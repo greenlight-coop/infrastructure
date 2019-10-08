@@ -1,34 +1,73 @@
+autoUpdate:
+  enabled: false
+  schedule: ""
 cluster:
-  clusterName: "alevat"
-  environmentGitOwner: "alevat"
-  project: "alevat-development"
+  azure: {}
+  clusterName: alevat
+  environmentGitOwner: alevat
+  gitKind: github
+  gitName: github
+  gitServer: https://github.com
+  namespace: jx
+  project: alevat-development
   provider: gke
-  zone: "us-east4"
-gitops: true
+  registry: gcr.io
+  zone: us-east4
 environments:
-- key: dev
-- key: staging
-- key: production
+  - ingress:
+      domain: ""
+      externalDNS: false
+      namespaceSubDomain: ""
+      tls:
+        email: ""
+        enabled: false
+        production: false
+    key: dev
+  - ingress:
+      domain: ""
+      externalDNS: false
+      namespaceSubDomain: ""
+      tls:
+        email: ""
+        enabled: false
+        production: false
+    key: staging
+  - ingress:
+      domain: ""
+      externalDNS: false
+      namespaceSubDomain: ""
+      tls:
+        email: ""
+        enabled: false
+        production: false
+    key: production
+gitops: true
 ingress:
-  domain: ""
+  domain: 35.194.77.121.nip.io
   externalDNS: false
+  namespaceSubDomain: -jx.
   tls:
     email: ""
     enabled: false
     production: false
 kaniko: true
-secretStorage: vault
+secretStorage: local
 storage:
+  backup:
+    enabled: true
+    url: gs://alevat-backup-7380f3af-9ee6-41ef-b68d-bf39230b3708
   logs:
     enabled: true
-    url: ""
+    url: gs://alevat-logs-191c1086-6938-4838-9129-7f4423cf5603
   reports:
     enabled: true
-    url: ""
+    url: gs://alevat-reports-0a63e287-6937-4862-b527-3a164821fc64
   repository:
     enabled: true
-    url: ""
+    url: gs://alevat-repository-0f993518-72e3-40e1-8e04-c720d417a4be
+vault: {}
+velero: {}
 versionStream:
-  ref: "master"
+  ref: master
   url: https://github.com/jenkins-x/jenkins-x-versions.git
 webhook: prow
