@@ -31,8 +31,8 @@ Documents Ale Vat environment set up and configurations.
         
 * Create a DNS managed zone for the cluster
 
-        gcloud dns managed-zones create "jx-test2-alevat-com" \
-            --dns-name "jx-test2.alevat.com." \
+        gcloud dns managed-zones create "jx-test3-alevat-com" \
+            --dns-name "jx-test3.alevat.com." \
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"
     * Add NS records for the managed zone via Google Domains
     
@@ -63,16 +63,16 @@ Documents Ale Vat environment set up and configurations.
             --clusterrole cluster-admin \
             --user $(gcloud config get-value account)
         
-* Install Jenkins X to cluster
+* Install Jenkins X via `jx boot`
 
-    *  `cd ~/dev/git/alevat/jx`
-    * `jx boot --end-step validate-git`
-        * `Do you want to clone the Jenkins X Boot Git repository?`: Enter for Y
-    * `mv jenkins-x-boot-config environment-alevat-dev`
-    * `cd environment-alevat-dev`
-    * `cat ~/dev/git/alevat/infrastructure/jx-requirements-step-1.yml | sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | tee jx-requirements.yml`
+        cd ~/dev/git/alevat/jx
+        jx boot --end-step validate-git
+        mv jenkins-x-boot-config environment-alevat-dev
+        cd environment-alevat-dev
+        cat ~/dev/git/alevat/infrastructure/jx-requirements.yml | sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | tee jx-requirements.yml
+        jx boot
     
-    *  Configure via `jx boot`
+    *  Configuration values:
         * `WARNING: TLS is not enabled`: Y
         * `Jenkins X Admin Username`: Enter for admin
         * `Jenkins X Admin Password`: Generate, store and use password
