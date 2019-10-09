@@ -1,6 +1,7 @@
 autoUpdate:
   enabled: false
   schedule: ""
+bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config
 cluster:
   azure: {}
   clusterName: alevat
@@ -9,47 +10,47 @@ cluster:
   gitName: github
   gitServer: https://github.com
   namespace: jx
-FIX>>>  project: alevat-jx-
+  project: alevat-jx-20191008220815
   provider: gke
   registry: gcr.io
   zone: us-east4
 environments:
   - ingress:
-      domain: ""
-      externalDNS: false
+      domain: dev.dev.alevat.com
+      externalDNS: true
       namespaceSubDomain: ""
       tls:
-        email: ""
-        enabled: false
-        production: false
+        email: etavela@alevat.com
+        enabled: true
+        production: true
     key: dev
   - ingress:
-      domain: ""
-      externalDNS: false
+      domain: staging.dev.alevat.com
+      externalDNS: true
       namespaceSubDomain: ""
       tls:
-        email: ""
-        enabled: false
-        production: false
+        email: etavela@alevat.com
+        enabled: true
+        production: true
     key: staging
   - ingress:
-      domain: ""
-      externalDNS: false
+      domain: dev.alevat.com
+      externalDNS: true
       namespaceSubDomain: ""
       tls:
-        email: ""
-        enabled: false
-        production: false
+        email: etavela@alevat.com
+        enabled: true
+        production: true
     key: production
 gitops: true
 ingress:
-  domain: 35.245.81.29.nip.io
-  externalDNS: false
+  domain: dev.alevat.com
+  externalDNS: true
   namespaceSubDomain: -jx.
   tls:
-    email: ""
-    enabled: false
-    production: false
+    email: etavela@alevat.com
+    enabled: true
+    production: true
 kaniko: true
 secretStorage: vault
 storage:

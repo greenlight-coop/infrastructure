@@ -9,7 +9,7 @@ cluster:
   gitName: github
   gitServer: https://github.com
   namespace: jx
-FIX>>>  project: alevat-jx-
+  project: alevat-jx-20191008220815
   provider: gke
   registry: gcr.io
   zone: us-east4
@@ -43,7 +43,7 @@ environments:
     key: production
 gitops: true
 ingress:
-  domain: 35.245.81.29.nip.io
+  domain: ""
   externalDNS: false
   namespaceSubDomain: -jx.
   tls:

@@ -11,13 +11,22 @@ Documents Ale Vat environment set up and configurations.
 * Install and configure Google Cloud Platform CLI
 
         cd ~/dev/tools
-        wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-265.0.0-darwin-x86_64.tar.gz -O - | tar -xz
+        wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-266.0.0-darwin-x86_64.tar.gz -O - | tar -xz
         ./google-cloud-sdk/install.sh
         gcloud init
         
     * Login as ...@alevat.com account
-    * Choose alevat-development as project
+    * Choose any project
     * Choose us-east4-a as the default zone
+
+* Create a new project named alevat-jx-<n> in Google Cloud Platform
+
+        GCP_PROJECT=alevat-jx-$(date +%Y%m%d%H%M%S)
+        gcloud projects create $GCP_PROJECT --name="Ale Vat Jenkins X" --organization=411469552668 --set-as-default
+        gcloud beta billing projects link $GCP_PROJECT --billing-account=01FB2E-55F20C-819FB4
+        gcloud services enable compute.googleapis.com
+        gcloud services enable container.googleapis.com
+        gcloud services enable containerregistry.googleapis.com
 
 * Install various tools via brew
 
@@ -32,7 +41,7 @@ Documents Ale Vat environment set up and configurations.
 
         gcloud container clusters \
             create alevat \
-            --project alevat-development \
+            --project $GCP_PROJECT \
             --region us-east4 \
             --machine-type n1-standard-2 \
             --enable-autoscaling \
@@ -49,11 +58,12 @@ Documents Ale Vat environment set up and configurations.
 * Install Jenkins X to cluster
 
     *  `cd ~/dev/git/alevat/jx`
-    *  Configure via `jx boot`
+    * `jx boot --end-step validate-git`
         * `Do you want to clone the Jenkins X Boot Git repository?`: Enter for Y
-        * `Do you want to jx boot the alevat cluster?`: Enter for Y
-        * `Git Owner name for environment repositories`: alevat
-        * `If 'alevat' is an GitHub organisation`: Y
+    * `mv jenkins-x-boot-config environment-alevat-dev`
+    * `cd environment-alevat-dev`
+    * TBD: Copy and edit infrastructure/jx-requirements-1.yml contents
+    *  Configure via `jx boot`
         * `WARNING: TLS is not enabled`: Y
         * `Jenkins X Admin Username`: Enter for admin
         * `Jenkins X Admin Password`: Generate, store and use password
@@ -62,15 +72,15 @@ Documents Ale Vat environment set up and configurations.
         * `Pipeline bot Git token`: generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
         * `HMAC token...`: save token and press enter to use generated token
         * `...external Docker Registry`: press enter for no
-    * `mv jenkins-x-boot-config environment-alevat-dev`
-    * `cd environment-alevat-dev`
+        
     * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
-    * `git pull && git push`
-    * Update *.dev A record for alevat.com in Google Domains to use new Ingress IP.
+    * TBD - FIX for external DNS! Update *.dev A record for alevat.com in Google Domains to use new Ingress IP.
+    * `git pull`
     * `echo "*.iml" >> .gitignore`
+    * `git commit -a -m"Updated .gitignore" && git push`
+        * Wait for any jobs to complete        
+
     *  TBD: copy / revise jx-requirements.yml (vault, storage, TLS, etc.)
-    * `jx boot` (or git push?????)
-        * Enter four times to create new buckets
     
 * Configure dev.alevat.com domain and TLS (OLD)
     
@@ -119,7 +129,7 @@ Documents Ale Vat environment set up and configurations.
             
     * Delete all buckets
     * Remove all alevat* Service Accounts
-    * Remove all Key rings via Security > Cryptographic Keys
+    * `gcloud projects delete $GCP_PROJECT --quiet`
 
 * Remove Jenkins X GitHub artifacts
     * Remove any alevat environment repositories
@@ -127,7 +137,7 @@ Documents Ale Vat environment set up and configurations.
           hub delete -y alevat/environment-alevat-staging
           hub delete -y alevat/environment-alevat-production
           hub delete -y alevat/environment-alevat-dev
-          rm -rf ~/dev/git/alevat/jx/environment-alevat-dev/
+          rm -rf ~/dev/git/alevat/jx/environment-alevat-dev
           
     * Delete alevat-jenkins Jenkins X token
     
@@ -138,12 +148,6 @@ Documents Ale Vat environment set up and configurations.
         brew uninstall kubernetes-helm
         brew uninstall kubernetes-cli
 
-* Remove gcloud-sdk
-
-        rm -rf  ~/dev/tools/google-cloud-sdk
-        
-    * Remove gcloud-sdk from PATH in ~/.zshrc
-
 * Remove local configuration files
 
         rm -rf  ~/.jx
@@ -151,4 +155,10 @@ Documents Ale Vat environment set up and configurations.
         rm -rf  ~/.kube
         rm -rf  ~/.gsutil
         rm -rf  ~/.config/gcloud
+        
+* Remove gcloud-sdk
+
+        rm -rf  ~/dev/tools/google-cloud-sdk
+        
+    * Remove gcloud-sdk from PATH in ~/.zshrc
         
