@@ -19,7 +19,7 @@ Documents Ale Vat environment set up and configurations.
     * Choose any project
     * Choose us-east4-a as the default zone
 
-* Create a new project named alevat-jx-<n> in Google Cloud Platform
+* Create a new project named alevat-jx-<n> in Google Cloud Platform and configure API permissions
 
         GCP_PROJECT=alevat-jx-$(date +%Y%m%d%H%M%S)
         gcloud projects create $GCP_PROJECT --name="Ale Vat Jenkins X" --organization=411469552668 --set-as-default
@@ -27,7 +27,15 @@ Documents Ale Vat environment set up and configurations.
         gcloud services enable compute.googleapis.com
         gcloud services enable container.googleapis.com
         gcloud services enable containerregistry.googleapis.com
+        gcloud services enable dns.googleapis.com
+        
+* Create a DNS managed zone for the cluster
 
+        gcloud dns managed-zones create "jx-test2-alevat-com" \
+            --dns-name "jx-test2.alevat.com." \
+            --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"
+    * Add NS records for the managed zone via Google Domains
+    
 * Install various tools via brew
 
         brew install kubernetes-cli        
@@ -62,7 +70,8 @@ Documents Ale Vat environment set up and configurations.
         * `Do you want to clone the Jenkins X Boot Git repository?`: Enter for Y
     * `mv jenkins-x-boot-config environment-alevat-dev`
     * `cd environment-alevat-dev`
-    * TBD: Copy and edit infrastructure/jx-requirements-1.yml contents
+    * `cat ~/dev/git/alevat/infrastructure/jx-requirements-step-1.yml | sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | tee jx-requirements.yml`
+    
     *  Configure via `jx boot`
         * `WARNING: TLS is not enabled`: Y
         * `Jenkins X Admin Username`: Enter for admin
@@ -73,10 +82,11 @@ Documents Ale Vat environment set up and configurations.
         * `HMAC token...`: save token and press enter to use generated token
         * `...external Docker Registry`: press enter for no
         
-    * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
-    * TBD - FIX for external DNS! Update *.dev A record for alevat.com in Google Domains to use new Ingress IP.
     * `git pull`
     * `echo "*.iml" >> .gitignore`
+    * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
+    
+    * TBD - FIX for external DNS! Update *.dev A record for alevat.com in Google Domains to use new Ingress IP.
     * `git commit -a -m"Updated .gitignore" && git push`
         * Wait for any jobs to complete        
 
@@ -125,11 +135,17 @@ Documents Ale Vat environment set up and configurations.
             --zone us-east4-c \
             $(gcloud compute disks list \
             --filter="zone:us-east4-c AND -users:*" \
-            --format="value(id)") --quiet
+            --format="value(id)") --quiet    
             
-    * Delete all buckets
-    * Remove all alevat* Service Accounts
-    * `gcloud projects delete $GCP_PROJECT --quiet`
+        gsutil -m rm -r gs://alevat-jx-backup
+        gsutil -m rm -r gs://alevat-jx-logs
+        gsutil -m rm -r gs://alevat-jx-reports
+        gsutil -m rm -r gs://alevat-jx-repository
+        gsutil -m rm -r gs://jx-vault-alevat-bucket
+        
+        gcloud projects delete $GCP_PROJECT --quiet
+    * Remove DNS managed zone
+    * Remove NS records for managed zone from Google Domains
 
 * Remove Jenkins X GitHub artifacts
     * Remove any alevat environment repositories

@@ -9,7 +9,7 @@ cluster:
   gitName: github
   gitServer: https://github.com
   namespace: jx
-  project: alevat-jx-20191008220815
+  project: GCP_PROJECT
   provider: gke
   registry: gcr.io
   zone: us-east4
