@@ -82,32 +82,15 @@ Documents Ale Vat environment set up and configurations.
         * `HMAC token...`: save token and press enter to use generated token
         * `...external Docker Registry`: press enter for no
         
-    * `git pull`
-    * `echo "*.iml" >> .gitignore`
     * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
-    
-    * TBD - FIX for external DNS! Update *.dev A record for alevat.com in Google Domains to use new Ingress IP.
-    * `git commit -a -m"Updated .gitignore" && git push`
-        * Wait for any jobs to complete        
+    * Synchronize local repository with GitHub and wait for pipeline to complete
+                
+            git pull
+            echo "*.iml" >> .gitignore
+            git commit -a -m"Updated .gitignore" && git push
+            jx get activities -w 
 
-    *  TBD: copy / revise jx-requirements.yml (vault, storage, TLS, etc.)
-    
-* Configure dev.alevat.com domain and TLS (OLD)
-    
-    * Modify jx-requirements.yml
-    
-            ingress:
-              domain: dev.alevat.com
-              externalDNS: true ??????
-              namespaceSubDomain: -jx.
-              tls:
-                email: etavela@alevat.com
-                enabled: true
-                production: true
-        
-    * `jx boot`
-    
-* Configure custom builder(s) ???????
+* TBD: Configure custom builder(s) ???????
 
         cp ~/dev/git/alevat/infrastructure/myvalues.yaml ~/.jx/
         jx upgrade platform --always-upgrade
