@@ -15,7 +15,7 @@ cluster:
   zone: us-east4
 environments:
   - ingress:
-      domain: jx-test3.alevat.com
+      domain: k8s.alevat.com
       externalDNS: true
       namespaceSubDomain: -dev.
       tls:
@@ -24,7 +24,7 @@ environments:
         production: true
     key: dev
   - ingress:
-      domain: jx-test3.alevat.com
+      domain: k8s.alevat.com
       externalDNS: true
       namespaceSubDomain: -staging.
       tls:
@@ -33,7 +33,7 @@ environments:
         production: true
     key: staging
   - ingress:
-      domain: jx-test3.alevat.com
+      domain: k8s.alevat.com
       externalDNS: true
       namespaceSubDomain: ""
       tls:
@@ -43,7 +43,7 @@ environments:
     key: production
 gitops: true
 ingress:
-  domain: jx-test3.alevat.com
+  domain: k8s.alevat.com
   externalDNS: true
   namespaceSubDomain: -jx.
   tls:

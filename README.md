@@ -2,9 +2,7 @@
 
 Documents Ale Vat environment set up and configurations.
 
-## MacBook
-
-### Set Up
+## Set Up
 
 * Install Docker Desktop, no Kubernetes
 
@@ -31,8 +29,8 @@ Documents Ale Vat environment set up and configurations.
         
 * Create a DNS managed zone for the cluster
 
-        gcloud dns managed-zones create "jx-test3-alevat-com" \
-            --dns-name "jx-test3.alevat.com." \
+        gcloud dns managed-zones create "k8s-alevat-com" \
+            --dns-name "k8s.alevat.com." \
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"
     * Add NS records for the managed zone via Google Domains
     
@@ -83,19 +81,69 @@ Documents Ale Vat environment set up and configurations.
         * `...external Docker Registry`: press enter for no
         
     * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
+    * Edit `OWNERS` file to include `etavela` and `alevat-jenkins` 
     * Synchronize local repository with GitHub and wait for pipeline to complete
                 
             git pull
             echo "*.iml" >> .gitignore
-            git commit -a -m"Updated .gitignore" && git push
+            git commit -a -m"Updated .gitignore and OWNERS" && git push
             jx get activities -w 
 
-* TBD: Configure custom builder(s) ???????
+* Configure custom builders
 
-        cp ~/dev/git/alevat/infrastructure/myvalues.yaml ~/.jx/
-        jx upgrade platform --always-upgrade
+    * Import custom builder projects (TBD)
+    
+            jx import
 
-### Tear Down
+    * TBD: Grant Viewer Role to Compute Engine default service account via GCP IAM
+    
+        * Issues still noted after granting role: 
+        
+                error: unable to enable 'dns' api: failed to run 
+                'gcloud services list --enabled --project alevat-jx-20191009121114' command in directory '',
+                output: 'ERROR: (gcloud.services.list) User [836571776966-compute@developer.gserviceaccount.com] 
+                does not have permission to access project [alevat-jx-20191009121114] (or it may not exist): 
+                Request had insufficient authentication scopes.'
+    
+    * Upgrade platform with new values
+
+            cp ~/dev/git/alevat/infrastructure/myvalues.yaml ~/.jx/
+            jx upgrade platform --always-upgrade
+
+    * Accept environment-alevat-dev PR
+
+## Install Application
+
+### Quickstart
+
+* Initialize quickstart and configure
+
+        jx create quickstart
+    
+    * `github username:` alevat-jenkins
+    * `API Token:` Copy GitHub token value from installation
+    * `select the quickstart you wish to create`: Select project type
+    * `Do you wish to use alevat-jenkins as the Git user name?`: Enter for Y
+    * `Who should be the owner of the repository?`: alevat
+    * `Enter the new repository name:` Enter project name
+    * `Would you like to initialise git now?`: Enter for Y
+    * `Commit message:` Enter for default
+
+* Fix certificates and name patterns. 
+    * NOTE: unclear if there's a way to do this via jx boot configuration or if jx boot will override these values on 
+    update.
+        
+            jx upgrade ingress --namespaces jx-staging --urltemplate "{{.Service}}.staging.{{.Domain}}" --wait-for-certs
+            jx upgrade ingress --namespaces jx-production --urltemplate "{{.Service}}.{{.Domain}}" --wait-for-certs
+
+### Import
+
+* Import the project and configure
+
+        jx import
+    
+    * `Do you wish to use alevat-jenkins as the Git user name:` Enter for Y
+## Tear Down
 
 * Remove resources from Google Cloud Platform
 
