@@ -104,6 +104,7 @@ Documents Ale Vat environment set up and configurations.
     * Import custom builder projects
     
             cd ~/dev/git/alevat/jx/builder-gradle-alevat
+            git pull
             jx import \
                 --pack docker \
                 --git-username=alevat-jenkins \
