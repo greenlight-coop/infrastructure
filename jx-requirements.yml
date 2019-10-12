@@ -1,6 +1,6 @@
 autoUpdate:
-  enabled: false
-  schedule: ""
+  enabled: true
+  schedule: "0 3 * * *"
 cluster:
   azure: {}
   clusterName: alevat
@@ -15,7 +15,7 @@ cluster:
   zone: us-east4
 environments:
   - ingress:
-      domain: k8s.alevat.com
+      domain: ALEVAT_CLUSTER_DOMAIN.alevat.com
       externalDNS: true
       namespaceSubDomain: -dev.
       tls:
@@ -24,16 +24,16 @@ environments:
         production: true
     key: dev
   - ingress:
-      domain: k8s.alevat.com
+      domain: ALEVAT_CLUSTER_DOMAIN.alevat.com
       externalDNS: true
-      namespaceSubDomain: -staging.
+      namespaceSubDomain: -stage.
       tls:
         email: etavela@alevat.com
         enabled: true
         production: true
     key: staging
   - ingress:
-      domain: k8s.alevat.com
+      domain: ALEVAT_CLUSTER_DOMAIN.alevat.com
       externalDNS: true
       namespaceSubDomain: ""
       tls:
@@ -43,7 +43,7 @@ environments:
     key: production
 gitops: true
 ingress:
-  domain: k8s.alevat.com
+  domain: ALEVAT_CLUSTER_DOMAIN.alevat.com
   externalDNS: true
   namespaceSubDomain: -jx.
   tls:

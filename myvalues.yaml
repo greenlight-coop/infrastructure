@@ -24,7 +24,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: '${computer.jnlpmac} ${computer.name}'
           Dlang:
-            Image: gcr.io/alevat-jx-20191009121114/builder-gradle-alevat:0.0.7
+            Image: gcr.io/GCP_PROJECT/builder-gradle-alevat:GRADLE_BUILDER_VERSION
             Privileged: true
             RequestCpu: "400m"
             RequestMemory: "512Mi"

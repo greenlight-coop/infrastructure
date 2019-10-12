@@ -27,11 +27,14 @@ Documents Ale Vat environment set up and configurations.
         gcloud services enable containerregistry.googleapis.com
         gcloud services enable dns.googleapis.com
         
-* Create a DNS managed zone for the cluster
+* Create a DNS managed zone for the cluster	
 
-        gcloud dns managed-zones create "k8s-alevat-com" \
-            --dns-name "k8s.alevat.com." \
+        ALEVAT_CLUSTER_DOMAIN=jx-test-6
+        # ALEVAT_CLUSTER_DOMAIN=k8s
+        gcloud dns managed-zones create "$ALEVAT_CLUSTER_DOMAIN-alevat-com" \
+            --dns-name "$ALEVAT_CLUSTER_DOMAIN.alevat.com." \
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"
+
     * Add NS records for the managed zone via Google Domains
     
 * Install various tools via brew
@@ -54,6 +57,7 @@ Documents Ale Vat environment set up and configurations.
             --num-nodes 1 \
             --max-nodes 2 \
             --min-nodes 1 \
+            --scopes=gke-default,https://www.googleapis.com/auth/cloud-platform.read-only \
             --preemptible
         
         kubectl create clusterrolebinding \
@@ -67,11 +71,17 @@ Documents Ale Vat environment set up and configurations.
         jx boot --end-step validate-git
         mv jenkins-x-boot-config environment-alevat-dev
         cd environment-alevat-dev
-        cat ~/dev/git/alevat/infrastructure/jx-requirements.yml | sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | tee jx-requirements.yml
+        cat ~/dev/git/alevat/infrastructure/jx-requirements.yml | \
+            sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | \
+            sed -e "s/ALEVAT_CLUSTER_DOMAIN/$ALEVAT_CLUSTER_DOMAIN/g" | \
+            tee jx-requirements.yml
         jx boot
     
+    *  Create GitHub token for alevat.jenkins
+        * generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
+        * `GITHUB_TOKEN=<generated value>`
+
     *  Configuration values:
-        * `WARNING: TLS is not enabled`: Y
         * `Jenkins X Admin Username`: Enter for admin
         * `Jenkins X Admin Password`: Generate, store and use password
         * `Pipeline bot Git username`: alevat-jenkins
@@ -91,26 +101,32 @@ Documents Ale Vat environment set up and configurations.
 
 * Configure custom builders
 
-    * Import custom builder projects (TBD)
+    * Import custom builder projects
     
-            jx import
+            cd ~/dev/git/alevat/jx/builder-gradle-alevat
+            jx import \
+                --pack docker \
+                --git-username=alevat-jenkins \
+                --git-api-token=$GITHUB_TOKEN
 
-    * TBD: Grant Viewer Role to Compute Engine default service account via GCP IAM
+    * Wait for build to complete
     
-        * Issues still noted after granting role: 
-        
-                error: unable to enable 'dns' api: failed to run 
-                'gcloud services list --enabled --project alevat-jx-20191009121114' command in directory '',
-                output: 'ERROR: (gcloud.services.list) User [836571776966-compute@developer.gserviceaccount.com] 
-                does not have permission to access project [alevat-jx-20191009121114] (or it may not exist): 
-                Request had insufficient authentication scopes.'
-    
-    * Upgrade platform with new values
+            jx get activity -f builder-gradle-alevat -w
 
-            cp ~/dev/git/alevat/infrastructure/myvalues.yaml ~/.jx/
+    * Upgrade platform with new values (FIX)
+    
+            GRADLE_BUILDER_VERSION=$(gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/builder-gradle-alevat --format="value(tags)")
+
+            WRONG
+            cat ~/dev/git/alevat/infrastructure/myvalues.yaml | \
+                sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | \
+                sed -e "s/GRADLE_BUILDER_VERSION/$GRADLE_BUILDER_VERSION/g" | \
+                tee ~/.jx/myvalues.yaml
             jx upgrade platform --always-upgrade
 
-    * Accept environment-alevat-dev PR
+    * Wait for build to complete
+    
+            jx get activity -f builder-gradle-alevat -w
 
 ## Install Application
 
@@ -129,7 +145,7 @@ Documents Ale Vat environment set up and configurations.
     * `Would you like to initialise git now?`: Enter for Y
     * `Commit message:` Enter for default
 
-* Fix certificates and name patterns. 
+* Fix certificates and name patterns. FIX
     * NOTE: unclear if there's a way to do this via jx boot configuration or if jx boot will override these values on 
     update.
         
@@ -143,6 +159,7 @@ Documents Ale Vat environment set up and configurations.
         jx import
     
     * `Do you wish to use alevat-jenkins as the Git user name:` Enter for Y
+    
 ## Tear Down
 
 * Remove resources from Google Cloud Platform
@@ -175,12 +192,14 @@ Documents Ale Vat environment set up and configurations.
         gsutil -m rm -r gs://jx-vault-alevat-bucket
         
         gcloud projects delete $GCP_PROJECT --quiet
+        
     * Remove DNS managed zone
     * Remove NS records for managed zone from Google Domains
 
 * Remove Jenkins X GitHub artifacts
     * Remove any alevat environment repositories
     
+          cd ~/dev/git/alevat/jx
           hub delete -y alevat/environment-alevat-staging
           hub delete -y alevat/environment-alevat-production
           hub delete -y alevat/environment-alevat-dev
