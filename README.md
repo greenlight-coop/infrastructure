@@ -4,6 +4,8 @@ Documents Ale Vat environment set up and configurations.
 
 ## Set Up
 
+* TODO: SET REASONABLE CRON FOR UPDATE
+
 * Install Docker Desktop, no Kubernetes
 
 * Install and configure Google Cloud Platform CLI
@@ -29,7 +31,7 @@ Documents Ale Vat environment set up and configurations.
         
 * Create a DNS managed zone for the cluster	
 
-        ALEVAT_CLUSTER_DOMAIN=jx-test-6
+        ALEVAT_CLUSTER_DOMAIN=jx-test-7
         # ALEVAT_CLUSTER_DOMAIN=k8s
         gcloud dns managed-zones create "$ALEVAT_CLUSTER_DOMAIN-alevat-com" \
             --dns-name "$ALEVAT_CLUSTER_DOMAIN.alevat.com." \
@@ -135,12 +137,11 @@ Documents Ale Vat environment set up and configurations.
 
 * Initialize quickstart and configure
 
-        jx create quickstart
+        jx create quickstart \
+            --git-username=alevat-jenkins \
+            --git-api-token=$GITHUB_TOKEN
     
-    * `github username:` alevat-jenkins
-    * `API Token:` Copy GitHub token value from installation
     * `select the quickstart you wish to create`: Select project type
-    * `Do you wish to use alevat-jenkins as the Git user name?`: Enter for Y
     * `Who should be the owner of the repository?`: alevat
     * `Enter the new repository name:` Enter project name
     * `Would you like to initialise git now?`: Enter for Y
@@ -157,10 +158,33 @@ Documents Ale Vat environment set up and configurations.
 
 * Import the project and configure
 
-        jx import
+    * Set parameters
+            
+            JX_IMPORT_PROJECT_NAME=<name>
+            JX_IMPORT_PACK=<pack>
     
-    * `Do you wish to use alevat-jenkins as the Git user name:` Enter for Y
+    * Import the project
+
+            cd ~/dev/tmp
+            jx import \
+                --pack $JX_IMPORT_PACK \
+                --git-username=alevat-jenkins \
+                --url=https://github.com/alevat/$JX_IMPORT_PROJECT_NAME \
+                --no-draft \
+                --git-api-token=$GITHUB_TOKEN
+            cd $JX_IMPORT_PROJECT_NAME
+            jx get activity -f $JX_IMPORT_PROJECT_NAME -w
+            
+    * Promote to production
     
+            JX_IMPORT_PROJECT_VERSION=$(gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/$JX_IMPORT_PROJECT_NAME --format="value(tags)")
+            jx promote $JX_IMPORT_PROJECT_NAME --version $JX_IMPORT_PROJECT_VERSION --env production
+            
+    * Clean up temporary checkout 
+            
+            cd ~/dev/tmp
+            rm -rf ~/dev/tmp/$JX_IMPORT_PROJECT_NAME
+            
 ## Tear Down
 
 * Remove resources from Google Cloud Platform
