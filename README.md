@@ -4,8 +4,6 @@ Documents Ale Vat environment set up and configurations.
 
 ## Set Up
 
-* TODO: SET REASONABLE CRON FOR UPDATE
-
 * Install Docker Desktop, no Kubernetes
 
 * Install and configure Google Cloud Platform CLI
@@ -19,9 +17,9 @@ Documents Ale Vat environment set up and configurations.
     * Choose any project
     * Choose us-east4-a as the default zone
 
-* Create a new project named alevat-jx-<n> in Google Cloud Platform and configure API permissions
+* Create a new project named alevat in Google Cloud Platform and configure API permissions
 
-        GCP_PROJECT=alevat-jx-$(date +%Y%m%d%H%M%S)
+        GCP_PROJECT=alevat
         gcloud projects create $GCP_PROJECT --name="Ale Vat Jenkins X" --organization=411469552668 --set-as-default
         gcloud beta billing projects link $GCP_PROJECT --billing-account=01FB2E-55F20C-819FB4
         gcloud services enable compute.googleapis.com
@@ -31,8 +29,7 @@ Documents Ale Vat environment set up and configurations.
         
 * Create a DNS managed zone for the cluster	
 
-        ALEVAT_CLUSTER_DOMAIN=jx-test-7
-        # ALEVAT_CLUSTER_DOMAIN=k8s
+        ALEVAT_CLUSTER_DOMAIN=k8s
         gcloud dns managed-zones create "$ALEVAT_CLUSTER_DOMAIN-alevat-com" \
             --dns-name "$ALEVAT_CLUSTER_DOMAIN.alevat.com." \
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"

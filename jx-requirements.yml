@@ -1,6 +1,6 @@
 autoUpdate:
   enabled: true
-  schedule: "*/10 * * * *"
+  schedule: "0 3 * * *"
 cluster:
   azure: {}
   clusterName: alevat
