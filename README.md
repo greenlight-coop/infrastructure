@@ -97,6 +97,51 @@ Documents Ale Vat environment set up and configurations.
             echo "*.iml" >> .gitignore
             git commit -a -m"Updated .gitignore and OWNERS" && git push
             jx get activities -w 
+            
+* Check and fix TLS secrets. 
+
+    * Check secret content in jx-staging and jx-production checking for LetsEncrypt certificate info. If okay, skip 
+    steps that follow.
+    
+            kubectl -n jx-staging get secret tls-k8s-alevat-com-p -o yaml 
+            kubectl -n jx-prod get secret tls-k8s-alevat-com-p -o yaml
+           
+    * Export secret data from `jx` namespace
+    
+            cd ~/dev/tmp
+            kubectl -n jx get secret tls-k8s-alevat-com-p -o yaml > tls-secret-staging.yaml
+            
+    * Edit staging secret content
+       
+        * Change `namespace` to jx-staging
+        * Remove keys for selfLink, uid resourceVersion and creationTimestamp
+        
+    * Replace staging secret
+    
+            kubectl delete secret -n jx-staging tls-k8s-alevat-com-p
+            kubectl apply -f tls-secret-staging.yaml
+            
+    * Fix secret in production
+    
+            cat tls-secret-staging.yaml | \
+                sed -e "s/jx-staging/jx-production/g" | \
+                tee tls-secret-production.yaml
+            kubectl delete secret -n jx-production tls-k8s-alevat-com-p
+            kubectl apply -f tls-secret-production.yaml
+
+* Configure Jenkins X resources
+
+    * Make JCenter available via `nexus`
+    
+        * Login to https://nexus-jx.k8s.alevat.com with admin username and password
+        * Click Administration link
+        * Click Repositories
+        * Click Create Repository
+        * Select `maven2 (proxy)` recipe
+        * Configuration:
+            * `Name`: jcenter
+            * `Remote storage`: https://jcenter.bintray.com
+        * Click Create Repository
 
 * Configure custom builders
 
@@ -113,20 +158,20 @@ Documents Ale Vat environment set up and configurations.
     
             jx get activity -f builder-gradle-alevat -w
 
-    * Upgrade platform with new values (FIX)
+    * Update configuration to include new PodTemplate
     
-            GRADLE_BUILDER_VERSION=$(gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/builder-gradle-alevat --format="value(tags)")
-
-            WRONG
-            cat ~/dev/git/alevat/infrastructure/myvalues.yaml | \
-                sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | \
-                sed -e "s/GRADLE_BUILDER_VERSION/$GRADLE_BUILDER_VERSION/g" | \
-                tee ~/.jx/myvalues.yaml
-            jx upgrade platform --always-upgrade
-
-    * Wait for build to complete
+        * Look up current builder version
     
-            jx get activity -f builder-gradle-alevat -w
+                gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/builder-gradle-alevat --format="value(tags)"
+                
+        * Include PodTemplate configuration from builder README.md at `jenkins` key in `env/jenkins-x-platform/values.tmpl.yaml`.
+                
+                cd ~/dev/git/alevat/jx/environment-alevat-dev
+
+        * Push changes and wait for build to complete
+    
+                git commit -a -m"Added custom builder" && git push
+                jx get activity -f environment-alevat-dev -w
 
 ## Install Application
 
@@ -144,13 +189,6 @@ Documents Ale Vat environment set up and configurations.
     * `Would you like to initialise git now?`: Enter for Y
     * `Commit message:` Enter for default
 
-* Fix certificates and name patterns. FIX
-    * NOTE: unclear if there's a way to do this via jx boot configuration or if jx boot will override these values on 
-    update.
-        
-            jx upgrade ingress --namespaces jx-staging --urltemplate "{{.Service}}.staging.{{.Domain}}" --wait-for-certs
-            jx upgrade ingress --namespaces jx-production --urltemplate "{{.Service}}.{{.Domain}}" --wait-for-certs
-
 ### Import
 
 * Import the project and configure
@@ -167,11 +205,12 @@ Documents Ale Vat environment set up and configurations.
                 --pack $JX_IMPORT_PACK \
                 --git-username=alevat-jenkins \
                 --url=https://github.com/alevat/$JX_IMPORT_PROJECT_NAME \
-                --no-draft \
                 --git-api-token=$GITHUB_TOKEN
             cd $JX_IMPORT_PROJECT_NAME
             jx get activity -f $JX_IMPORT_PROJECT_NAME -w
             
+    * Fix any build issues
+    
     * Promote to production
     
             JX_IMPORT_PROJECT_VERSION=$(gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/$JX_IMPORT_PROJECT_NAME --format="value(tags)")
