@@ -100,11 +100,17 @@ Documents Ale Vat environment set up and configurations.
             
 * Check and fix TLS secrets. 
 
+    * Fix TLS secret replication annotation
+    
+            kubectl annotate secret tls-k8s-alevat-com-p -n jx \
+                replicator.v1.mittwald.de/replication-allowed=true \
+                replicator.v1.mittwald.de/replication-allowed-namespaces=jx-staging,jx-production 
+
     * Check secret content in jx-staging and jx-production checking for LetsEncrypt certificate info. If okay, skip 
     steps that follow.
     
             kubectl -n jx-staging get secret tls-k8s-alevat-com-p -o yaml 
-            kubectl -n jx-prod get secret tls-k8s-alevat-com-p -o yaml
+            kubectl -n jx-production get secret tls-k8s-alevat-com-p -o yaml
            
     * Export secret data from `jx` namespace
     
@@ -113,6 +119,11 @@ Documents Ale Vat environment set up and configurations.
             
     * Edit staging secret content
        
+        * Delete replicator annotations
+        * Add replicate from annotation
+        
+                replicator.v1.mittwald.de/replicate-from: jx/tls-k8s-alevat-com-p
+        
         * Change `namespace` to jx-staging
         * Remove keys for selfLink, uid resourceVersion and creationTimestamp
         
