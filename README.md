@@ -2,6 +2,17 @@
 
 Documents Ale Vat environment set up and configurations.
 
+## Global
+
+* Set environment variables
+
+       GCP_PROJECT=alevat-gcp-project
+       ALEVAT_CLUSTER_DOMAIN=k8s
+
+    *  Generate or reuse GitHub token for alevat.jenkins
+        * generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
+        * `GITHUB_TOKEN=<generated value>`
+
 ## Set Up
 
 * Install Docker Desktop, no Kubernetes
@@ -9,7 +20,7 @@ Documents Ale Vat environment set up and configurations.
 * Install and configure Google Cloud Platform CLI
 
         cd ~/dev/tools
-        wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-266.0.0-darwin-x86_64.tar.gz -O - | tar -xz
+        wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-270.0.0-darwin-x86_64.tar.gz -O - | tar -xz
         ./google-cloud-sdk/install.sh
         gcloud init
         
@@ -19,8 +30,7 @@ Documents Ale Vat environment set up and configurations.
 
 * Create a new project named alevat in Google Cloud Platform and configure API permissions
 
-        GCP_PROJECT=alevat
-        gcloud projects create $GCP_PROJECT --name="Ale Vat Jenkins X" --organization=411469552668 --set-as-default
+        gcloud projects create $GCP_PROJECT --name="Ale Vat GCP Project" --organization=411469552668 --set-as-default
         gcloud beta billing projects link $GCP_PROJECT --billing-account=01FB2E-55F20C-819FB4
         gcloud services enable compute.googleapis.com
         gcloud services enable container.googleapis.com
@@ -29,7 +39,6 @@ Documents Ale Vat environment set up and configurations.
         
 * Create a DNS managed zone for the cluster	
 
-        ALEVAT_CLUSTER_DOMAIN=k8s
         gcloud dns managed-zones create "$ALEVAT_CLUSTER_DOMAIN-alevat-com" \
             --dns-name "$ALEVAT_CLUSTER_DOMAIN.alevat.com." \
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"

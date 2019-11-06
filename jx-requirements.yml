@@ -1,6 +1,7 @@
 autoUpdate:
-  enabled: true
-  schedule: "0 3 * * *"
+  enabled: false
+  schedule: ""
+bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config.git
 cluster:
   azure: {}
   clusterName: alevat
@@ -51,7 +52,8 @@ ingress:
     enabled: true
     production: true
 kaniko: true
-secretStorage: vault
+repository: nexus
+secretStorage: local
 storage:
   backup:
     enabled: true
@@ -64,7 +66,7 @@ storage:
     url: gs://alevat-jx-reports
   repository:
     enabled: true
-    url: gs://alevat-jx-repository
+    url: gs://alevat-jx-chart-repository
 vault: {}
 velero: {}
 versionStream:
