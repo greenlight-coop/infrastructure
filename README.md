@@ -6,7 +6,7 @@ Documents Ale Vat environment set up and configurations.
 
 * Set environment variables
 
-       GCP_PROJECT=alevat-gcp-project
+       GCP_PROJECT=alevat-project-v4
        ALEVAT_CLUSTER_DOMAIN=k8s
 
     *  Generate or reuse GitHub token for alevat.jenkins
@@ -45,15 +45,22 @@ Documents Ale Vat environment set up and configurations.
 
     * Add NS records for the managed zone via Google Domains
     
-* Install various tools via brew
+* Install various tools via brew (note Helm version may be an issue)
 
         brew install kubernetes-cli        
-        brew install kubernetes-helm
         brew tap jenkins-x/jx
         brew install jx
         brew tap boz/repo
         brew install boz/repo/kail
         
+* Install Helm
+
+        cd ~/dev/tmp
+        wget -c https://get.helm.sh/helm-v2.14.3-darwin-amd64.tar.gz -O - | tar -xz
+        sudo mv darwin-amd64/helm /usr/local/bin/helm
+        rm -rf darwin-amd64
+        helm version
+
 * Create GCP Kubernetes cluster
 
         gcloud container clusters \
@@ -76,36 +83,81 @@ Documents Ale Vat environment set up and configurations.
 * Install Jenkins X via `jx boot`
 
         cd ~/dev/git/alevat/jx
-        jx boot --end-step validate-git
-        mv jenkins-x-boot-config environment-alevat-dev
-        cd environment-alevat-dev
-        cat ~/dev/git/alevat/infrastructure/jx-requirements.yml | \
-            sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | \
-            sed -e "s/ALEVAT_CLUSTER_DOMAIN/$ALEVAT_CLUSTER_DOMAIN/g" | \
-            tee jx-requirements.yml
         jx boot
-    
-    *  Create GitHub token for alevat.jenkins
-        * generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
-        * `GITHUB_TOKEN=<generated value>`
-
+           
     *  Configuration values:
+        * `Do you want to clone the Jenkins X Boot Git repository?`: Enter for Y
+        * `Do you want to jx boot the alevat cluster?`: Enter for Y
+        * `Git Owner name for environment repositories`: alevat
+        * `If 'alevat' is an GitHub organisation`: Y
+        * (TLS warning) `Do you wish to continue?`: Y
         * `Jenkins X Admin Username`: Enter for admin
         * `Jenkins X Admin Password`: Generate, store and use password
         * `Pipeline bot Git username`: alevat-jenkins
         * `Pipeline bot Git email address`: jenkins@alevat.com
-        * `Pipeline bot Git token`: generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
+        * `Pipeline bot Git token`: Use value of GITHUB_TOKEN
         * `HMAC token...`: save token and press enter to use generated token
         * `...external Docker Registry`: press enter for no
-        
-    * Grant Admin permissions to `administrators` team for alevat/environment-alevat-dev repository in GitHub
-    * Edit `OWNERS` file to include `etavela` and `alevat-jenkins` 
-    * Synchronize local repository with GitHub and wait for pipeline to complete
-                
+            
+    * Edit `OWNERS` file to include `etavela` and `alevat-jenkins`
+    
+    * Review any changes necessary to jx-requirements.yml template
+        * `versionStream.ref`
+        * Others
+
+    * Update the configuration
+    
+            mv jenkins-x-boot-config environment-alevat-dev
+            cd environment-alevat-dev
+            cat ~/dev/git/alevat/infrastructure/jx-requirements.yml | \
+                sed -e "s/GCP_PROJECT/$GCP_PROJECT/g" | \
+                sed -e "s/ALEVAT_CLUSTER_DOMAIN/$ALEVAT_CLUSTER_DOMAIN/g" | \
+                tee jx-requirements.yml
             git pull
             echo "*.iml" >> .gitignore
-            git commit -a -m"Updated .gitignore and OWNERS" && git push
-            jx get activities -w 
+            git commit -a -m"Updated configuration"
+            jx boot
+            
+* Configure Jenkins X resources
+
+    * Make JCenter available via `nexus`
+    
+        * Login to https://nexus-jx.k8s.alevat.com with admin username and password
+        * Click Administration link
+        * Click Repositories
+        * Click Create Repository
+        * Select `maven2 (proxy)` recipe
+        * Configuration:
+            * `Name`: jcenter
+            * `Remote storage`: https://jcenter.bintray.com
+        * Click Create Repository
+
+* Configure custom builders
+
+    * Import custom builder projects
+    
+        * Use project import steps with the following values:
+        
+                JX_IMPORT_PROJECT_NAME=builder-gradle-alevat
+                JX_IMPORT_PACK=docker
+
+    * Wait for build to complete
+    
+            jx get activity -f builder-gradle-alevat -w
+
+    * Update configuration to include new PodTemplate
+    
+        * Look up current builder version
+    
+                gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/builder-gradle-alevat --format="value(tags)"
+                
+        * Include PodTemplate configuration from builder README.md at `jenkins` key in `env/jenkins-x-platform/values.tmpl.yaml`.
+                
+                cd ~/dev/git/alevat/jx/environment-alevat-dev
+                git commit -a -m"Added custom builder" && git push
+                jx get activity -f environment-alevat-dev -w
+
+* Install existing applications (see below)
             
 * Check and fix TLS secrets. 
 
@@ -149,50 +201,6 @@ Documents Ale Vat environment set up and configurations.
             kubectl delete secret -n jx-production tls-k8s-alevat-com-p
             kubectl apply -f tls-secret-production.yaml
 
-* Configure Jenkins X resources
-
-    * Make JCenter available via `nexus`
-    
-        * Login to https://nexus-jx.k8s.alevat.com with admin username and password
-        * Click Administration link
-        * Click Repositories
-        * Click Create Repository
-        * Select `maven2 (proxy)` recipe
-        * Configuration:
-            * `Name`: jcenter
-            * `Remote storage`: https://jcenter.bintray.com
-        * Click Create Repository
-
-* Configure custom builders
-
-    * Import custom builder projects
-    
-            cd ~/dev/git/alevat/jx/builder-gradle-alevat
-            git pull
-            jx import \
-                --pack docker \
-                --git-username=alevat-jenkins \
-                --git-api-token=$GITHUB_TOKEN
-
-    * Wait for build to complete
-    
-            jx get activity -f builder-gradle-alevat -w
-
-    * Update configuration to include new PodTemplate
-    
-        * Look up current builder version
-    
-                gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/builder-gradle-alevat --format="value(tags)"
-                
-        * Include PodTemplate configuration from builder README.md at `jenkins` key in `env/jenkins-x-platform/values.tmpl.yaml`.
-                
-                cd ~/dev/git/alevat/jx/environment-alevat-dev
-
-        * Push changes and wait for build to complete
-    
-                git commit -a -m"Added custom builder" && git push
-                jx get activity -f environment-alevat-dev -w
-
 ## Install Application
 
 ### Quickstart
@@ -217,6 +225,7 @@ Documents Ale Vat environment set up and configurations.
             
             JX_IMPORT_PROJECT_NAME=<name>
             JX_IMPORT_PACK=<pack>
+            JX_IMPORT_NO_DRAFT=<true to suppress generation>
     
     * Import the project
 
@@ -225,7 +234,8 @@ Documents Ale Vat environment set up and configurations.
                 --pack $JX_IMPORT_PACK \
                 --git-username=alevat-jenkins \
                 --url=https://github.com/alevat/$JX_IMPORT_PROJECT_NAME \
-                --git-api-token=$GITHUB_TOKEN
+                --git-api-token=$GITHUB_TOKEN \
+                --no-draft=$JX_IMPORT_NO_DRAFT
             cd $JX_IMPORT_PROJECT_NAME
             jx get activity -f $JX_IMPORT_PROJECT_NAME -w
             
@@ -288,11 +298,14 @@ Documents Ale Vat environment set up and configurations.
           
     * Delete alevat-jenkins Jenkins X token
     
+* Uninstall manuall installed tools
+
+        sudo rm /usr/local/bin/helm
+    
 * Remove tools from brew
 
         brew uninstall jx
         brew uninstall kail
-        brew uninstall kubernetes-helm
         brew uninstall kubernetes-cli
 
 * Remove local configuration files

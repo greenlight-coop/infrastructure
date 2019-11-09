@@ -1,7 +1,7 @@
 autoUpdate:
   enabled: false
   schedule: ""
-bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config.git
+bootConfigURL: https://github.com/alevat/environment-alevat-dev
 cluster:
   azure: {}
   clusterName: alevat
@@ -66,10 +66,10 @@ storage:
     url: gs://alevat-jx-reports
   repository:
     enabled: true
-    url: gs://alevat-jx-chart-repository
+    url: gs://alevat-jx-repository
 vault: {}
 velero: {}
 versionStream:
-  ref: master
+  ref: v1.0.193
   url: https://github.com/jenkins-x/jenkins-x-versions.git
 webhook: prow
