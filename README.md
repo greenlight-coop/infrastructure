@@ -6,14 +6,14 @@ Documents Ale Vat environment set up and configurations.
 
 * Set environment variables
 
-       GCP_PROJECT=alevat-project-v4
+       GCP_PROJECT=alevat-k8s # Revise if necessary to create in a new space
        ALEVAT_CLUSTER_DOMAIN=k8s
 
     *  Generate or reuse GitHub token for alevat.jenkins
         * generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
         * `GITHUB_TOKEN=<generated value>`
 
-## Set Up
+## Initial Set Up (One Time)
 
 * Install Docker Desktop, no Kubernetes
 
@@ -28,9 +28,9 @@ Documents Ale Vat environment set up and configurations.
     * Choose any project
     * Choose us-east4-a as the default zone
 
-* Create a new project named alevat in Google Cloud Platform and configure API permissions
+* Create a new project in Google Cloud Platform and configure API permissions
 
-        gcloud projects create $GCP_PROJECT --name="Ale Vat GCP Project" --organization=411469552668 --set-as-default
+        gcloud projects create $GCP_PROJECT --name="Ale Vat Kubernetes Project" --organization=411469552668 --set-as-default
         gcloud beta billing projects link $GCP_PROJECT --billing-account=01FB2E-55F20C-819FB4
         gcloud services enable compute.googleapis.com
         gcloud services enable container.googleapis.com
@@ -44,6 +44,8 @@ Documents Ale Vat environment set up and configurations.
             --description "Automatically managed zone by kubernetes.io/external-dns for Ale Vat Jenkins X cluster"
 
     * Add NS records for the managed zone via Google Domains
+    
+# Cluster Set Up
     
 * Install various tools via brew (note Helm version may be an issue)
 
@@ -98,12 +100,14 @@ Documents Ale Vat environment set up and configurations.
         * `Pipeline bot Git token`: Use value of GITHUB_TOKEN
         * `HMAC token...`: save token and press enter to use generated token
         * `...external Docker Registry`: press enter for no
+        
+    * Note - may encounter git conflicts, if necessary resolve and re-run `jx boot' in project.
             
     * Edit `OWNERS` file to include `etavela` and `alevat-jenkins`
     
     * Review any changes necessary to jx-requirements.yml template
         * `versionStream.ref`
-        * Others
+        * Any others
 
     * Update the configuration
     
@@ -142,8 +146,6 @@ Documents Ale Vat environment set up and configurations.
                 JX_IMPORT_PACK=docker
 
     * Wait for build to complete
-    
-            jx get activity -f builder-gradle-alevat -w
 
     * Update configuration to include new PodTemplate
     
@@ -157,21 +159,21 @@ Documents Ale Vat environment set up and configurations.
                 git commit -a -m"Added custom builder" && git push
                 jx get activity -f environment-alevat-dev -w
 
-* Install existing applications (see below)
+* Install existing applications (required to create staging and production namespaces - see below
+  for steps)
             
-* Check and fix TLS secrets. 
+* Check and fix TLS secrets. (Note: annotating for kubernetes-replicator but this is not used)
 
+    * Delete `env/templates/wildcardcert-secret.yaml` from environment-alevat-staging and 
+      environment-alevat-staging.
+      
+        * Commit and push changes for environments.
+      
     * Fix TLS secret replication annotation
     
             kubectl annotate secret tls-k8s-alevat-com-p -n jx \
                 replicator.v1.mittwald.de/replication-allowed=true \
                 replicator.v1.mittwald.de/replication-allowed-namespaces=jx-staging,jx-production 
-
-    * Check secret content in jx-staging and jx-production checking for LetsEncrypt certificate info. If okay, skip 
-    steps that follow.
-    
-            kubectl -n jx-staging get secret tls-k8s-alevat-com-p -o yaml 
-            kubectl -n jx-production get secret tls-k8s-alevat-com-p -o yaml
            
     * Export secret data from `jx` namespace
     
@@ -245,6 +247,9 @@ Documents Ale Vat environment set up and configurations.
     
             JX_IMPORT_PROJECT_VERSION=$(gcloud container images list-tags --limit=1 gcr.io/$GCP_PROJECT/$JX_IMPORT_PROJECT_NAME --format="value(tags)")
             jx promote $JX_IMPORT_PROJECT_NAME --version $JX_IMPORT_PROJECT_VERSION --env production
+
+    * Test PR and preview environment
+        * Note that updating project references in artifacts may be necessary
             
     * Clean up temporary checkout 
             
@@ -282,11 +287,6 @@ Documents Ale Vat environment set up and configurations.
         gsutil -m rm -r gs://alevat-jx-repository
         gsutil -m rm -r gs://jx-vault-alevat-bucket
         
-        gcloud projects delete $GCP_PROJECT --quiet
-        
-    * Remove DNS managed zone
-    * Remove NS records for managed zone from Google Domains
-
 * Remove Jenkins X GitHub artifacts
     * Remove any alevat environment repositories
     
@@ -313,6 +313,19 @@ Documents Ale Vat environment set up and configurations.
         rm -rf  ~/.jx
         rm -rf  ~/.helm
         rm -rf  ~/.kube
+    
+# Tear Down Project (optional)
+
+* Remove DNS managed zone
+    * Remove record sets for managed zone from Google Domains
+    * Remove zone
+
+* Remove project
+
+        gcloud projects delete $GCP_PROJECT --quiet
+
+* Remove local configuration files
+
         rm -rf  ~/.gsutil
         rm -rf  ~/.config/gcloud
         
@@ -321,4 +334,3 @@ Documents Ale Vat environment set up and configurations.
         rm -rf  ~/dev/tools/google-cloud-sdk
         
     * Remove gcloud-sdk from PATH in ~/.zshrc
-        
