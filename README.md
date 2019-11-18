@@ -74,7 +74,7 @@ Documents Ale Vat environment set up and configurations.
             --num-nodes 1 \
             --max-nodes 2 \
             --min-nodes 1 \
-            --scopes=gke-default,https://www.googleapis.com/auth/cloud-platform.read-only \
+            --scopes=gke-default,storage-full,https://www.googleapis.com/auth/cloud-platform.read-only \
             --preemptible
         
         kubectl create clusterrolebinding \
@@ -203,7 +203,7 @@ Documents Ale Vat environment set up and configurations.
             kubectl delete secret -n jx-production tls-k8s-alevat-com-p
             kubectl apply -f tls-secret-production.yaml
 
-## Install Application
+## Install Applications
 
 ### Quickstart
 
@@ -255,7 +255,58 @@ Documents Ale Vat environment set up and configurations.
             
             cd ~/dev/tmp
             rm -rf ~/dev/tmp/$JX_IMPORT_PROJECT_NAME
+
+    * Add any environment specific configuration to staging and production environments, e.g.:
+    
+            green-ui:
+              env:
+                JX_NAMESPACE: jx-staging
+
+    * Add BDD tests to staging configuration, e.g.:
+    
+            env:
+            - name: DEPLOY_NAMESPACE
+              value: jx-staging
+            pipelineConfig:
+              env:
+              - name: DEPLOY_NAMESPACE
+                value: jx-staging
+              pipelines:
+                release:
+                  postBuild:
+                    steps:
+                      - sh: ./run-tests.sh
+                        name: green-bdd-test
+                        dir: /home/bdd
+                        agent:
+                          image: gcr.io/alevat-k8s/green-bdd:0.0.5
+
             
+## Revise Cluster Node Pool
+
+* Create new node pool
+
+        gcloud container node-pools create alevat-pool \
+            --cluster alevat \
+            --machine-type n1-standard-2 \
+            --region us-east4 \
+            --num-nodes 1 \
+            --max-nodes 2 \
+            --min-nodes 1 \
+            --enable-autoscaling \
+            --scopes=gke-default,storage-full,https://www.googleapis.com/auth/cloud-platform.read-only \
+            --preemptible    
+
+
+* Drain each node
+
+        kubectl drain [node]
+        
+* Delete old pool
+
+        gcloud container node-pools delete default-pool \
+            --cluster alevat
+
 ## Tear Down
 
 * Remove resources from Google Cloud Platform
@@ -286,7 +337,9 @@ Documents Ale Vat environment set up and configurations.
         gsutil -m rm -r gs://alevat-jx-reports
         gsutil -m rm -r gs://alevat-jx-repository
         gsutil -m rm -r gs://jx-vault-alevat-bucket
-        
+
+* Remove DNS managed zone record sets
+
 * Remove Jenkins X GitHub artifacts
     * Remove any alevat environment repositories
     
@@ -295,6 +348,8 @@ Documents Ale Vat environment set up and configurations.
           hub delete -y alevat/environment-alevat-production
           hub delete -y alevat/environment-alevat-dev
           rm -rf ~/dev/git/alevat/jx/environment-alevat-dev
+          rm -rf ~/dev/git/alevat/jx/environment-alevat-staging
+          rm -rf ~/dev/git/alevat/jx/environment-alevat-production
           
     * Delete alevat-jenkins Jenkins X token
     
