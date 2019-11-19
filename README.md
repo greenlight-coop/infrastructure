@@ -45,6 +45,26 @@ Documents Ale Vat environment set up and configurations.
 
     * Add NS records for the managed zone via Google Domains
     
+* Create a GCP Storage bucket for build report output via GCP Console
+
+    * Name: build-reports.k8s.alevat.com
+    * Location type: Region, us-east4
+    * Storage class: standard
+    * Access control: uniform
+    * Encryption: Google-managed key
+    * Grant Storage Admin role to default compute service account (e.g. 472501189628-compute@developer.gserviceaccount.com)
+    * Grant Storage Object Viewer to allUsers
+    
+* Set web configuration properties for the bucket
+
+        gsutil web set -m index.html -e 404.html gs://build-reports.k8s.alevat.com
+
+* Configure a CNAME to point to the report bucket
+    
+    * DNS Name: build-reports (.k8s.alevat.com)
+    * Resource Record Type: CNAME
+    * Canonical Name: c.storage.googleapis.com.
+
 # Cluster Set Up
     
 * Install various tools via brew (note Helm version may be an issue)
@@ -54,6 +74,7 @@ Documents Ale Vat environment set up and configurations.
         brew install jx
         brew tap boz/repo
         brew install boz/repo/kail
+        brew install mongodb/brew/mongodb-community-shell
         
 * Install Helm
 
@@ -362,6 +383,7 @@ Documents Ale Vat environment set up and configurations.
         brew uninstall jx
         brew uninstall kail
         brew uninstall kubernetes-cli
+        brew uninstall mongodb-community-shell
 
 * Remove local configuration files
 
