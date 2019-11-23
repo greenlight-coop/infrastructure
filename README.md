@@ -75,6 +75,8 @@ Documents Ale Vat environment set up and configurations.
         brew tap boz/repo
         brew install boz/repo/kail
         brew install mongodb/brew/mongodb-community-shell
+        brew tap starkandwayne/cf
+        brew install starkandwayne/cf/safe
         
 * Install Helm
 
@@ -384,6 +386,7 @@ Documents Ale Vat environment set up and configurations.
         brew uninstall kail
         brew uninstall kubernetes-cli
         brew uninstall mongodb-community-shell
+        brew uninstall safe
 
 * Remove local configuration files
 
