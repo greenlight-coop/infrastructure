@@ -225,8 +225,39 @@ Documents Ale Vat environment set up and configurations.
                 tee tls-secret-production.yaml
             kubectl delete secret -n jx-production tls-k8s-alevat-com-p
             kubectl apply -f tls-secret-production.yaml
+            
+* Configure environments to use Vault secrets
+
+    * Add jx-requirements.yml file to root of staging and production with content:
+    
+            secretStorage: vault
 
 ## Install Applications
+
+### Create databases
+
+* Create MongoDb databases for green-service (staging and production)
+
+* Create users for production and staging databases (readWrite for database)
+
+* Make a note of connection URIs (with user:password embedded) for Vault secret creation.
+
+### Configure database integration
+
+* Configure secrets for applications
+
+    * Use Vault (UI or `safe`) to create secrets for:
+        * secrets/alevat/green-service/production/mongodb:uri
+        * secrets/alevat/green-service/staging/mongodb:uri
+        
+* Add integration configuration to staging and production environments. Add content (edited for
+ environment):
+
+        green-service:
+          env:
+            GREEN_SERVICE_MONGODB_DATABASE: green-service-db-staging
+          mysecrets:
+            mongodbUri: vault:alevat/green-service/staging/mongodb:uri
 
 ### Quickstart
 
