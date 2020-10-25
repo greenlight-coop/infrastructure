@@ -10,6 +10,7 @@
 
 ## Update Configuration
 
+    terraform apply --var project_id=$(terraform output project_id)
 
 ## Removal
 
