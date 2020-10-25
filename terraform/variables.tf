@@ -5,12 +5,12 @@ variable "region" {
 
 variable "project_id" {
   type    = string
-  default = "greenlight-development"
+  default = "greenlight-coop-development"
 }
 
 variable "state_bucket" {
   type    = string
-  default = "tf-state-greenlight-development"
+  default = "tf-state-greenlight-coop-development"
 }
 
 variable "cluster_name" {
@@ -45,6 +45,7 @@ variable "billing_account_id" {
 
 variable "k8s_version" {
   type = string
+  default = "1.17.12-gke.1504"
 }
 
 variable "ingress_nginx" {

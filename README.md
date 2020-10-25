@@ -13,3 +13,11 @@ development machines.
 ## Google Cloud Platform
 
 See the [README.md](terraform/README.md) in the `terraform` directory for instructions on creating or updating GCP resources for Green Light.
+
+## Public Website
+
+The public website is https://greenlight.coop.
+
+Website management is hosted at https://dashboard.webhosting.coop/index.php.
+
+Public website content is stored in the [greenlight/www]() project in GitHub.
