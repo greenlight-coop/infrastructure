@@ -15,6 +15,20 @@ resource "google_project" "main" {
   billing_account = var.billing_account_id
 }
 
+resource "google_project_service" "dns" {
+  project = google_project.main.project_id
+  service = "dns.googleapis.com"
+}
+
+resource "google_dns_managed_zone" "development" {
+  name        = "development-k8s-zone"
+  dns_name    = "dev.greenlight.coop."
+  description = "DNS zone for development k8s cluster"
+  depends_on = [
+    google_project_service.dns
+  ]
+}
+
 resource "google_project_service" "container" {
   project = google_project.main.project_id
   service = "container.googleapis.com"
@@ -57,6 +71,13 @@ resource "google_container_node_pool" "primary_nodes" {
     create = "15m"
     update = "1h"
   }
+}
+
+module "argo_cd" {
+  source = "runoncloud/argocd/kubernetes"
+
+  namespace       = "argocd"
+  argo_cd_version = "1.7.8"
 }
 
 resource "null_resource" "kubeconfig" {
