@@ -1,15 +1,15 @@
-# Ale Vat Software Infrastructure
+# Green Light Software Cooperative Infrastructure
 
-Documents Ale Vat environment set up and configurations.
+Documents Green Light Software Cooperative environment set up and configurations.
 
 ## Global
 
 * Set environment variables
 
-       GCP_PROJECT=alevat-k8s # Revise if necessary to create in a new space
-       ALEVAT_CLUSTER_DOMAIN=k8s
+       GCP_PROJECT=greenlight-temp # Revise if necessary to create in a new space
+       ALEVAT_CLUSTER_DOMAIN=greenlight
 
-    *  Generate or reuse GitHub token for alevat.jenkins
+    *  Generate or reuse GitHub token for alevat-jenkins
         * generate via https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo
         * `GITHUB_TOKEN=<generated value>`
 
