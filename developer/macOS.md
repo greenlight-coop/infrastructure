@@ -8,7 +8,9 @@
 
 * Unzip and move to Applications
 
-* Set Tab Size to 2 in Settings
+* Update Settings
+    * Set Tab Size to 2
+    * Auto Save: afterDelay
 
 * Install the following extensions
   * Terraform (Anton Kulikov)
@@ -57,7 +59,7 @@ Update to the following plugins in .zshrc
       helm
     )
 
-### git / GitHub
+### git /
 
     brew install git
     git config --global user.name $FULL_NAME
