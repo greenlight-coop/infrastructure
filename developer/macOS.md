@@ -53,10 +53,11 @@ Update to the following plugins in .zshrc
 
     plugins=(
       git
+      github
       kubectl
-      minikube
       zsh-autosuggestions
       helm
+      terraform
     )
 
 ### git /
