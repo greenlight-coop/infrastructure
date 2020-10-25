@@ -5,17 +5,17 @@ variable "region" {
 
 variable "project_id" {
   type    = string
-  default = "greenlight-coop-development"
+  default = ""
 }
 
-variable "state_bucket" {
+variable "project_name" {
   type    = string
-  default = "tf-state-greenlight-coop-development"
+  default = "greenlight-development"
 }
 
 variable "cluster_name" {
   type    = string
-  default = "devops-catalog"
+  default = "greenlight-development-k8s"
 }
 
 variable "min_node_count" {
@@ -46,9 +46,4 @@ variable "billing_account_id" {
 variable "k8s_version" {
   type = string
   default = "1.17.12-gke.1504"
-}
-
-variable "ingress_nginx" {
-  type    = bool
-  default = false
 }

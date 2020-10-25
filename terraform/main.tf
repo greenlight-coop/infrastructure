@@ -1,27 +1,16 @@
 provider "google" {
   project     = var.project_id
   region      = var.region
-  credentials = file("account.json")
 }
 
-terraform {
-  backend "gcs" {
-    bucket      = "tf-state-greenlight-development"
-    prefix      = "terraform/state"
-    credentials = "account.json"
-  }
+resource "random_string" "main" {
+  length  = 16
+  special = false
+  upper   = false
 }
 
-resource "google_storage_bucket" "state" {
-  name          = var.state_bucket
-  location      = var.region
-  project       = var.project_id
-  versioning    {
-    enabled = "true"
-  }
-  storage_class = "NEARLINE"
-  labels        = {
-    environment = "development"
-    created-by  = "terraform"
-  }
+resource "google_project" "main" {
+  name            = var.project_name
+  project_id      = var.project_id != "" ? var.project_id : "development-${random_string.main.result}"
+  billing_account = var.billing_account_id
 }
