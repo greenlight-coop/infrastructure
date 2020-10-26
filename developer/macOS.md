@@ -65,6 +65,7 @@ Update to the following plugins in .zshrc
     brew install git
     git config --global user.name $FULL_NAME
     git config --global user.email $EMAIL_ADDRESS
+    git config --global pull.rebase false
     git config --global alias.co checkout
     git config --global alias.br branch
     git config --global alias.ci commit
