@@ -1,3 +1,21 @@
+terraform {
+  required_version = ">= 0.12"
+
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "-> 3.44.0"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
+locals {
+  credentials_file_path = var.credentials_path
+}
+
 provider "google" {
   project     = var.project_id
   region      = var.region
@@ -71,6 +89,18 @@ resource "google_container_node_pool" "primary_nodes" {
     create = "15m"
     update = "1h"
   }
+}
+
+provider "kubernetes" {
+  load_config_file = false
+
+  host     = google_container_cluster.primary.endpoint
+  username = var.gke_username
+  password = var.gke_password
+
+  client_certificate     = google_container_cluster.primary.master_auth.0.client_certificate
+  client_key             = google_container_cluster.primary.master_auth.0.client_key
+  cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
 }
 
 module "argo_cd" {
