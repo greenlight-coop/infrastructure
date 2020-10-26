@@ -12,9 +12,9 @@ Global for all instructions that follow
 
 ## Initial Configuration
     
-    gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID
+    gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID --set-as-default
 
-    ./setup-sa.sh $GCP_ORGANIZATION_ID $SEED_GCP_PROJECT_ID $GCP_BILLING_ACCOUNT_ID
+    ./setup-sa.sh -o $GCP_ORGANIZATION_ID -p $SEED_GCP_PROJECT_ID -b $GCP_BILLING_ACCOUNT_ID
 
     terraform init
 
