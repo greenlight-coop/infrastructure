@@ -3,6 +3,11 @@ variable "region" {
   default = "us-east4"
 }
 
+variable "zone" {
+  type    = string
+  default = "us-east4-a"
+}
+
 variable "project_name" {
   type    = string
   default = "greenlight-development"
@@ -25,7 +30,7 @@ variable "min_node_count" {
 
 variable "max_node_count" {
   type    = number
-  default = 3
+  default = 10
 }
 
 variable "machine_type" {
