@@ -3,14 +3,14 @@ variable "region" {
   default = "us-east4"
 }
 
-variable "project_id" {
-  type    = string
-  default = ""
-}
-
 variable "project_name" {
   type    = string
   default = "greenlight-development"
+}
+
+variable "org_id" {
+  type = string
+  default = "636256323415"
 }
 
 variable "cluster_name" {
