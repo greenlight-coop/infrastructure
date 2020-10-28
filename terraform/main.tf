@@ -33,5 +33,6 @@ module "project-factory" {
   billing_account       = var.billing_account_id
   credentials_path      = "credentials.json"
   activate_apis         = ["container.googleapis.com", "cloudbilling.googleapis.com"]
-  skip_gcloud_download  = "true"
+  auto_create_network   = true
+  skip_gcloud_download  = true
 }
