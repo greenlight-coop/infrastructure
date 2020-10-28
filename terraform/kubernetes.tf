@@ -4,16 +4,19 @@ provider "kubernetes" {
 
 resource "google_container_cluster" "primary" {
   name                     = var.cluster_name
-  project                  = module.project-factory.project_id
+  project                  = google_project.main.project_id
   location                 = var.zone
   min_master_version       = var.k8s_version
   remove_default_node_pool = true
   initial_node_count       = 1
+  depends_on = [
+    google_project_service.container
+  ]
 }
 
 resource "google_container_node_pool" "primary_nodes" {
   name               = "primary-node-pool"
-  project            = module.project-factory.project_id
+  project            = google_project.main.project_id
   location           = var.zone
   cluster            = google_container_cluster.primary.name
   version            = var.k8s_version

@@ -23,16 +23,18 @@ provider "google" {
   region      = var.region
 }
 
-module "project-factory" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2"
+resource "random_id" "main" {
+  byte_length  = 2
+}
 
-  name                  = var.project_name
-  random_project_id     = "true"
-  org_id                = var.org_id
-  billing_account       = var.billing_account_id
-  credentials_path      = "credentials.json"
-  activate_apis         = ["container.googleapis.com", "cloudbilling.googleapis.com"]
-  auto_create_network   = true
-  skip_gcloud_download  = true
+resource "google_project" "main" {
+  name            = var.project_name
+  project_id      = "${var.project_name}-${random_id.main.hex}"
+  org_id          = var.org_id
+  billing_account = var.billing_account_id
+}
+
+resource "google_project_service" "container" {
+  project = google_project.main.project_id
+  service = "container.googleapis.com"
 }

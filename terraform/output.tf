@@ -1,3 +1,3 @@
 output "project_id" {
-  value = module.project-factory.project_id
+  value = google_project.main.project_id
 }
