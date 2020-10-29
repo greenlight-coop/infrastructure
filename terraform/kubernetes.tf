@@ -41,37 +41,27 @@ resource "google_container_node_pool" "primary_nodes" {
   }
 }
 
-# provider "kubernetes" {
-#   load_config_file = false
-
-#   host     = google_container_cluster.primary.endpoint
-#   username = var.gke_username
-#   password = var.gke_password
-
-#   client_certificate     = google_container_cluster.primary.master_auth.0.client_certificate
-#   client_key             = google_container_cluster.primary.master_auth.0.client_key
-#   cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
-# }
-
-module "argo_cd" {
-  source = "runoncloud/argocd/kubernetes"
-
-  namespace       = "argocd"
-  argo_cd_version = "1.7.8"
+resource "null_resource" "kubeconfig" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${var.cluster_name} --project ${google_project.main.project_id} --zone ${var.zone}"
+  }
+  depends_on = [
+    google_container_cluster.primary,
+  ]
 }
 
-# resource "null_resource" "kubeconfig" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${var.cluster_name} --project ${google_project.main.project_id} --region ${var.region}"
-#   }
-#   depends_on = [
-#     google_container_cluster.primary,
-#   ]
-# }
+resource "null_resource" "ingress-nginx" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml"
+  }
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
 
-# resource "null_resource" "destroy-kubeconfig" {
-#   provisioner "local-exec" {
-#     when    = destroy
-#     command = "rm -f $PWD/kubeconfig"
-#   }
-# }
+resource "null_resource" "destroy-kubeconfig" {
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm -f $PWD/kubeconfig"
+  }
+}
