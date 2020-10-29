@@ -28,7 +28,7 @@ Global for all instructions that follow
 
     terraform apply
 
-Create/update NS records for dev.greenlight.coop. at https://marcaria.com/ from output
+(TBD - document DNS configuration steps)
 
 ## Update Configuration
 

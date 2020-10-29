@@ -82,7 +82,7 @@ Update .zshrc per directions at start of install
     gcloud init
         
 * Authenticate with greenlight.coop account
-* Choose the Green Light development project (e.g. `development-xxxxxxxxxxxxxxx`) as the default project and `us-east4-a` as the default zone
+* Choose the Green Light development project (e.g. `greenlight-development-xxxx`) as the default project and `us-east4-a` as the default zone
 
 ### Kubernetes Tools
 
