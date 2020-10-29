@@ -93,18 +93,6 @@ Update .zshrc per directions at start of install
     brew install kn
     brew install argocd
 
-After installation
-
-### Google Cloud Platform
-
-    cd ~/dev/tools
-    wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-315.0.0-darwin-x86_64.tar.gz -O - | tar -xz
-    ./google-cloud-sdk/install.sh
-    . ~/.zshrc
-    gcloud init
-        
-Authenticate with greenlight.coop account
-
 ### NodeJS
 
     brew install nvm
