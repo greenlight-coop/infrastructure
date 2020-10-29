@@ -53,12 +53,12 @@ resource "google_container_node_pool" "primary_nodes" {
 #   cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
 # }
 
-# module "argo_cd" {
-#   source = "runoncloud/argocd/kubernetes"
+module "argo_cd" {
+  source = "runoncloud/argocd/kubernetes"
 
-#   namespace       = "argocd"
-#   argo_cd_version = "1.7.8"
-# }
+  namespace       = "argocd"
+  argo_cd_version = "1.7.8"
+}
 
 # resource "null_resource" "kubeconfig" {
 #   provisioner "local-exec" {

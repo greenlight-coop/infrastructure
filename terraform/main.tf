@@ -3,12 +3,24 @@ terraform {
 
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source =  "hashicorp/google"
       version = "~> 3.44.0"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source =  "hashicorp/kubernetes"
       version = "~> 1.13.2"
+    }
+    k8s = {
+      source =  "banzaicloud/k8s"
+      version = "~> 0.8.3"
+    }
+    http = {
+      source =  "hashicorp/http"
+      version = "~> 2.0.0"
+    }
+    random = {
+      source =  "hashicorp/random"
+      version = "~> 3.0.0"
     }
   }
 
