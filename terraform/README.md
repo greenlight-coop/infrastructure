@@ -36,7 +36,7 @@ Global for all instructions that follow
 
 ## Removal
 
-    terraform destroy --var project_id=$(terraform output project_id)
+    terraform destroy
 
 ### Remove Seed Project
 
