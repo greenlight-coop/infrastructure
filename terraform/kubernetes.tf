@@ -59,6 +59,24 @@ resource "null_resource" "ingress-nginx" {
   ]
 }
 
+resource "null_resource" "argocd-namesapce" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
+  }
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
+
+resource "null_resource" "argocd" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+  }
+  depends_on = [
+    null_resource.argocd-namesapce,
+  ]
+}
+
 resource "null_resource" "destroy-kubeconfig" {
   provisioner "local-exec" {
     when    = destroy
