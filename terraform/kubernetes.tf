@@ -46,7 +46,7 @@ resource "null_resource" "kubeconfig" {
     command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${google_project.development.project_id} --zone ${var.zone}"
   }
   depends_on = [
-    google_container_cluster.development_primary_nodes,
+    google_container_node_pool.development_primary_nodes,
   ]
 }
 
