@@ -43,10 +43,10 @@ resource "google_container_node_pool" "primary_nodes" {
 
 resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${var.cluster_name} --project ${google_project.main.project_id} --zone ${var.zone}"
+    command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${var.cluster_name} --project ${google_project.development.project_id} --zone ${var.zone}"
   }
   depends_on = [
-    google_container_cluster.primary,
+    google_container_cluster.development,
   ]
 }
 
