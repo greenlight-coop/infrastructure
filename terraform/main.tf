@@ -146,3 +146,13 @@ resource "google_dns_managed_zone" "dev" {
   description = "DNS for dev.greenlight.coop"
   depends_on  = [google_project_service.dns-development]
 }
+
+resource "google_dns_record_set" "dev_name_servers" {
+  name         = "dev.greenlight.com."
+  project      = google_project.network.project_id
+  managed_zone = google_dns_managed_zone.root.name
+  type         = "NS"
+  ttl          = 300
+
+  rrdatas = google_dns_managed_zone.dev.name_servers
+}
