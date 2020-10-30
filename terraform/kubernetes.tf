@@ -59,6 +59,15 @@ resource "null_resource" "ingress-nginx" {
   ]
 }
 
+resource "null_resource" "cert-manager" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.yaml"
+  }
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
+
 resource "null_resource" "argocd-namesapce" {
   provisioner "local-exec" {
     command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
