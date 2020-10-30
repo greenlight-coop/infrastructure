@@ -2,7 +2,6 @@ locals {
   dns_enable_count = var.enable_dns == true ? 1 : 0
 }
 
-
 resource "google_project_service" "dns-network" {
   count   = local.dns_enable_count
   project = google_project.network.project_id
