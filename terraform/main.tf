@@ -40,8 +40,8 @@ resource "random_id" "main" {
 }
 
 resource "google_project" "main" {
-  name            = var.project_name
-  project_id      = "${var.project_name}-${random_id.main.hex}"
+  name            = "greenlight-development"
+  project_id      = "greenlight-development-${random_id.main.hex}"
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }

@@ -8,11 +8,6 @@ variable "zone" {
   default = "us-east4-a"
 }
 
-variable "project_name" {
-  type    = string
-  default = "greenlight-development"
-}
-
 variable "org_id" {
   type = string
   default = "636256323415"
