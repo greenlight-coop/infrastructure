@@ -150,7 +150,7 @@ resource "google_dns_managed_zone" "dev" {
 resource "google_dns_record_set" "dev_name_servers" {
   name         = "dev.greenlight.com."
   project      = google_project.network.project_id
-  managed_zone = google_dns_managed_zone.dev.name
+  managed_zone = google_dns_managed_zone.root.name
   type         = "NS"
   ttl          = 300
 
