@@ -13,11 +13,6 @@ variable "org_id" {
   default = "636256323415"
 }
 
-variable "cluster_name" {
-  type    = string
-  default = "greenlight-development-k8s"
-}
-
 variable "min_node_count" {
   type    = number
   default = 1
