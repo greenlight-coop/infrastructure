@@ -84,6 +84,7 @@ resource "google_dns_managed_zone" "root" {
 
 resource "google_dns_record_set" "public_website_a" {
   name         = "greenlight.com."
+  project      = google_project.network.project_id
   managed_zone = google_dns_managed_zone.root.name
   type         = "A"
   ttl          = 300
@@ -93,6 +94,7 @@ resource "google_dns_record_set" "public_website_a" {
 
 resource "google_dns_record_set" "www" {
   name         = "www.greenlight.com."
+  project      = google_project.network.project_id
   managed_zone = google_dns_managed_zone.root.name
   type         = "CNAME"
   ttl          = 300
@@ -102,6 +104,7 @@ resource "google_dns_record_set" "www" {
 
 resource "google_dns_record_set" "mx" {
   name         = "greenlight.com."
+  project      = google_project.network.project_id
   managed_zone = google_dns_managed_zone.root.name
   type         = "MX"
   ttl          = 300
@@ -118,6 +121,7 @@ resource "google_dns_record_set" "mx" {
 
 resource "google_dns_record_set" "google-site-verification-txt" {
   name         = "greenlight.com."
+  project      = google_project.network.project_id
   managed_zone = google_dns_managed_zone.root.name
   type         = "TXT"
   ttl          = 300
@@ -127,6 +131,7 @@ resource "google_dns_record_set" "google-site-verification-txt" {
 
 resource "google_dns_record_set" "github-verification-txt" {
   name         = "_github-challenge-greenlight-coop.greenlight.com."
+  project      = google_project.network.project_id
   managed_zone = google_dns_managed_zone.root.name
   type         = "TXT"
   ttl          = 300
