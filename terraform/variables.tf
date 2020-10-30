@@ -42,3 +42,8 @@ variable "k8s_version" {
   type = string
   default = "1.17.12-gke.1504"
 }
+
+variable "enable_dns" {
+  type = bool
+  default = false
+}

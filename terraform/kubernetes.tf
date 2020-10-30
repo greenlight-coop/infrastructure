@@ -68,6 +68,28 @@ resource "null_resource" "cert-manager" {
   ]
 }
 
+######## EXAMPLE APPLICATION - REMOVE
+
+resource "null_resource" "kuard-deployment" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/deployment.yaml"
+  }
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
+
+resource "null_resource" "kuard-service" {
+  provisioner "local-exec" {
+    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/service.yaml"
+  }
+  depends_on = [
+    null_resource.kuard-deployment,
+  ]
+}
+
+######## END
+
 resource "null_resource" "argocd-namesapce" {
   provisioner "local-exec" {
     command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
