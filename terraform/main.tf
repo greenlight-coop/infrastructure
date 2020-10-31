@@ -43,7 +43,7 @@ resource "random_id" "main" {
 locals {
   network_project_id_suffix     = random_id.main[0].hex
   development_project_id_suffix = random_id.main[1].hex
-  local.disabled                = 0
+  disabled                      = 0
 }
 
 resource "google_project" "network" {
