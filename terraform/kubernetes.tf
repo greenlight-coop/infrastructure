@@ -162,13 +162,10 @@ resource "helm_release" "argo-cd" {
         annotations:
           kubernetes.io/ingress.class: nginx
           cert-manager.io/cluster-issuer: letsencrypt-production
-        hosts:
-          - argocd.dev.greenlight.coop
         tls:
           - secretName: letsencrypt-production
             hosts:
               - argocd.dev.greenlight.coop
-        https: true
   EOT
   ]
 
