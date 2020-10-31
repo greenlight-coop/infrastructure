@@ -1,3 +1,8 @@
+provider "helm" {
+  kubernetes {
+    config_path = "./kubeconfig"
+  }
+}
 
 resource "google_container_cluster" "development" {
   name                     = "greenlight-development-cluster"
