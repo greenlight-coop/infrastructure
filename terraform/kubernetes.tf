@@ -92,7 +92,8 @@ resource "helm_release" "cert-manager" {
   }
 
   depends_on = [
-    null_resource.kubeconfig
+    null_resource.kubeconfig,
+    kubernetes_namespace.cert-manager
   ]
 }
 
@@ -162,7 +163,8 @@ resource "helm_release" "argo-cd" {
   ]
 
   depends_on = [
-    k8s_manifest.letsencrypt-production-issuer
+    k8s_manifest.letsencrypt-production-issuer,
+    kubernetes_namespace.argocd
   ]
 }
 
