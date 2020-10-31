@@ -80,7 +80,7 @@ resource "helm_release" "cert-manager" {
   repository  = "https://charts.jetstack.io"
   chart       = "jetstack/cert-manager"
   version     = "1.0.4"
-  namespace   = kubernetes_namespace.cert-manager.metadata.name
+  namespace   = "cert-manager"
   depends_on = [
     null_resource.kubeconfig,
   ]
