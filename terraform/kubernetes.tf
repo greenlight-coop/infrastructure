@@ -97,28 +97,28 @@ resource "helm_release" "cert-manager" {
 }
 
 data "template_file" "letsencrypt-staging-issuer" {
-  template = "${file("manifests/letsencrypt-staging-issuer.yaml")}"
+  template = file("manifests/letsencrypt-staging-issuer.yaml")
   vars = {
-    administration-email = "${var.administration-email}"
+    administration-email = var.administration-email
   }
 }
 
 resource "k8s_manifest" "letsencrypt-staging-issuer" {
-  content = "${data.template_file.letsencrypt-staging-issuer.rendered}"
+  content = data.template_file.letsencrypt-staging-issuer.rendered
   depends_on = [
     helm_release.cert-manager,
   ]
 }
 
 data "template_file" "letsencrypt-production-issuer" {
-  template = "${file("manifests/letsencrypt-production-issuer.yaml")}"
+  template = file("manifests/letsencrypt-production-issuer.yaml")
   vars = {
-    administration-email = "${var.administration-email}"
+    administration-email = var.administration-email
   }
 }
 
 resource "k8s_manifest" "letsencrypt-production-issuer" {
-  content = "${data.template_file.letsencrypt-production-issuer.rendered}"
+  content = data.template_file.letsencrypt-production-issuer.rendered
   depends_on = [
     helm_release.cert-manager,
   ]
