@@ -139,7 +139,6 @@ data "template_file" "argocd-values" {
 }
 
 resource "helm_release" "argo-cd" {
-  count       = local.disabled
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
   chart       = "argo-cd"
