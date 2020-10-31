@@ -146,9 +146,23 @@ resource "helm_release" "argo-cd" {
   }
 
   set {
-    name  = "server.ingress.hosts"
-    value = "argocd.dev.greenlight.coop"
+    name  = "server.ingress.enabled"
+    value = true
   }
+
+  # set {
+  #   name  = "server.ingress.hosts"
+  #   value = "argocd.dev.greenlight.coop"
+  #   type  = auto
+  # }
+
+  values = [ <<-EOT
+    server:
+      ingress:
+        hosts:
+          - argocd.dev.greenlight.coop
+  EOT
+  ]
 
   depends_on = [
     k8s_manifest.letsencrypt-production-issuer
