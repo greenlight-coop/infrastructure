@@ -1,4 +1,4 @@
-# helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values argocd-values.yaml --wait
+# helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
 # In order to access the server UI you have the following options:
 # 
