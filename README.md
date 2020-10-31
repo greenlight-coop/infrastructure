@@ -14,6 +14,10 @@ development machines.
 
 See the [README.md](terraform/README.md) in the `terraform` directory for instructions on creating or updating GCP resources for Green Light.
 
+## DNS
+
+DNS for the domain greenlight.coop is managed at https://marcaria.com/. Subdomains will be Managed Zones in GCP DNS.
+
 ## Public Website
 
 The public website is https://greenlight.coop.

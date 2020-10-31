@@ -1,5 +1,6 @@
 ## Google Cloud Platform
 kubeconfig
+credentials.json
 
 ## Terraform
 .terraform/

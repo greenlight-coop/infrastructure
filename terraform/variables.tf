@@ -3,19 +3,14 @@ variable "region" {
   default = "us-east4"
 }
 
-variable "project_id" {
+variable "zone" {
   type    = string
-  default = ""
+  default = "us-east4-a"
 }
 
-variable "project_name" {
-  type    = string
-  default = "greenlight-development"
-}
-
-variable "cluster_name" {
-  type    = string
-  default = "greenlight-development-k8s"
+variable "org_id" {
+  type = string
+  default = "636256323415"
 }
 
 variable "min_node_count" {
@@ -25,7 +20,7 @@ variable "min_node_count" {
 
 variable "max_node_count" {
   type    = number
-  default = 3
+  default = 10
 }
 
 variable "machine_type" {
@@ -46,4 +41,19 @@ variable "billing_account_id" {
 variable "k8s_version" {
   type = string
   default = "1.17.12-gke.1504"
+}
+
+variable "enable_dns" {
+  type = bool
+  default = false
+}
+
+variable "enable_dns_named_resources" {
+  type = bool
+  default = true
+}
+
+variable "administration-email" {
+  type    = string
+  default = "admin@greenlight.coop"
 }

@@ -27,12 +27,12 @@ Set environment variables and directories for command line installation
 
     export FULL_NAME="<your full name>"
     export EMAIL_ADDRESS=<your email address>
-    mkdir -p ~/dev/tools
 
 ### Prerequisities / General Tools
 
     brew install wget
     brew install jq
+    brew install python
 
 ### zsh / oh-my-zsh
     
@@ -60,11 +60,12 @@ Update to the following plugins in .zshrc
       terraform
     )
 
-### git /
+### git / GitHub
 
     brew install git
     git config --global user.name $FULL_NAME
     git config --global user.email $EMAIL_ADDRESS
+    git config --global pull.rebase false
     git config --global alias.co checkout
     git config --global alias.br branch
     git config --global alias.ci commit
@@ -74,13 +75,14 @@ Update to the following plugins in .zshrc
 
 ### Google Cloud Platform
 
-    cd ~/dev/tools
-    wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-315.0.0-darwin-x86_64.tar.gz -O - | tar -xz
-    ./google-cloud-sdk/install.sh
-    . ~/.zshrc
+    brew install google-cloud-sdk
+
+Update .zshrc per directions at start of install
+
     gcloud init
         
-Authenticate with greenlight.coop account
+* Authenticate with greenlight.coop account
+* Choose the Green Light development project (e.g. `greenlight-development-xxxx`) as the default project and `us-east4-a` as the default zone
 
 ### Kubernetes Tools
 
@@ -100,3 +102,37 @@ Follow instructions in output to update .zshrc
   
     . ~/.zshrc
     nvm install --lts
+
+## Notes
+
+After following these instructions, `brew ls` output should be as below. This is provided for verification and to
+help distinguish which casks were installed as dependencies and which may have been added outside of these
+instructions.
+
+    argocd
+    gdbm
+    gettext
+    git
+    helm
+    hub
+    jq
+    kn
+    kubernetes-cli
+    libidn2
+    libunistring
+    ncurses
+    nvm
+    oniguruma
+    openssl
+    openssl@1.1
+    pcre
+    pcre2
+    pkg-config
+    python@3.8
+    readline
+    sqlite
+    terraform
+    wget
+    xz
+    zsh
+    zsh-completions

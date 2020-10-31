@@ -1,76 +1,66 @@
+terraform {
+  required_version = ">= 0.12"
+
+  required_providers {
+    google = {
+      source =  "hashicorp/google"
+      version = "~> 3.44.0"
+    }
+    kubernetes = {
+      source =  "hashicorp/kubernetes"
+      version = "~> 1.13.3"
+    }
+    k8s = {
+      source =  "banzaicloud/k8s"
+      version = "~> 0.8.3"
+    }
+    helm = {
+      source =  "hashicorp/helm"
+      version = "~> 1.3.2"
+    }
+    random = {
+      source =  "hashicorp/random"
+      version = "~> 3.0.0"
+    }
+  }
+
+  backend "gcs" {
+    bucket      = "tfstate-greenlight"
+    prefix      = "terraform/state"
+    credentials = "credentials.json"
+  }
+}
+
 provider "google" {
-  project     = var.project_id
   region      = var.region
 }
 
-resource "random_string" "main" {
-  length  = 16
-  special = false
-  upper   = false
+resource "random_id" "main" {
+  count       = 2
+  byte_length = 2
 }
 
-resource "google_project" "main" {
-  name            = var.project_name
-  project_id      = var.project_id != "" ? var.project_id : "development-${random_string.main.result}"
+locals {
+  network_project_id_suffix     = random_id.main[0].hex
+  development_project_id_suffix = random_id.main[1].hex
+  disabled                      = 0
+}
+
+resource "google_project" "network" {
+  name            = "greenlight-network"
+  project_id      = "greenlight-network-${local.network_project_id_suffix}"
+  org_id          = var.org_id
   billing_account = var.billing_account_id
 }
 
-resource "google_project_service" "container" {
-  project = google_project.main.project_id
+resource "google_project" "development" {
+  name            = "greenlight-development"
+  project_id      = "greenlight-development-${local.development_project_id_suffix}"
+  org_id          = var.org_id
+  billing_account = var.billing_account_id
+}
+
+resource "google_project_service" "container-development" {
+  project = google_project.development.project_id
   service = "container.googleapis.com"
-}
-
-resource "google_container_cluster" "primary" {
-  name                     = var.cluster_name
-  project                  = google_project.main.project_id
-  location                 = var.region
-  min_master_version       = var.k8s_version
-  remove_default_node_pool = true
-  initial_node_count       = 1
-  depends_on = [
-    google_project_service.container
-  ]
-}
-
-resource "google_container_node_pool" "primary_nodes" {
-  name               = var.cluster_name
-  project            = google_project.main.project_id
-  location           = var.region
-  cluster            = google_container_cluster.primary.name
-  version            = var.k8s_version
-  initial_node_count = var.min_node_count
-  node_config {
-    preemptible  = var.preemptible
-    machine_type = var.machine_type
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-  }
-  autoscaling { 
-    min_node_count = var.min_node_count
-    max_node_count = var.max_node_count
-  }
-  management {
-    auto_upgrade = false
-  }
-  timeouts {
-    create = "15m"
-    update = "1h"
-  }
-}
-
-resource "null_resource" "kubeconfig" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${var.cluster_name} --project ${google_project.main.project_id} --region ${var.region}"
-  }
-  depends_on = [
-    google_container_cluster.primary,
-  ]
-}
-
-resource "null_resource" "destroy-kubeconfig" {
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f $PWD/kubeconfig"
-  }
 }
