@@ -1,0 +1,24 @@
+# helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values argocd-values.yaml --wait
+# 
+# After reaching the UI the first time you can login with username: admin and the password will be the
+# name of the server pod. You can get the pod name by running:
+# 
+# kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+
+installCRDs: false
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - argocd.dev.greenlight.coop
+    # annotations:
+    #   kubernetes.io/ingress.class: nginx
+    #   cert-manager.io/cluster-issuer: letsencrypt-production
+    # tls:
+    #   - secretName: letsencrypt-production
+    #     hosts:
+    #       - argocd.dev.greenlight.coop
+    https: false
+  extraAgs:
+    insecure: true
+  
