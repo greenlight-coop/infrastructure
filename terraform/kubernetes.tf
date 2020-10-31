@@ -174,13 +174,3 @@ resource "helm_release" "argo-cd" {
     kubernetes_namespace.argocd
   ]
 }
-
-# resource "null_resource" "argocd" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
-#   }
-#   depends_on = [
-#     null_resource.argocd-namesapce,
-#   ]
-# }
-
