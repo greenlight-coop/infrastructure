@@ -134,6 +134,10 @@ resource "kubernetes_namespace" "argocd" {
   ]
 }
 
+data "template_file" "argocd-values" {
+  template = file("helm/argocd-values.yaml")
+}
+
 resource "helm_release" "argo-cd" {
   count       = local.disabled
   name        = "argo-cd"
@@ -142,25 +146,7 @@ resource "helm_release" "argo-cd" {
   version     = "2.9.5"
   namespace   = "argocd"
 
-  set {
-    name  = "installCRDs"
-    value = "false"
-  }
-
-  values = [ <<-EOT
-    server:
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          cert-manager.io/cluster-issuer: letsencrypt-production
-        tls:
-          - secretName: letsencrypt-production
-            hosts:
-              - argocd.dev.greenlight.coop
-        https: true
-  EOT
-  ]
+  values = data.template_file.argocd-values.rendered
 
   depends_on = [
     k8s_manifest.letsencrypt-production-issuer,
