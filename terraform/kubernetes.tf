@@ -75,6 +75,17 @@ resource "kubernetes_namespace" "cert-manager" {
   ]
 }
 
+resource "helm_release" "cert-manager" {
+  name        = "cert-manager"
+  repository  = "https://charts.jetstack.io"
+  chart       = "jetstack/cert-manager"
+  version     = "1.0.4"
+  namespace   = kubernetes_namespace.cert-manager.metadata.name
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
+
 # resource "null_resource" "ingress-nginx" {
 #   provisioner "local-exec" {
 #     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml"
