@@ -145,20 +145,10 @@ resource "helm_release" "argo-cd" {
     value = "false"
   }
 
-  set {
-    name  = "server.ingress.enabled"
-    value = true
-  }
-
-  # set {
-  #   name  = "server.ingress.hosts"
-  #   value = "argocd.dev.greenlight.coop"
-  #   type  = auto
-  # }
-
   values = [ <<-EOT
     server:
       ingress:
+        enabled: true
         annotations:
           kubernetes.io/ingress.class: nginx
           cert-manager.io/cluster-issuer: letsencrypt-production
@@ -166,6 +156,7 @@ resource "helm_release" "argo-cd" {
           - secretName: letsencrypt-production
             hosts:
               - argocd.dev.greenlight.coop
+        https: true
   EOT
   ]
 
