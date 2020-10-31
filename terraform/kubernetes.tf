@@ -98,9 +98,8 @@ resource "helm_release" "cert-manager" {
 
 data "template_file" "letsencrypt-staging-issuer" {
   template = "${file("manifests/letsencrypt-staging-issuer.yaml")}"
-
-  vars {
-    replicas = "${var.replicas}"
+  vars = {
+    administration-email = "${var.administration-email}"
   }
 }
 
@@ -113,9 +112,8 @@ resource "k8s_manifest" "letsencrypt-staging-issuer" {
 
 data "template_file" "letsencrypt-production-issuer" {
   template = "${file("manifests/letsencrypt-production-issuer.yaml")}"
-
-  vars {
-    replicas = "${var.replicas}"
+  vars = {
+    administration-email = "${var.administration-email}"
   }
 }
 
