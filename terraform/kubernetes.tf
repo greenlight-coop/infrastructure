@@ -165,9 +165,9 @@ resource "helm_release" "argo-cd" {
         hosts:
           - argocd.dev.greenlight.coop
         tls:
-          secretName: letsencrypt-production
-          hosts:
-            - argocd.dev.greenlight.coop
+          - secretName: letsencrypt-production
+            hosts:
+              - argocd.dev.greenlight.coop
         https: true
   EOT
   ]
