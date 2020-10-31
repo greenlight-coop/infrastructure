@@ -10,6 +10,10 @@ terraform {
       source =  "hashicorp/kubernetes"
       version = "~> 1.13.3"
     }
+    k8s = {
+      source =  "banzaicloud/k8s"
+      version = "~> 0.8.3"
+    }
     helm = {
       source =  "hashicorp/helm"
       version = "~> 1.3.2"

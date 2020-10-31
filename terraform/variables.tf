@@ -47,3 +47,8 @@ variable "enable_dns" {
   type = bool
   default = false
 }
+
+variable "administration-email" {
+  type    = string
+  default = "admin@greenlight.coop"
+}

@@ -2,6 +2,10 @@ provider "kubernetes" {
     config_path = "./kubeconfig"
 }
 
+provider "k8s" {
+    config_path = "./kubeconfig"
+}
+
 provider "helm" {
   kubernetes {
     config_path = "./kubeconfig"
@@ -78,31 +82,49 @@ resource "kubernetes_namespace" "cert-manager" {
 resource "helm_release" "cert-manager" {
   name        = "cert-manager"
   repository  = "https://charts.jetstack.io"
-  chart       = "jetstack/cert-manager"
+  chart       = "cert-manager"
   version     = "1.0.4"
   namespace   = "cert-manager"
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
   depends_on = [
     null_resource.kubeconfig,
   ]
 }
 
-# resource "null_resource" "ingress-nginx" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml"
-#   }
-#   depends_on = [
-#     null_resource.kubeconfig,
-#   ]
-# }
+data "template_file" "letsencrypt-staging-issuer" {
+  template = "${file("manifests/letsencrypt-staging-issuer.yaml")}"
 
-# resource "null_resource" "cert-manager" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.yaml"
-#   }
-#   depends_on = [
-#     null_resource.kubeconfig,
-#   ]
-# }
+  vars {
+    replicas = "${var.replicas}"
+  }
+}
+
+resource "k8s_manifest" "letsencrypt-staging-issuer" {
+  content = "${data.template_file.letsencrypt-staging-issuer.rendered}"
+  depends_on = [
+    helm_release.cert-manager,
+  ]
+}
+
+data "template_file" "letsencrypt-production-issuer" {
+  template = "${file("manifests/letsencrypt-production-issuer.yaml")}"
+
+  vars {
+    replicas = "${var.replicas}"
+  }
+}
+
+resource "k8s_manifest" "letsencrypt-production-issuer" {
+  content = "${data.template_file.letsencrypt-production-issuer.rendered}"
+  depends_on = [
+    helm_release.cert-manager,
+  ]
+}
 
 ######## EXAMPLE APPLICATION - REMOVE
 
