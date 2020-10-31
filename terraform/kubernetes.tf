@@ -1,3 +1,7 @@
+provider "kubernetes" {
+    config_path = "./kubeconfig"
+}
+
 provider "helm" {
   kubernetes {
     config_path = "./kubeconfig"
@@ -55,8 +59,17 @@ resource "null_resource" "kubeconfig" {
 resource "helm_release" "ingress-nginx" {
   name        = "ingress-nginx"
   repository  = "https://kubernetes.github.io/ingress-nginx"
-  chart       = "ingress-nginx/ingress-nginx"
+  chart       = "ingress-nginx"
   version     = "3.7.1"
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
+
+resource "kubernetes_namespace" "cert-manager" {
+  metadata {
+    name = "cert-manager"
+  }
   depends_on = [
     null_resource.kubeconfig,
   ]
