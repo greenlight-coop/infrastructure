@@ -12,6 +12,10 @@ provider "helm" {
   }
 }
 
+locals {
+  enable_dns_named_resources_count = var.enable_dns_named_resources == true ? 1 : 0
+}
+
 resource "google_container_cluster" "development" {
   name                     = "greenlight-development-cluster"
   project                  = google_project.development.project_id
@@ -148,6 +152,7 @@ resource "kubernetes_namespace" "argocd" {
 # 
 # kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
 resource "helm_release" "argo-cd" {
+  count       = local.enable_dns_named_resources_count
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
   chart       = "argo-cd"
@@ -160,7 +165,7 @@ resource "helm_release" "argo-cd" {
       ingress:
         enabled: true
         hosts:
-          - argocd2.dev.greenlight.coop
+          - argocd4.dev.greenlight.coop
         annotations:
           kubernetes.io/ingress.class: nginx
           cert-manager.io/cluster-issuer: letsencrypt-production
@@ -170,7 +175,7 @@ resource "helm_release" "argo-cd" {
         tls:
           - secretName: letsencrypt-production
             hosts:
-              - argocd2.dev.greenlight.coop
+              - argocd4.dev.greenlight.coop
         https: true
   EOT
   ]
