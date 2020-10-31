@@ -32,7 +32,7 @@ Global for all instructions that follow
 
 ## Update Configuration
 
-    terraform apply --var project_id=$(terraform output project_id)
+    terraform apply
 
 ## Removal
 
