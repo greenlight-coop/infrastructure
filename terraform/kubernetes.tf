@@ -1,6 +1,3 @@
-provider "kubernetes" {
-
-}
 
 resource "google_container_cluster" "development" {
   name                     = "greenlight-development-cluster"
@@ -49,91 +46,100 @@ resource "null_resource" "kubeconfig" {
     google_container_node_pool.development_primary_nodes,
   ]
 }
-
-resource "null_resource" "ingress-nginx" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml"
-  }
+resource "helm_release" "my_database" {
+  name        = "ingress-nginx"
+  repository  = "https://kubernetes.github.io/ingress-nginx"
+  chart       = "ingress-nginx/ingress-nginx"
+  version     = "3.7.1"
   depends_on = [
     null_resource.kubeconfig,
   ]
 }
 
-resource "null_resource" "cert-manager" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.yaml"
-  }
-  depends_on = [
-    null_resource.kubeconfig,
-  ]
-}
+# resource "null_resource" "ingress-nginx" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml"
+#   }
+#   depends_on = [
+#     null_resource.kubeconfig,
+#   ]
+# }
+
+# resource "null_resource" "cert-manager" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.yaml"
+#   }
+#   depends_on = [
+#     null_resource.kubeconfig,
+#   ]
+# }
 
 ######## EXAMPLE APPLICATION - REMOVE
 
-resource "null_resource" "kuard-deployment" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/deployment.yaml"
-  }
-  depends_on = [
-    null_resource.ingress-nginx,
-  ]
-}
+# resource "null_resource" "kuard-deployment" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/deployment.yaml"
+#   }
+#   depends_on = [
+#     null_resource.ingress-nginx,
+#   ]
+# }
 
-resource "null_resource" "kuard-service" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/service.yaml"
-  }
-  depends_on = [
-    null_resource.kuard-deployment,
-  ]
-}
+# resource "null_resource" "kuard-service" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/service.yaml"
+#   }
+#   depends_on = [
+#     null_resource.kuard-deployment,
+#   ]
+# }
 
-resource "null_resource" "letsencrypt-staging-issuer" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-staging-issuer.yaml"
-  }
-  depends_on = [
-    null_resource.ingress-nginx,
-  ]
-}
+# resource "null_resource" "letsencrypt-staging-issuer" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-staging-issuer.yaml"
+#   }
+#   depends_on = [
+#     null_resource.ingress-nginx,
+#   ]
+# }
 
-resource "null_resource" "letsencrypt-production-issuer" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-production-issuer.yaml"
-  }
-  depends_on = [
-    null_resource.ingress-nginx,
-  ]
-}
+# resource "null_resource" "letsencrypt-production-issuer" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-production-issuer.yaml"
+#   }
+#   depends_on = [
+#     null_resource.ingress-nginx,
+#   ]
+# }
 
-resource "null_resource" "kuard-ingress" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f kuard-ingress-tls.yaml"
-  }
-  depends_on = [
-    null_resource.letsencrypt-production-issuer,
-  ]
-}
+# resource "null_resource" "kuard-ingress" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f kuard-ingress-tls.yaml"
+#   }
+#   depends_on = [
+#     null_resource.letsencrypt-production-issuer,
+#   ]
+# }
 
 ######## END
 
-resource "null_resource" "argocd-namesapce" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
-  }
-  depends_on = [
-    null_resource.kubeconfig,
-  ]
-}
+# resource "null_resource" "argocd-namesapce" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
+#   }
+#   depends_on = [
+#     null_resource.kubeconfig,
+#   ]
+# }
 
-resource "null_resource" "argocd" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
-  }
-  depends_on = [
-    null_resource.argocd-namesapce,
-  ]
-}
+# resource "null_resource" "argocd" {
+#   provisioner "local-exec" {
+#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+#   }
+#   depends_on = [
+#     null_resource.argocd-namesapce,
+#   ]
+# }
 
 resource "null_resource" "destroy-kubeconfig" {
   provisioner "local-exec" {
