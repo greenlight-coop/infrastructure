@@ -134,6 +134,13 @@ resource "kubernetes_namespace" "argocd" {
   ]
 }
 
+# Equivalent to:
+#   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
+# 
+# After reaching the UI the first time you can login with username: admin and the password will be the
+# name of the server pod. You can get the pod name by running:
+# 
+# kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
 resource "helm_release" "argo-cd" {
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
