@@ -134,10 +134,6 @@ resource "kubernetes_namespace" "argocd" {
   ]
 }
 
-data "template_file" "argocd-values" {
-  template = file("helm/argocd-values.yaml")
-}
-
 resource "helm_release" "argo-cd" {
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
@@ -145,7 +141,26 @@ resource "helm_release" "argo-cd" {
   version     = "2.9.5"
   namespace   = "argocd"
 
-  values = data.template_file.argocd-values.rendered
+  values = [ <<-EOT
+    installCRDs: false
+    server:
+      ingress:
+        enabled: true
+        hosts:
+          - argocd2.dev.greenlight.coop
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          cert-manager.io/cluster-issuer: letsencrypt-production
+          kubernetes.io/tls-acme: "true"
+          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        tls:
+          - secretName: letsencrypt-production
+            hosts:
+              - argocd2.dev.greenlight.coop
+        https: true
+  EOT
+  ]
 
   depends_on = [
     k8s_manifest.letsencrypt-production-issuer,
