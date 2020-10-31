@@ -124,63 +124,14 @@ resource "k8s_manifest" "letsencrypt-production-issuer" {
   ]
 }
 
-######## EXAMPLE APPLICATION - REMOVE
-
-# resource "null_resource" "kuard-deployment" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/deployment.yaml"
-#   }
-#   depends_on = [
-#     null_resource.ingress-nginx,
-#   ]
-# }
-
-# resource "null_resource" "kuard-service" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f https://netlify.cert-manager.io/docs/tutorials/acme/example/service.yaml"
-#   }
-#   depends_on = [
-#     null_resource.kuard-deployment,
-#   ]
-# }
-
-# resource "null_resource" "letsencrypt-staging-issuer" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-staging-issuer.yaml"
-#   }
-#   depends_on = [
-#     null_resource.ingress-nginx,
-#   ]
-# }
-
-# resource "null_resource" "letsencrypt-production-issuer" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f letsencrypt-production-issuer.yaml"
-#   }
-#   depends_on = [
-#     null_resource.ingress-nginx,
-#   ]
-# }
-
-# resource "null_resource" "kuard-ingress" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl apply -f kuard-ingress-tls.yaml"
-#   }
-#   depends_on = [
-#     null_resource.letsencrypt-production-issuer,
-#   ]
-# }
-
-######## END
-
-# resource "null_resource" "argocd-namesapce" {
-#   provisioner "local-exec" {
-#     command = "KUBECONFIG=$PWD/kubeconfig kubectl create namespace argocd"
-#   }
-#   depends_on = [
-#     null_resource.kubeconfig,
-#   ]
-# }
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+  depends_on = [
+    null_resource.kubeconfig,
+  ]
+}
 
 # resource "null_resource" "argocd" {
 #   provisioner "local-exec" {
@@ -191,9 +142,3 @@ resource "k8s_manifest" "letsencrypt-production-issuer" {
 #   ]
 # }
 
-resource "null_resource" "destroy-kubeconfig" {
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f $PWD/kubeconfig"
-  }
-}
