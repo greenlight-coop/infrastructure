@@ -44,7 +44,7 @@ locals {
   network_project_id_suffix     = random_id.main[0].hex
   development_project_id_suffix = random_id.main[1].hex
   disabled                      = 0
-  workspace-suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
 }
 
 resource "google_project" "network" {
