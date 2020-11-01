@@ -70,11 +70,6 @@ resource "helm_release" "ingress-nginx" {
   chart       = "ingress-nginx"
   version     = "3.7.1"
 
-  set {
-    name  = "controller.enableTLSPassthrough"
-    value = "true"
-  }
-
   depends_on = [
     null_resource.kubeconfig
   ]
