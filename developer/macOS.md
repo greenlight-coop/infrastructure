@@ -14,6 +14,7 @@
 
 * Install the following extensions
   * Terraform (Anton Kulikov)
+  * Kubernetes
 
 ### Docker Desktop
 
