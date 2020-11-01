@@ -1,14 +1,34 @@
+data "google_client_config" "provider" {}
+
 provider "kubernetes" {
-    config_path = "./kubeconfig"
+  load_config_file = false
+
+  host  = "https://${google_container_cluster.development.endpoint}"
+  token = data.google_client_config.provider.access_token
+  cluster_ca_certificate = base64decode(
+    google_container_cluster.development.master_auth[0].cluster_ca_certificate,
+  )
 }
 
 provider "k8s" {
-    config_path = "./kubeconfig"
+  load_config_file = false
+
+  host  = "https://${google_container_cluster.development.endpoint}"
+  token = data.google_client_config.provider.access_token
+  cluster_ca_certificate = base64decode(
+    google_container_cluster.development.master_auth[0].cluster_ca_certificate,
+  )
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "./kubeconfig"
+    load_config_file = false
+
+    host  = "https://${google_container_cluster.development.endpoint}"
+    token = data.google_client_config.provider.access_token
+    cluster_ca_certificate = base64decode(
+      google_container_cluster.development.master_auth[0].cluster_ca_certificate,
+    )
   }
 }
 
@@ -55,33 +75,17 @@ resource "google_container_node_pool" "development_primary_nodes" {
   }
 }
 
-resource "null_resource" "kubeconfig" {
-  provisioner "local-exec" {
-    command = "KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${google_project.development.project_id} --zone ${var.zone}"
-  }
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
-  ]
-}
-
 resource "helm_release" "ingress-nginx" {
   name        = "ingress-nginx"
   repository  = "https://kubernetes.github.io/ingress-nginx"
   chart       = "ingress-nginx"
   version     = "3.7.1"
-
-  depends_on = [
-    null_resource.kubeconfig
-  ]
 }
 
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
   }
-  depends_on = [
-    null_resource.kubeconfig
-  ]
 }
 
 resource "helm_release" "cert-manager" {
@@ -97,7 +101,6 @@ resource "helm_release" "cert-manager" {
   }
 
   depends_on = [
-    null_resource.kubeconfig,
     kubernetes_namespace.cert-manager
   ]
 }
@@ -134,9 +137,6 @@ resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
   }
-  depends_on = [
-    null_resource.kubeconfig
-  ]
 }
 
 # Equivalent to:
