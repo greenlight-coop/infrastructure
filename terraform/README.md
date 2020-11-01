@@ -30,6 +30,10 @@ Global for all instructions that follow
 
 (TBD - document DNS configuration steps)
 
+To add the newly created Kubernetes cluster to your local configuration run:
+
+    $(terraform output kubeconfig_command)
+
 ## Update Configuration
 
     terraform apply
