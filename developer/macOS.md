@@ -92,6 +92,7 @@ Update .zshrc per directions at start of install
     brew tap knative/client
     brew install kn
     brew install argocd
+    brew install kustomize
 
 ### NodeJS
 

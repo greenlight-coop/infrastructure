@@ -12,7 +12,13 @@ development machines.
 
 ## Google Cloud Platform
 
-See the [README.md](terraform/README.md) in the `terraform` directory for instructions on creating or updating GCP resources for Green Light.
+See the [README.md](terraform/README.md) in the `terraform` directory for instructions on creating or updating GCP
+resources for Green Light.
+
+## Argo CD
+
+See the [README.md](argocd/README.md) in the `argocd` directory for artifacts and information on managing the 
+Kubernetes cluster and applications via Argo CD.
 
 ## DNS
 
