@@ -30,6 +30,10 @@ Global for all instructions that follow
 
 (TBD - document DNS configuration steps)
 
+To add the newly created Kubernetes cluster to your local configuration run:
+
+    $(terraform output kubeconfig_command)
+
 ## Update Configuration
 
     terraform apply
@@ -43,3 +47,29 @@ Global for all instructions that follow
 It's expected this will never be required
 
     gcloud projects delete $SEED_GCP_PROJECT_ID --quiet
+
+## Terraform Workspace
+
+To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
+for deployment of the infrastructure to a temporary environment (set of GCP projects) that can then be destroyed
+after the modifications have been vetted and merged to master.
+
+* Checkout a branch of the infrastructure project based on the current GitHub issue.
+
+        git checkout -b feature/<n>
+
+* Create a new workspace using the issue number as part of the workspace name
+
+        terraform workspace new temp<n>
+
+* Iterate between deploying the resources in the new workspace and making changes to the configuration
+
+        terraform apply
+
+* When all changes have been merged to master, dispose of the temporary workspace and apply changes from master
+
+        terraform destroy
+        terraform workspace select default
+        terraform workspace delete temp<n>
+        git checkout master && git pull
+        terraform apply

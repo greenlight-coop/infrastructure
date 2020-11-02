@@ -44,18 +44,19 @@ locals {
   network_project_id_suffix     = random_id.main[0].hex
   development_project_id_suffix = random_id.main[1].hex
   disabled                      = 0
+  workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
 }
 
 resource "google_project" "network" {
-  name            = "greenlight-network"
-  project_id      = "greenlight-network-${local.network_project_id_suffix}"
+  name            = "greenlight-network${local.workspace_suffix}"
+  project_id      = "gl-network${local.workspace_suffix}-${local.network_project_id_suffix}"
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }
 
 resource "google_project" "development" {
-  name            = "greenlight-development"
-  project_id      = "greenlight-development-${local.development_project_id_suffix}"
+  name            = "greenlight-development${local.workspace_suffix}"
+  project_id      = "gl-development${local.workspace_suffix}-${local.development_project_id_suffix}"
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }
