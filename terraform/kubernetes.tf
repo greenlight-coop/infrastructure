@@ -160,7 +160,7 @@ resource "helm_release" "argo-cd" {
       ingress:
         enabled: true
         hosts:
-          - argocd${local.workspace_suffix}.dev.greenlight.coop
+          - argocd-alt1${local.workspace_suffix}.dev.greenlight.coop
         annotations:
           kubernetes.io/ingress.class: nginx
           cert-manager.io/cluster-issuer: letsencrypt-production
@@ -170,7 +170,7 @@ resource "helm_release" "argo-cd" {
         tls:
           - secretName: letsencrypt-production
             hosts:
-              - argocd${local.workspace_suffix}.dev.greenlight.coop
+              - argocd-alt1${local.workspace_suffix}.dev.greenlight.coop
         https: true
   EOT
   ]
