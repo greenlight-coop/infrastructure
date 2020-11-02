@@ -15,12 +15,17 @@
 * Install the following extensions
   * Terraform (Anton Kulikov)
   * Kubernetes
+  * Docker
 
-### Docker Desktop
+### Docker
 
 * Download from https://docs.docker.com/docker-for-mac/install/
 
-* Open .dmg, move Docker to Applications and launch to install 
+* Open .dmg, move Docker to Applications and launch to install
+
+* Login to Docker Hub from the command line to enable pushing images, etc.
+
+        docker login -u <username>
 
 ## Command Line Tools
 
