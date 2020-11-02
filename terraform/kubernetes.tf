@@ -180,3 +180,15 @@ resource "helm_release" "argo-cd" {
     kubernetes_namespace.argocd
   ]
 }
+
+data "template_file" "argocd-project" {
+  template = file("manifests/argocd-project.yaml")
+  vars = {}
+}
+
+resource "k8s_manifest" "argocd-project" {
+  content = data.template_file.argocd-project.rendered
+  depends_on = [
+    helm_release.argo-cd
+  ]
+}
