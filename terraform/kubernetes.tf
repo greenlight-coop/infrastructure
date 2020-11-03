@@ -34,6 +34,8 @@ provider "helm" {
 
 locals {
   enable_dns_named_resources_count = var.enable_dns_named_resources == true ? 1 : 0
+  tls_cert_issuer                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
+  tls_secret_name                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
 }
 
 resource "google_container_cluster" "development" {
@@ -163,12 +165,12 @@ resource "helm_release" "argo-cd" {
           - argocd${local.workspace_suffix}.dev.greenlight.coop
         annotations:
           kubernetes.io/ingress.class: nginx
-          cert-manager.io/cluster-issuer: letsencrypt-production
+          cert-manager.io/cluster-issuer: ${local.tls_cert_issuer}
           kubernetes.io/tls-acme: "true"
           nginx.ingress.kubernetes.io/ssl-passthrough: "true"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         tls:
-          - secretName: letsencrypt-production
+          - secretName: ${local.tls_secret_name}
             hosts:
               - argocd${local.workspace_suffix}.dev.greenlight.coop
         https: true
@@ -196,8 +198,10 @@ resource "k8s_manifest" "argocd-project" {
 data "template_file" "argocd-apps-application" {
   template = file("manifests/argocd-apps-application.yaml")
   vars = {
-    target_revision = local.argocd_source_target_revision,
-    workspace_suffix = local.workspace_suffix
+    target_revision =   local.argocd_source_target_revision,
+    tls_cert_issuer =   local.tls_cert_issuer
+    tls_secret_name =   local.tls_secret_name,
+    workspace_suffix =  local.workspace_suffix
   }
 }
 
