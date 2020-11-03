@@ -14,12 +14,12 @@ spec:
   sourceRepos:
   - '*'
 
-  # Only permit applications to deploy to the guestbook namespace in the same cluster
+  # Permit applications to deploy to any namespace in any cluster.
   destinations:
   - namespace: '*'
     server: '*'
 
-  # Deny all cluster-scoped resources from being created, except for Namespace
+  # Allow creation of all resources
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
@@ -42,7 +42,7 @@ spec:
 
   # Enables namespace orphaned resource monitoring.
   # orphanedResources:
-  #   warn: false
+  warn: true
 
   # roles:
   # A role which provides read-only access to all applications in the project

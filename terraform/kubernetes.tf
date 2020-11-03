@@ -194,9 +194,10 @@ resource "k8s_manifest" "argocd-project" {
 }
 
 data "template_file" "argocd-apps-application" {
-  template = file("manifests/argocd-project.yaml")
+  template = file("manifests/argocd-apps-application.yaml")
   vars = {
-    target_revision = local.argocd_source_target_revision
+    target_revision = local.argocd_source_target_revision,
+    workspace_suffix = local.workspace_suffix
   }
 }
 

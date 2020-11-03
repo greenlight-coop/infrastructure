@@ -26,9 +26,20 @@ Global for all instructions that follow
 
     terraform init
 
-    terraform apply
+    terraform apply --var enable_dns_named_resources=false
 
-(TBD - document DNS configuration steps)
+Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
+append `-feature-<issue number>` to the hostname in each record.
+
+    ingress.dev.greenlight.coop A       <look up ingress-nginx-controller EXTERNAL-IP>
+
+    argocd.dev.greenlight.coop  CNAME   ingress.dev.greenlight.coop
+    api.dev.greenlight.coop	    CNAME   ingress.dev.greenlight.coop 
+    grafana.dev.greenlight.coop	CNAME   ingress.dev.greenlight.coop
+
+Build the remainder of the Terraform resources:
+
+    terraform apply
 
 To add the newly created Kubernetes cluster to your local configuration run:
 

@@ -18,10 +18,10 @@ spec:
     helm:
       # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
-      # - name: "global.workspaceSuffix"
-      #   value: ${workspace_suffix}
-      # - name: "global.tls.secretName"
-      #   value: ${tls_secret_name}
+      - name: "global.workspaceSuffix"
+        value: ${workspace_suffix}
+      - name: "global.tlsSecretName"
+        value: ${tls_secret_name}
 
       # Optional Helm version to template with. If omitted it will fallback to look at the 'apiVersion' in Chart.yaml
       # and decide which Helm binary to use automatically. This field can be either 'v2' or 'v3'.
