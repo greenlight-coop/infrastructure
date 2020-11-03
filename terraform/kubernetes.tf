@@ -108,7 +108,7 @@ resource "helm_release" "cert-manager" {
 data "template_file" "letsencrypt-staging-issuer" {
   template = file("manifests/letsencrypt-staging-issuer.yaml")
   vars = {
-    administration-email = var.administration-email
+    administration_email = var.administration_email
   }
 }
 
@@ -122,7 +122,7 @@ resource "k8s_manifest" "letsencrypt-staging-issuer" {
 data "template_file" "letsencrypt-production-issuer" {
   template = file("manifests/letsencrypt-production-issuer.yaml")
   vars = {
-    administration-email = var.administration-email
+    administration_email = var.administration_email
   }
 }
 
@@ -190,5 +190,20 @@ resource "k8s_manifest" "argocd-project" {
   content = data.template_file.argocd-project.rendered
   depends_on = [
     helm_release.argo-cd
+  ]
+}
+
+data "template_file" "argocd-apps-application" {
+  template = file("manifests/argocd-project.yaml")
+  vars = {
+    target_revision = local.argocd_source_target_revision
+  }
+}
+
+resource "k8s_manifest" "argocd-apps-application" {
+  content = data.template_file.argocd-apps-application.rendered
+  depends_on = [
+    helm_release.argo-cd,
+    k8s_manifest.argocd-project
   ]
 }

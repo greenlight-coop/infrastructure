@@ -53,7 +53,7 @@ variable "enable_dns_named_resources" {
   default = true
 }
 
-variable "administration-email" {
+variable "administration_email" {
   type    = string
   default = "admin@greenlight.coop"
 }

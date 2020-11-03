@@ -54,22 +54,23 @@ To test non-trivial infrastructure configuration changes, it's recommended to us
 for deployment of the infrastructure to a temporary environment (set of GCP projects) that can then be destroyed
 after the modifications have been vetted and merged to master.
 
-* Checkout a branch of the infrastructure project based on the current GitHub issue.
+* Checkout a branch of the infrastructure and/or argocd-apps projects based on the current GitHub issue number.
 
-        git checkout -b feature/<n>
+        git checkout -b feature/<issue number>
 
-* Create a new workspace using the issue number as part of the workspace name
+* Create a new workspace using the issue number as part of the workspace name, replacing '/' with '-'
 
-        terraform workspace new temp<n>
+        terraform workspace new feature-<issue number>
 
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 
         terraform apply
 
-* When all changes have been merged to master, dispose of the temporary workspace and apply changes from master
+* When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
+  deafult workspace from master
 
         terraform destroy
         terraform workspace select default
-        terraform workspace delete temp<n>
+        terraform workspace delete feature-<issue number>
         git checkout master && git pull
         terraform apply

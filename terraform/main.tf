@@ -45,7 +45,7 @@ locals {
   development_project_id_suffix = random_id.main[1].hex
   disabled                      = 0
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  # argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : "-${terraform.workspace}"
+  argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
 }
 
 resource "google_project" "network" {
