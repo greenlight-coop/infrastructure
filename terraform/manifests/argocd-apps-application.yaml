@@ -20,8 +20,12 @@ spec:
       parameters:
       - name: "global.workspaceSuffix"
         value: ${workspace_suffix}
+      - name: "global.tlsCertIssuer"
+        value: ${tls_cert_issuer}
       - name: "global.tlsSecretName"
         value: ${tls_secret_name}
+      - name: "global.targetRevision"
+        value: ${target_revision}
 
       # Optional Helm version to template with. If omitted it will fallback to look at the 'apiVersion' in Chart.yaml
       # and decide which Helm binary to use automatically. This field can be either 'v2' or 'v3'.

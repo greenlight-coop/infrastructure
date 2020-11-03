@@ -76,6 +76,7 @@ after the modifications have been vetted and merged to master.
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 
         terraform apply
+        $(terraform output kubeconfig_command)
 
 * When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
   deafult workspace from master
@@ -84,4 +85,6 @@ after the modifications have been vetted and merged to master.
         terraform workspace select default
         terraform workspace delete feature-<issue number>
         git checkout master && git pull
-        terraform apply
+        terraform apply --var enable_dns_named_resources=false
+        # Create DNS records for *-feature-<issue number> resources
+        terraform apply apply
