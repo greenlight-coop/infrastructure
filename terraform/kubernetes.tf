@@ -89,9 +89,20 @@ resource "helm_release" "ingress-nginx" {
   ]
 }
 
-data "kubernetes_ingress" "nginx" {
+data "kubernetes_service" "ingress-nginx-controller" {
+  metadata {
+    namespace = "default"
+    name      = "ingress-nginx-controller"
+  }
   depends_on = [
     helm_release.ingress-nginx
+  ]
+}
+
+locals {
+  ingress_ip_address = data.kubernetes_service.ingress-nginx-controller.load_balancer_ingress[0].ip
+  depends_on = [
+    data.kubernetes_service.ingress-nginx-controller
   ]
 }
 

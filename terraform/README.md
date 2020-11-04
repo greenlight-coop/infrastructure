@@ -24,11 +24,9 @@ Global for all instructions that follow
 
     gsutil acl ch -u $SEED_GCP_SERVICE_ACCOUNT:OWNER gs://$TF_BACKEND_BUCKET
 
-    terraform init
-
-    tf apply -target=google_container_cluster.development
-
-    tf apply -target=helm_release.ingress-nginx
+    terraform init \
+        && tf apply -auto-approve -target=google_container_cluster.development \
+        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller
 
 Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
 append `-feature-<issue number>` to the hostname in each record.
