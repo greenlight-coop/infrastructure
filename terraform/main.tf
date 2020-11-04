@@ -35,7 +35,7 @@ provider "google" {
   region      = var.region
 }
 
-resource "random_id_suffix" "main" {
+resource "random_id" "suffix" {
   count       = 2
   byte_length = 2
 }
@@ -51,8 +51,8 @@ resource "random_password" "webhook_secret" {
 }
 
 locals {
-  network_project_id_suffix     = random_id_suffix.main[0].hex
-  development_project_id_suffix = random_id_suffix.main[1].hex
+  network_project_id_suffix     = random_id.suffix[0].hex
+  development_project_id_suffix = random_id.suffix[1].hex
   disabled                      = 0
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")

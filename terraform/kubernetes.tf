@@ -127,7 +127,7 @@ resource "k8s_manifest" "letsencrypt-staging-issuer" {
     }
   )
   depends_on = [
-    helm_release.argo-cd
+    helm_release.cert-manager
   ]
 }
 
@@ -138,7 +138,7 @@ resource "k8s_manifest" "letsencrypt-production-issuer" {
     }
   )
   depends_on = [
-    helm_release.argo-cd
+    helm_release.cert-manager
   ]
 }
 
