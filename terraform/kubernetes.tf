@@ -108,9 +108,8 @@ resource "helm_release" "cert-manager" {
 }
 
 resource "k8s_manifest" "argocd-secret" {
-  templatefile(
-    "manifests/argocd-secret.yaml",
-    vars = {
+  content = templatefile("manifests/argocd-secret.yaml",
+    {
       admin_password_hash   = local.admin_password_hash
       admin_password_mtime  = local.admin_password_mtime,
       webhook_secret        = local.webhook_secret
@@ -122,9 +121,8 @@ resource "k8s_manifest" "argocd-secret" {
 }
 
 resource "k8s_manifest" "letsencrypt-staging-issuer" {
-  templatefile(
-    "manifests/letsencrypt-production-issuer.yaml",
-    vars = {
+  content = templatefile("manifests/letsencrypt-production-issuer.yaml",
+    {
       admin_email = var.admin_email
     }
   )
@@ -134,9 +132,8 @@ resource "k8s_manifest" "letsencrypt-staging-issuer" {
 }
 
 resource "k8s_manifest" "letsencrypt-production-issuer" {
-  templatefile(
-    "manifests/letsencrypt-production-issuer.yaml",
-    vars = {
+  content = templatefile("manifests/letsencrypt-production-issuer.yaml", 
+    {
       admin_email = var.admin_email
     }
   )
@@ -195,22 +192,19 @@ resource "helm_release" "argo-cd" {
 }
 
 resource "k8s_manifest" "argocd-project" {
-  templatefile(
-    "manifests/argocd-project.yaml",
-    vars = {}
-  )
+  content = templatefile("manifests/argocd-project.yaml", {})
   depends_on = [
     helm_release.argo-cd
   ]
 }
 
 resource "k8s_manifest" "argocd-apps-application" {
-  templatefile(
-    "manifests/argocd-apps-application.yaml",
-    vars = {
-      target_revision =   local.argocd_source_target_revision,
-      tls_cert_issuer =   local.tls_cert_issuer
-      tls_secret_name =   local.tls_secret_name,
+  content = templatefile(
+    "manifests/argocd-apps-application.yaml", 
+    {
+      target_revision = local.argocd_source_target_revision
+      tls_cert_issuer = local.tls_cert_issuer
+      tls_secret_name = local.tls_secret_name
       workspace_suffix =  local.workspace_suffix
     }
   )
