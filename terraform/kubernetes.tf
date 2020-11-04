@@ -33,7 +33,6 @@ provider "helm" {
 }
 
 locals {
-  enable_dns_named_resources_count = var.enable_dns_named_resources == true ? 1 : 0
   tls_cert_issuer                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
   tls_secret_name                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
 }

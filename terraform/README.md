@@ -30,8 +30,6 @@ Global for all instructions that follow
 
     tf apply -target=helm_release.ingress-nginx
 
-    terraform apply --var enable_dns_named_resources=false
-
 Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
 append `-feature-<issue number>` to the hostname in each record.
 

@@ -48,11 +48,6 @@ variable "enable_dns" {
   default = false
 }
 
-variable "enable_dns_named_resources" {
-  type = bool
-  default = true
-}
-
 variable "admin_password" {
   type    = string
   default = ""
