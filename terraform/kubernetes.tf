@@ -33,8 +33,8 @@ provider "helm" {
 }
 
 locals {
-  tls_cert_issuer                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
-  tls_secret_name                  = terraform.workspace == "default" ? "letsencrypt-production" : "letsencrypt-staging" 
+  tls_cert_issuer                  = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production"
+  tls_secret_name                  = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production" 
 }
 
 resource "google_container_cluster" "development" {

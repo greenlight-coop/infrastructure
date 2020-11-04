@@ -62,3 +62,8 @@ variable "webhook_secret" {
   type    = string
   default = ""
 }
+
+variable "use_staging_certs" {
+  type    = bool
+  default = false
+}
