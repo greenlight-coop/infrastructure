@@ -75,6 +75,9 @@ resource "google_container_node_pool" "development_primary_nodes" {
     create = "15m"
     update = "1h"
   }
+  depends_on = [
+    google_container_cluster.development
+  ]
 }
 
 resource "helm_release" "ingress-nginx" {
@@ -82,12 +85,18 @@ resource "helm_release" "ingress-nginx" {
   repository  = "https://kubernetes.github.io/ingress-nginx"
   chart       = "ingress-nginx"
   version     = "3.7.1"
+  depends_on = [
+    google_container_node_pool.development_primary_nodes
+  ]
 }
 
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
   }
+  depends_on = [
+    google_container_node_pool.development_primary_nodes
+  ]
 }
 
 resource "helm_release" "cert-manager" {
@@ -156,7 +165,6 @@ resource "kubernetes_namespace" "argocd" {
 # 
 # kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
 resource "helm_release" "argo-cd" {
-  count       = local.enable_dns_named_resources_count
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
   chart       = "argo-cd"

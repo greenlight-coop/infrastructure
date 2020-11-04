@@ -26,6 +26,10 @@ Global for all instructions that follow
 
     terraform init
 
+    tf apply -target=google_container_cluster.development
+
+    tf apply -target=helm_release.ingress-nginx
+
     terraform apply --var enable_dns_named_resources=false
 
 Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
