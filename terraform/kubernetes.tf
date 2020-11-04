@@ -192,6 +192,11 @@ resource "helm_release" "argo-cd" {
             hosts:
               - argocd${local.workspace_suffix}.dev.greenlight.coop
         https: true
+    configs:
+      secret:
+        githubSecret: ${local.webhook_secret}
+        argocdServerAdminPassword: ${local.admin_password_hash}
+        argocdServerAdminPasswordMtime: ${local.admin_password_mtime}
   EOT
   ]
 
@@ -199,21 +204,6 @@ resource "helm_release" "argo-cd" {
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
     kubernetes_namespace.argocd
-  ]
-}
-
-resource "kubernetes_secret" "argocd-secret" {
-  metadata {
-    name = "argocd-secret"
-    namespace = "argocd"
-  }
-  data = {
-    "admin.password"        = base64encode(local.admin_password_hash)
-    "admin.passwordMtime"   = base64encode(local.admin_password_hash)
-    "webhook.github.secret" = base64encode(local.webhook_secret)
-  }
-  depends_on = [
-    helm_release.argo-cd
   ]
 }
 
