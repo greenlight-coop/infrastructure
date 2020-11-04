@@ -132,21 +132,8 @@ resource "helm_release" "cert-manager" {
   ]
 }
 
-resource "k8s_manifest" "argocd-secret" {
-  content = templatefile("manifests/argocd-secret.yaml",
-    {
-      admin_password_hash   = local.admin_password_hash
-      admin_password_mtime  = local.admin_password_mtime,
-      webhook_secret        = local.webhook_secret
-    }
-  )
-  depends_on = [
-    helm_release.argo-cd
-  ]
-}
-
 resource "k8s_manifest" "letsencrypt-staging-issuer" {
-  content = templatefile("manifests/letsencrypt-production-issuer.yaml",
+  content = templatefile("manifests/letsencrypt-staging-issuer.yaml",
     {
       admin_email = var.admin_email
     }
@@ -171,6 +158,37 @@ resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
   }
+}
+
+resource "k8s_manifest" "argocd-secret" {
+  content = templatefile("manifests/argocd-secret.yaml",
+    {
+      admin_password_hash   = local.admin_password_hash
+      admin_password_mtime  = local.admin_password_mtime,
+      webhook_secret        = local.webhook_secret
+    }
+  )
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+}
+
+resource "kubernetes_secret" "example" {
+  metadata {
+    name = "argocd-secret"
+    namespace = "argocd"
+  }
+
+  data = {
+    "admin.password"        = base64encode(local.admin_password_hash)
+    "admin.passwordMtime"   = base64encode(local.admin_password_hash)
+    "webhook.github.secret" = base64encode(local.webhook_secret)
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+  depends_on = [
+    helm_release.argo-cd
+  ]
 }
 
 # Equivalent to:
