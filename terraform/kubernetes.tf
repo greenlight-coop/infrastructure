@@ -160,19 +160,6 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
-resource "k8s_manifest" "argocd-secret" {
-  content = templatefile("manifests/argocd-secret.yaml",
-    {
-      admin_password_hash   = local.admin_password_hash
-      admin_password_mtime  = local.admin_password_mtime,
-      webhook_secret        = local.webhook_secret
-    }
-  )
-  depends_on = [
-    kubernetes_namespace.argocd
-  ]
-}
-
 # Equivalent to:
 #   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
@@ -212,6 +199,21 @@ resource "helm_release" "argo-cd" {
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
     kubernetes_namespace.argocd
+  ]
+}
+
+resource "kubernetes_secret" "argocd-secret" {
+  metadata {
+    name = "argocd-secret"
+    namespace = "argocd"
+  }
+  data = {
+    "admin.password"        = base64encode(local.admin_password_hash)
+    "admin.passwordMtime"   = base64encode(local.admin_password_hash)
+    "webhook.github.secret" = base64encode(local.webhook_secret)
+  }
+  depends_on = [
+    helm_release.argo-cd
   ]
 }
 
