@@ -53,7 +53,17 @@ variable "enable_dns_named_resources" {
   default = true
 }
 
-variable "administration_email" {
+variable "admin_password" {
+  type    = string
+  default = ""
+}
+
+variable "admin_email" {
   type    = string
   default = "admin@greenlight.coop"
+}
+
+variable "webhook_secret" {
+  type    = string
+  default = ""
 }

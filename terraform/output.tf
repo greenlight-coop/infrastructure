@@ -6,6 +6,14 @@ output "network_project_id" {
   value = google_project.network.project_id
 }
 
+output "admin_password" {
+  value = local.admin_password
+}
+
+output "webhook_secret" {
+  value = local.webhook_secret
+}
+
 output "cluster_endpoint" {
   value = google_container_cluster.development.endpoint
 }

@@ -45,6 +45,10 @@ To add the newly created Kubernetes cluster to your local configuration run:
 
     $(terraform output kubeconfig_command)
 
+Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
+* Copy the webhook_secret value from Terraform output
+* Create the new GitHub webhook using webhook_secret as the Secret value and set Content type to application/json.
+
 ## Update Configuration
 
     terraform apply

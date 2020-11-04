@@ -35,17 +35,31 @@ provider "google" {
   region      = var.region
 }
 
-resource "random_id" "main" {
+resource "random_id_suffix" "main" {
   count       = 2
   byte_length = 2
 }
 
+resource "random_password" "admin" {
+  length  = 12
+  special = false
+}
+
+resource "random_password" "webhook_secret" {
+  length  = 24
+  special = false
+}
+
 locals {
-  network_project_id_suffix     = random_id.main[0].hex
-  development_project_id_suffix = random_id.main[1].hex
+  network_project_id_suffix     = random_id_suffix.main[0].hex
+  development_project_id_suffix = random_id_suffix.main[1].hex
   disabled                      = 0
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  admin_password_hash           = bcrypt(local.admin_password)
+  admin_password_mtime          = timestamp()
+  webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
 }
 
 resource "google_project" "network" {
