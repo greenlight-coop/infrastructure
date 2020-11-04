@@ -173,24 +173,6 @@ resource "k8s_manifest" "argocd-secret" {
   ]
 }
 
-resource "kubernetes_secret" "example" {
-  metadata {
-    name = "argocd-secret"
-    namespace = "argocd"
-  }
-
-  data = {
-    "admin.password"        = base64encode(local.admin_password_hash)
-    "admin.passwordMtime"   = base64encode(local.admin_password_hash)
-    "webhook.github.secret" = base64encode(local.webhook_secret)
-  }
-
-  type = "kubernetes.io/dockerconfigjson"
-  depends_on = [
-    helm_release.argo-cd
-  ]
-}
-
 # Equivalent to:
 #   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
