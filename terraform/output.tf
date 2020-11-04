@@ -21,3 +21,7 @@ output "cluster_endpoint" {
 output "kubeconfig_command" {
   value ="gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${google_project.development.project_id} --zone ${var.zone}"
 }
+
+output "ingress_dns_a_record" {
+  value = "ingress${local.workspace_suffix}.dev.greenlight.coop IN A ${kubernetes_ingress.nginx}"
+}

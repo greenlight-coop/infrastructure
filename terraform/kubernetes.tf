@@ -89,6 +89,12 @@ resource "helm_release" "ingress-nginx" {
   ]
 }
 
+data "kubernetes_ingress" "nginx" {
+  depends_on = [
+    helm_release.ingress-nginx
+  ]
+}
+
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
