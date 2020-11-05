@@ -177,6 +177,13 @@ resource "helm_release" "argo-cd" {
   values = [ <<-EOT
     installCRDs: false
     server:
+      config:
+        url: argocd${local.workspace_suffix}.dev.greenlight.coop
+        repositories: |
+          - url: git@github.com:greenlight-coop/argocd-apps.git
+            sshPrivateKeySecret:
+              name: bot-private-key
+              key: ${local.bot_private_key}
       ingress:
         enabled: true
         hosts:

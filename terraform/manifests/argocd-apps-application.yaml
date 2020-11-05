@@ -10,7 +10,7 @@ spec:
 
   # Source of the application manifests
   source:
-    repoURL: https://github.com/greenlight-coop/argocd-apps.git
+    repoURL: git@github.com:greenlight-coop/argocd-apps.git
     targetRevision: ${target_revision}
     path: apps
 
