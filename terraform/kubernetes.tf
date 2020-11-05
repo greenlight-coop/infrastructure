@@ -160,7 +160,16 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
-# Equivalent to:
+resource "k8s_manifest" "argocd-project" {
+  content = templatefile("manifests/argocd-project.yaml", {
+    bot_private_key = local.bot_private_key
+  })
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+}
+
+# Equivalent to: 
 #   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
 # After reaching the UI the first time you can login with username: admin and the password will be the
@@ -183,7 +192,7 @@ resource "helm_release" "argo-cd" {
           - url: git@github.com:greenlight-coop/argocd-apps.git
             sshPrivateKeySecret:
               name: bot-private-key
-              key: ${local.bot_private_key}
+              key: github-ssh-key
       ingress:
         enabled: true
         hosts:
