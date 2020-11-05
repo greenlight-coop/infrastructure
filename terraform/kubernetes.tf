@@ -187,9 +187,10 @@ resource "helm_release" "argo-cd" {
     installCRDs: false
     server:
       config:
-        url: argocd${local.workspace_suffix}.dev.greenlight.coop
+        url: https://argocd${local.workspace_suffix}.dev.greenlight.coop
         repositories: |
           - url: git@github.com:greenlight-coop/argocd-apps.git
+            type: git
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
