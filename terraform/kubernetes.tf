@@ -160,8 +160,8 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
-resource "k8s_manifest" "argocd-project" {
-  content = templatefile("manifests/argocd-project.yaml", {
+resource "k8s_manifest" "argocd-github-ssh-key-secret" {
+  content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
     bot_private_key = local.bot_private_key
   })
   depends_on = [
@@ -219,6 +219,7 @@ resource "helm_release" "argo-cd" {
   depends_on = [
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
+    k8s_manifest.argocd-github-ssh-key-secret,
     kubernetes_namespace.argocd
   ]
 }
