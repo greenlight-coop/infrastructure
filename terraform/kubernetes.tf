@@ -191,8 +191,8 @@ resource "helm_release" "argo-cd" {
         repositories: |
           - url: git@github.com:greenlight-coop/argocd-apps.git
             sshPrivateKeySecret:
-              name: bot-private-key
-              key: github-ssh-key
+              name: github-ssh-key
+              key: sshPrivateKey
       ingress:
         enabled: true
         hosts:
