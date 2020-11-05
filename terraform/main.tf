@@ -60,6 +60,8 @@ locals {
   admin_password_hash           = bcrypt(local.admin_password)
   admin_password_mtime          = timestamp()
   webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
+  bot_private_key_file          = "./.ssh/id_ed25519"
+  bot_private_key               = file(local.bot_private_key_file)
 }
 
 resource "google_project" "network" {
