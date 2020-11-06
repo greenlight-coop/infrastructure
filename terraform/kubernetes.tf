@@ -300,7 +300,7 @@ resource "null_resource" "enable-serving-istio-injection" {
     command = "kubectl label namespace knative-serving istio-injection=enabled"
   }
   depends_on = [
-    k8s_manifest.istio-minimal-operator,
+    null_resource.istio-minimal-operator,
   ]
 }
 
