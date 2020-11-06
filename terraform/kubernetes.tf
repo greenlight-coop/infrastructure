@@ -160,12 +160,6 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
-resource "kubernetes_namespace" "monitoring" {
-  metadata {
-    name = "monitoring"
-  }
-}
-
 resource "k8s_manifest" "argocd-github-ssh-key-secret" {
   content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
     bot_private_key = local.bot_private_key
@@ -175,21 +169,11 @@ resource "k8s_manifest" "argocd-github-ssh-key-secret" {
   ]
 }
 
-resource "k8s_manifest" "monitoring-admin-password-secret" {
+resource "k8s_manifest" "default-admin-password-secret" {
   content = templatefile("manifests/admin-password-secret.yaml", {
-    namespace       = "monitoring"
+    namespace       = "default"
     admin_password  = local.admin_password
   })
-  depends_on = [
-    kubernetes_namespace.monitoring
-  ]
-}
-
-resource "k8s_manifest" "grafana-datasources-secret" {
-  content = templatefile("manifests/grafana-datasources-secret.yaml", {})
-  depends_on = [
-    kubernetes_namespace.monitoring
-  ]
 }
 
 # Equivalent to: 
@@ -244,7 +228,6 @@ resource "helm_release" "argo-cd" {
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
     k8s_manifest.argocd-github-ssh-key-secret,
-    k8s_manifest.grafana-datasources-secret,
     kubernetes_namespace.argocd
   ]
 }
@@ -267,7 +250,6 @@ resource "k8s_manifest" "argocd-apps-application" {
     }
   )
   depends_on = [
-    k8s_manifest.argocd-project,
-    k8s_manifest.monitoring-admin-password-secret
+    k8s_manifest.argocd-project
   ]
 }
