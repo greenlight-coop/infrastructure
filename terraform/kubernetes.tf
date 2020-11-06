@@ -160,7 +160,7 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
-resource "kubernetes_namespace" "argocd" {
+resource "kubernetes_namespace" "monitoring" {
   metadata {
     name = "monitoring"
   }
