@@ -177,7 +177,7 @@ resource "k8s_manifest" "argocd-github-ssh-key-secret" {
 
 resource "k8s_manifest" "monitoring-admin-password-secret" {
   content = templatefile("manifests/admin-password-secret.yaml", {
-    namespace       = monitoring
+    namespace       = "monitoring"
     admin_password  = local.admin_password
   })
   depends_on = [
