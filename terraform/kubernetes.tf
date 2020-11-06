@@ -306,13 +306,13 @@ resource "null_resource" "enable-serving-istio-injection" {
 resource "k8s_manifest" "knative-serving-permissive" {
   content = <<-EOT
     apiVersion: "security.istio.io/v1beta1"
-      kind: "PeerAuthentication"
-      metadata:
-        name: "default"
-        namespace: "knative-serving"
-      spec:
-        mtls:
-          mode: PERMISSIVE
+    kind: "PeerAuthentication"
+    metadata:
+      name: "default"
+      namespace: "knative-serving"
+    spec:
+      mtls:
+        mode: PERMISSIVE
   EOT
   depends_on = [
     null_resource.enable-serving-istio-injection
