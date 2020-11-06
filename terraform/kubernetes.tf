@@ -259,7 +259,7 @@ resource "k8s_manifest" "argocd-apps-application" {
     }
   )
   depends_on = [
-    k8s_manifest.argocd-project
+    k8s_manifest.argocd-project,
     k8s_manifest.monitoring-admin-password-secret
   ]
 }
