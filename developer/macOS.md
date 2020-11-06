@@ -100,6 +100,13 @@ Update .zshrc per directions at start of install
     brew install argocd
     brew install kustomize
 
+### Istio
+
+    cd ~/dev/tools
+    curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.7.4 sh -
+
+Add $HOME/dev/tools/istio-1.7.4/bin to PATH in ~/.zshrc and source it (`. ~/.zshrc`)
+
 ### NodeJS
 
     brew install nvm

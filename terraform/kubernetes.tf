@@ -261,3 +261,49 @@ resource "k8s_manifest" "argocd-apps-application" {
     k8s_manifest.default-admin-password-secret
   ]
 }
+
+resource "k8s_manifest" "knative-serving-crds" {
+  content = file("manifests/knative-serving-crds.yaml")
+  depends_on = [
+    k8s_manifest.argocd-apps-application
+  ]
+}
+
+resource "k8s_manifest" "knative-serving-core" {
+  content = file("manifests/knative-serving-core.yaml")
+  depends_on = [
+    k8s_manifest.knative-serving-crds
+  ]
+}
+
+resource "k8s_manifest" "istio-minimal-operator" {
+  content = file("manifests/istio-minimal-operator.yaml")
+  depends_on = [
+    k8s_manifest.knative-serving-core
+  ]
+}
+
+resource "null_resource" "enable-serving-istio-injection" {
+  provisioner "local-exec" {
+    command = "kubectl label namespace knative-serving istio-injection=enabled"
+  }
+  depends_on = [
+    k8s_manifest.istio-minimal-operator,
+  ]
+}
+
+resource "k8s_manifest" "knative-serving-permissive" {
+  content = <<-EOT
+    apiVersion: "security.istio.io/v1beta1"
+      kind: "PeerAuthentication"
+      metadata:
+        name: "default"
+        namespace: "knative-serving"
+      spec:
+        mtls:
+          mode: PERMISSIVE
+  EOT
+  depends_on = [
+    k8s_manifest.istio-serving-crds
+  ]
+}
