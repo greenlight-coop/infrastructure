@@ -186,9 +186,7 @@ resource "k8s_manifest" "monitoring-admin-password-secret" {
 }
 
 resource "k8s_manifest" "grafana-datasources-secret" {
-  content = templatefile("manifests/grafana-datasources-secret.yaml", {
-    namespace = "monitoring"
-  })
+  content = templatefile("manifests/grafana-datasources-secret.yaml", {})
   depends_on = [
     kubernetes_namespace.monitoring
   ]
