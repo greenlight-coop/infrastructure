@@ -27,5 +27,5 @@ output "ingress_dns_record" {
 }
 
 output "istio-ingress_dns_record" {
-  value = "istio-ingress${local.workspace_suffix}.knative.dev.greenlight.coop IN A ${local.istio_ingress_ip_address}"
+  value = "istio-ingress.knative${local.workspace_suffix}.dev.greenlight.coop IN A ${local.istio_ingress_ip_address}"
 }

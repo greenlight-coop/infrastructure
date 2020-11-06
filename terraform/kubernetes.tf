@@ -335,3 +335,17 @@ resource "k8s_manifest" "knative-serving-istio" {
     k8s_manifest.knative-serving-permissive
   ]
 }
+
+resource "null_resource" "enable-serving-istio-injection" {
+  provisioner "local-exec" {
+    command = <<-EOT
+      kubectl patch configmap/config-domain \
+        --namespace knative-serving \
+        --type merge \
+        --patch '{"data":{"knative${local.workspace_suffix}.dev.greenlight.coop":""}}'
+    EOT
+  }
+  depends_on = [
+    k8s_manifest.enable-serving-istio-injection,
+  ]
+}
