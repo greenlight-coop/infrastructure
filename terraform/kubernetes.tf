@@ -160,12 +160,28 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
 resource "k8s_manifest" "argocd-github-ssh-key-secret" {
   content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
     bot_private_key = local.bot_private_key
   })
   depends_on = [
     kubernetes_namespace.argocd
+  ]
+}
+
+resource "k8s_manifest" "monitoring-admin-password-secret" {
+  content = templatefile("manifests/admin-password-secret.yaml", {
+    namespace       = monitoring
+    admin_password  = local.admin_password
+  })
+  depends_on = [
+    kubernetes_namespace.monitoring
   ]
 }
 
@@ -236,7 +252,6 @@ resource "k8s_manifest" "argocd-apps-application" {
   content = templatefile(
     "manifests/argocd-apps-application.yaml", 
     {
-      admin_password    = local.admin_password
       target_revision   = local.argocd_source_target_revision
       tls_cert_issuer   = local.tls_cert_issuer
       tls_secret_name   = local.tls_secret_name
@@ -245,5 +260,6 @@ resource "k8s_manifest" "argocd-apps-application" {
   )
   depends_on = [
     k8s_manifest.argocd-project
+    k8s_manifest.monitoring-admin-password-secret
   ]
 }

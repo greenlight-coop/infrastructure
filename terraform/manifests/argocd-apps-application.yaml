@@ -20,8 +20,6 @@ spec:
       parameters:
       - name: "global.workspaceSuffix"
         value: ${workspace_suffix}
-      - name: "global.adminPassword"
-        value: ${admin_password}
       - name: "global.tlsCertIssuer"
         value: ${tls_cert_issuer}
       - name: "global.tlsSecretName"
