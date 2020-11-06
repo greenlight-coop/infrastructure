@@ -276,10 +276,19 @@ resource "k8s_manifest" "knative-serving-core" {
   ]
 }
 
+resource "null_resource" "istioctl-install" {
+  provisioner "local-exec" {
+    command = "istioctl install"
+  }
+  depends_on = [
+    k8s_manifest.knative-serving-core,
+  ]
+}
+
 resource "k8s_manifest" "istio-minimal-operator" {
   content = file("manifests/istio-minimal-operator.yaml")
   depends_on = [
-    k8s_manifest.knative-serving-core
+    null_resource.istioctl-install
   ]
 }
 
