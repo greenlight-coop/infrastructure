@@ -25,3 +25,7 @@ output "kubeconfig_command" {
 output "ingress_dns_record" {
   value = "ingress${local.workspace_suffix}.dev.greenlight.coop IN A ${local.ingress_ip_address}"
 }
+
+output "istio-ingress_dns_record" {
+  value = "istio-ingress${local.workspace_suffix}.knative.dev.greenlight.coop IN A ${local.istio_ingress_ip_address}"
+}

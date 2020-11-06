@@ -294,6 +294,22 @@ resource "null_resource" "istio-minimal-operator" {
   ]
 }
 
+data "kubernetes_service" "istio-ingressgateway" {
+  metadata {
+    namespace = "istio-system"
+    name      = "istio-ingressgateway"
+  }
+  depends_on = [
+    null_resource.istio-minimal-operator
+  ]
+}
+locals {
+  istio_ingress_ip_address = data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip
+  depends_on = [
+    data.kubernetes_service.istio-ingressgateway
+  ]
+}
+
 resource "null_resource" "enable-serving-istio-injection" {
   provisioner "local-exec" {
     command = "kubectl label namespace knative-serving istio-injection=enabled"
@@ -316,5 +332,12 @@ resource "k8s_manifest" "knative-serving-permissive" {
   EOT
   depends_on = [
     null_resource.enable-serving-istio-injection
+  ]
+}
+
+resource "k8s_manifest" "knative-serving-istio" {
+  content = file("manifests/knative-serving-istio.yaml")
+  depends_on = [
+    k8s_manifest.knative-serving-permissive
   ]
 }
