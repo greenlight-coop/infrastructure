@@ -289,7 +289,6 @@ resource "null_resource" "istio-minimal-operator" {
   provisioner "local-exec" {
     command = "istioctl manifest apply -f manifest/istio-minimal-operator.yaml"
   }
-  content = file("manifests/istio-minimal-operator.yaml")
   depends_on = [
     null_resource.istioctl-install
   ]
