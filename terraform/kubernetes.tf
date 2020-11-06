@@ -185,6 +185,15 @@ resource "k8s_manifest" "monitoring-admin-password-secret" {
   ]
 }
 
+resource "k8s_manifest" "grafana-datasources-secret" {
+  content = templatefile("manifests/grafana-datasources-secret.yaml", {
+    namespace = "monitoring"
+  })
+  depends_on = [
+    kubernetes_namespace.monitoring
+  ]
+}
+
 # Equivalent to: 
 #   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
@@ -237,6 +246,7 @@ resource "helm_release" "argo-cd" {
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
     k8s_manifest.argocd-github-ssh-key-secret,
+    k8s_manifest.grafana-datasources-secret,
     kubernetes_namespace.argocd
   ]
 }
