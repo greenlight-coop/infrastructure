@@ -278,7 +278,7 @@ resource "k8s_manifest" "knative-serving-core" {
 
 resource "null_resource" "istioctl-install" {
   provisioner "local-exec" {
-    command = "istioctl install"
+    command = "istioctl install --skip-confirmation"
   }
   depends_on = [
     k8s_manifest.knative-serving-core,
