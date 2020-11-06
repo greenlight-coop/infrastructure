@@ -33,8 +33,8 @@ provider "helm" {
 }
 
 locals {
-  tls_cert_issuer                  = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production"
-  tls_secret_name                  = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production" 
+  tls_cert_issuer = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production"
+  tls_secret_name = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production" 
 }
 
 resource "google_container_cluster" "development" {
@@ -236,6 +236,7 @@ resource "k8s_manifest" "argocd-apps-application" {
   content = templatefile(
     "manifests/argocd-apps-application.yaml", 
     {
+      admin_password    = local.admin_password
       target_revision   = local.argocd_source_target_revision
       tls_cert_issuer   = local.tls_cert_issuer
       tls_secret_name   = local.tls_secret_name
