@@ -304,6 +304,6 @@ resource "k8s_manifest" "knative-serving-permissive" {
           mode: PERMISSIVE
   EOT
   depends_on = [
-    k8s_manifest.istio-serving-crds
+    null_resource.enable-serving-istio-injection
   ]
 }
