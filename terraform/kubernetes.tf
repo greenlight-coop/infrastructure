@@ -276,7 +276,7 @@ resource "k8s_manifest" "knative-serving-crds-twice" {
 resource "k8s_manifest" "knative-serving-core" {
   content = file("manifests/knative-serving-core.yaml")
   depends_on = [
-    k8s_manifest.knative-serving-crds
+    k8s_manifest.knative-serving-crds-twice
   ]
 }
 
