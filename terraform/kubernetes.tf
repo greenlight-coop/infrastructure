@@ -261,27 +261,22 @@ resource "k8s_manifest" "argocd-apps-application" {
 }
 
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
-resource "k8s_manifest" "knative-serving-crds" {
-  content = file("manifests/knative-serving-crds.yaml")
+resource "null_resource" "knative-serving-crds" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
+  }
   depends_on = [
     k8s_manifest.argocd-apps-application
   ]
 }
 
-resource "null_resource" "knative-serving-crds-twice" {
+# Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
+resource "null_resource" "knative-serving-core" {
   provisioner "local-exec" {
-    command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
+    command = "kubectl apply --filename manifests/knative-serving-core.yaml"
   }
   depends_on = [
-    k8s_manifest.knative-serving-crds
-  ]
-}
-
-# Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
-resource "k8s_manifest" "knative-serving-core" {
-  content = file("manifests/knative-serving-core.yaml")
-  depends_on = [
-    null_resource.knative-serving-crds-twice
+    null_resource.knative-serving-crds
   ]
 }
 
