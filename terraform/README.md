@@ -13,22 +13,53 @@ Global for all instructions that follow
     export SEED_GCP_SERVICE_ACCOUNT=<lookup_fq_sa_username_after_creation>
 
 ## Initial Configuration
+
+Prepare an SSH key pair for automated GitHub access, etc. Note that these files are .gitignored and should be protected
+for future reference. After generation, add the public key to the bot@greenlight.coop GitHub account. Store the generated
+keys in a `./.ssh` directory relative to this `terraform` directory.
+
+    ssh-keygen -t ed25519 -C "bot@greenlight.coop"
+
+Run the following commands (once only for the Green Light organization)
     
     gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID --set-as-default
-
     ./setup-sa.sh -o $GCP_ORGANIZATION_ID -p $SEED_GCP_PROJECT_ID -b $GCP_BILLING_ACCOUNT_ID
-
     gsutil mb -b on -c nearline -p $SEED_GCP_PROJECT_ID gs://$TF_BACKEND_BUCKET
-
     gsutil versioning set on gs://$TF_BACKEND_BUCKET
-
     gsutil acl ch -u $SEED_GCP_SERVICE_ACCOUNT:OWNER gs://$TF_BACKEND_BUCKET
 
-    terraform init
+If reusing a GCP project
 
-    terraform apply
+    export TF_VAR_project_id=(project id)
+    export TF_VAR_project_name=(project name)
+    export TF_VAR_existing_project=true
 
-(TBD - document DNS configuration steps)
+To create the GCP project, cluster and resources
+
+    terraform init \
+        && tf apply -auto-approve -target=google_container_cluster.development \
+        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
+            -target=google_dns_record_set.api_name_servers \
+            -target=google_dns_record_set.apps_name_servers \
+            -target=google_dns_record_set.knative_name_servers \
+            -target=google_dns_record_set.ingress_name_servers
+
+Add the newly created Kubernetes cluster to your local configuration run:
+
+    $(terraform output kubeconfig_command)
+
+Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name servers in the
+Google Domains managed greenlightcoop.dev domain.
+
+Build the remainder of the Terraform resources:
+
+    terraform apply -auto-approve
+
+Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
+* Copy the webhook_secret value from Terraform output
+* Create the new GitHub webhook using webhook_secret as the Secret value and set .
+    * Payload URL: https://argocd.(workspace-)apps.greenlightcoop.dev/api/webhook
+    * Content type: application/json
 
 ## Update Configuration
 
@@ -43,3 +74,31 @@ Global for all instructions that follow
 It's expected this will never be required
 
     gcloud projects delete $SEED_GCP_PROJECT_ID --quiet
+
+## Terraform Workspace
+
+To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
+for deployment of the infrastructure to a temporary environment (set of GCP projects) that can then be destroyed
+after the modifications have been vetted and merged to master.
+
+* Checkout a branch of the infrastructure and/or argocd-apps projects based on the current GitHub issue number.
+
+        git checkout -b feature/<issue number>
+
+* Create a new workspace using the issue number as part of the workspace name, replacing '/' with '-'
+
+        terraform workspace new feature-<issue number>
+
+* Iterate between deploying the resources in the new workspace and making changes to the configuration
+
+        terraform apply
+        $(terraform output kubeconfig_command)
+
+* When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
+  deafult workspace from master
+
+        terraform destroy
+        terraform workspace select default
+        terraform workspace delete feature-<issue number>
+        git checkout master && git pull
+        terraform apply

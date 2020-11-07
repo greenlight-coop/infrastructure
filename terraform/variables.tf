@@ -13,6 +13,21 @@ variable "org_id" {
   default = "636256323415"
 }
 
+variable "existing_project" {
+  type = bool
+  default = false
+}
+
+variable "project_id" {
+  type = string
+  default = ""
+}
+
+variable "project_name" {
+  type = string
+  default = ""
+}
+
 variable "min_node_count" {
   type    = number
   default = 1
@@ -43,17 +58,22 @@ variable "k8s_version" {
   default = "1.17.12-gke.1504"
 }
 
-variable "enable_dns" {
-  type = bool
-  default = false
+variable "admin_password" {
+  type    = string
+  default = ""
 }
 
-variable "enable_dns_named_resources" {
-  type = bool
-  default = true
-}
-
-variable "administration-email" {
+variable "admin_email" {
   type    = string
   default = "admin@greenlight.coop"
+}
+
+variable "webhook_secret" {
+  type    = string
+  default = ""
+}
+
+variable "use_staging_certs" {
+  type    = bool
+  default = false
 }

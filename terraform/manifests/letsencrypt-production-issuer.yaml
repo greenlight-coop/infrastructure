@@ -7,7 +7,7 @@ spec:
     # You must replace this email address with your own.
     # Let's Encrypt will use this to contact you about expiring
     # certificates, and issues related to your account.
-    email: ${administration-email}
+    email: ${admin_email}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Secret resource that will be used to store the account's private key.
@@ -17,3 +17,6 @@ spec:
     - http01:
         ingress:
           class: nginx
+    - http01:
+        ingress:
+          class: istio

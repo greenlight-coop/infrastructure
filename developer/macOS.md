@@ -14,12 +14,18 @@
 
 * Install the following extensions
   * Terraform (Anton Kulikov)
+  * Kubernetes
+  * Docker
 
-### Docker Desktop
+### Docker
 
 * Download from https://docs.docker.com/docker-for-mac/install/
 
-* Open .dmg, move Docker to Applications and launch to install 
+* Open .dmg, move Docker to Applications and launch to install
+
+* Login to Docker Hub from the command line to enable pushing images, etc.
+
+        docker login -u <username>
 
 ## Command Line Tools
 
@@ -92,6 +98,14 @@ Update .zshrc per directions at start of install
     brew tap knative/client
     brew install kn
     brew install argocd
+    brew install kustomize
+
+### Istio
+
+    cd ~/dev/tools
+    curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.7.4 sh -
+
+Add $HOME/dev/tools/istio-1.7.4/bin to PATH in ~/.zshrc and source it (`. ~/.zshrc`)
 
 ### NodeJS
 

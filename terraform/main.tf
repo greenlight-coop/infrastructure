@@ -22,6 +22,10 @@ terraform {
       source =  "hashicorp/random"
       version = "~> 3.0.0"
     }
+    null = {
+      source =  "hashicorp/null"
+      version = "~> 3.0.0"
+    }
   }
 
   backend "gcs" {
@@ -35,32 +39,43 @@ provider "google" {
   region      = var.region
 }
 
-resource "random_id" "main" {
-  count       = 2
+resource "random_id" "project_id_suffix" {
   byte_length = 2
 }
 
-locals {
-  network_project_id_suffix     = random_id.main[0].hex
-  development_project_id_suffix = random_id.main[1].hex
-  disabled                      = 0
+resource "random_password" "admin" {
+  length  = 12
+  special = false
 }
 
-resource "google_project" "network" {
-  name            = "greenlight-network"
-  project_id      = "greenlight-network-${local.network_project_id_suffix}"
-  org_id          = var.org_id
-  billing_account = var.billing_account_id
+resource "random_password" "webhook_secret" {
+  length  = 24
+  special = false
+}
+
+locals {
+  development_project_id_suffix = random_id.project_id_suffix.hex
+  project_id                    = var.project_id == "" ? "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}" : var.project_id
+  project_name                  = var.project_name == "" ? "gl-development${local.workspace_suffix}" : var.project_name
+  workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  admin_password_hash           = bcrypt(local.admin_password)
+  admin_password_mtime          = timestamp()
+  webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
+  bot_private_key_file          = "./.ssh/id_ed25519"
+  bot_private_key               = file(local.bot_private_key_file)
 }
 
 resource "google_project" "development" {
-  name            = "greenlight-development"
-  project_id      = "greenlight-development-${local.development_project_id_suffix}"
+  count           = var.existing_project ? 0 : 1
+  name            = local.project_name
+  project_id      = local.project_id
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }
 
 resource "google_project_service" "container-development" {
-  project = google_project.development.project_id
+  project = local.project_id
   service = "container.googleapis.com"
 }
