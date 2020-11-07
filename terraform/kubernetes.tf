@@ -266,8 +266,10 @@ resource "k8s_manifest" "knative-serving-crds" {
   ]
 }
 
-resource "k8s_manifest" "knative-serving-crds-twice" {
-  content = file("manifests/knative-serving-crds.yaml")
+resource "null_resource" "knative-serving-crds-twice" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
+  }
   depends_on = [
     k8s_manifest.knative-serving-crds
   ]
@@ -276,7 +278,7 @@ resource "k8s_manifest" "knative-serving-crds-twice" {
 resource "k8s_manifest" "knative-serving-core" {
   content = file("manifests/knative-serving-core.yaml")
   depends_on = [
-    k8s_manifest.knative-serving-crds-twice
+    null_resource.knative-serving-crds-twice
   ]
 }
 
