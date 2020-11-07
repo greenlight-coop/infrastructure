@@ -132,7 +132,7 @@ resource "google_dns_record_set" "wildcard-apps-greenlightcoop-dev-cname-record"
   type         = "CNAME"
   ttl          = 300
 
-  rrdatas = [local.ingress_domain_name]
+  rrdatas = [local.ingress_domain_name_terminated]
 }
 
 # API
@@ -162,5 +162,5 @@ resource "google_dns_record_set" "wildcard-api-greenlightcoop-dev-cname-record" 
   type         = "CNAME"
   ttl          = 300
 
-  rrdatas = [local.ingress_domain_name]
+  rrdatas = [local.ingress_domain_name_terminated]
 }

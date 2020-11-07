@@ -53,7 +53,7 @@ Google Domains managed greenlightcoop.dev domain.
 
 Build the remainder of the Terraform resources:
 
-    terraform apply
+    terraform apply -auto-approve
 
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Copy the webhook_secret value from Terraform output
