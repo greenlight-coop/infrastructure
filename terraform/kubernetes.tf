@@ -99,10 +99,6 @@ data "kubernetes_service" "ingress-nginx-controller" {
   ]
 }
 
-locals {
-  ingress_ip_address = data.kubernetes_service.ingress-nginx-controller.load_balancer_ingress[0].ip
-}
-
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
@@ -308,9 +304,6 @@ data "kubernetes_service" "istio-ingressgateway" {
   depends_on = [
     null_resource.istio-minimal-operator
   ]
-}
-locals {
-  istio_ingress_ip_address = data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip
 }
 
 resource "null_resource" "enable-serving-istio-injection" {
