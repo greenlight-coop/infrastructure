@@ -244,10 +244,13 @@ resource "k8s_manifest" "argocd-apps-application" {
   content = templatefile(
     "manifests/argocd-apps-application.yaml", 
     {
-      target_revision   = local.argocd_source_target_revision
-      tls_cert_issuer   = local.tls_cert_issuer
-      tls_secret_name   = local.tls_secret_name
-      workspace_suffix  = local.workspace_suffix
+      target_revision     = local.argocd_source_target_revision
+      tls_cert_issuer     = local.tls_cert_issuer
+      tls_secret_name     = local.tls_secret_name
+      workspace_suffix    = local.workspace_suffix
+      api_domain_name     = local.api_domain_name
+      apps_domain_name    = local.apps_domain_name
+      knative_domain_name = local.knative_domain_name
     }
   )
   depends_on = [

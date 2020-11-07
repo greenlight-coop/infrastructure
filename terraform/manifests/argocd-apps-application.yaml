@@ -18,8 +18,12 @@ spec:
     helm:
       # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
-      - name: "global.workspaceSuffix"
-        value: ${workspace_suffix}
+      - name: "global.apiDomainName"
+        value: ${api_domain_name}
+      - name: "global.appsDomainName"
+        value: ${apps_domain_name}
+      - name: "global.knativeDomainName"
+        value: ${knative_domain_name}
       - name: "global.tlsCertIssuer"
         value: ${tls_cert_issuer}
       - name: "global.tlsSecretName"
