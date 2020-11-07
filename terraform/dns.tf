@@ -172,5 +172,5 @@ resource "google_dns_record_set" "wildcard-api-greenlightcoop-dev-cname-record" 
   type         = "CNAME"
   ttl          = 300
 
-  rrdatas = [google_dns_record_set.api-greenlightcoop-dev-a-record.rrdatas[0]]
+  rrdatas = [google_dns_record_set.api-greenlightcoop-dev-a-record.name]
 }
