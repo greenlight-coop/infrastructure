@@ -336,7 +336,7 @@ resource "k8s_manifest" "knative-serving-istio" {
   ]
 }
 
-resource "null_resource" "enable-serving-istio-injection" {
+resource "null_resource" "knative-serving-config-domain" {
   provisioner "local-exec" {
     command = <<-EOT
       kubectl patch configmap/config-domain \
