@@ -155,6 +155,15 @@ resource "google_dns_record_set" "api_name_servers" {
   rrdatas = google_dns_managed_zone.api.name_servers
 }
 
+resource "google_dns_record_set" "api-greenlightcoop-dev-cname-record" {
+  name         = local.api_domain_name_terminated
+  project      = local.project_id
+  managed_zone = google_dns_managed_zone.api.name
+  type         = "CNAME"
+  ttl          = 300
+
+  rrdatas = [local.ingress_domain_name_terminated]
+
 resource "google_dns_record_set" "wildcard-api-greenlightcoop-dev-cname-record" {
   name         = "*.${local.api_domain_name_terminated}"
   project      = local.project_id
