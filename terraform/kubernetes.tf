@@ -260,6 +260,7 @@ resource "k8s_manifest" "argocd-apps-application" {
   ]
 }
 
+# Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
 resource "k8s_manifest" "knative-serving-crds" {
   content = file("manifests/knative-serving-crds.yaml")
   depends_on = [
@@ -276,6 +277,7 @@ resource "null_resource" "knative-serving-crds-twice" {
   ]
 }
 
+# Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
 resource "k8s_manifest" "knative-serving-core" {
   content = file("manifests/knative-serving-core.yaml")
   depends_on = [
@@ -336,6 +338,7 @@ resource "k8s_manifest" "knative-serving-permissive" {
   ]
 }
 
+# Downloaded from https://github.com/knative/net-istio/releases/download/v0.18.0/release.yaml
 resource "k8s_manifest" "knative-serving-istio" {
   content = file("manifests/knative-serving-istio.yaml")
   depends_on = [
@@ -356,5 +359,28 @@ resource "null_resource" "knative-serving-config-domain" {
     k8s_manifest.knative-serving-istio,
     k8s_manifest.knative-serving-core,
     google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+  ]
+}
+
+# Downloaded from https://github.com/knative/net-certmanager/releases/download/v0.18.0/release.yaml
+# Edited to include installed letsencrypt ClusterIssuer configuration starting line 119 per instructions at
+# https://knative.dev/docs/serving/using-auto-tls/#configure-config-certmanager-configmap
+resource "k8s_manifest" "knative-serving-certmanager-extension" {
+  content = templatefile("manifests/knative-serving-certmanager-extension.yaml",
+    {
+      tls_cert_issuer = local.tls_cert_issuer
+    }
+  )
+  depends_on = [
+    null_resource.knative-serving-config-domain
+  ]
+}
+
+resource "null_resource" "knative-serving-config-network-tls" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-serving-config-network-tls.yaml"
+  }
+  depends_on = [
+    k8s_manifest.knative-serving-certmanager-extension
   ]
 }
