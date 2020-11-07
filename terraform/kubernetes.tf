@@ -346,6 +346,6 @@ resource "null_resource" "knative-serving-config-domain" {
     EOT
   }
   depends_on = [
-    k8s_manifest.enable-serving-istio-injection,
+    k8s_manifest.knative-serving-istio,
   ]
 }
