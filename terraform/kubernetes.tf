@@ -362,7 +362,7 @@ resource "null_resource" "knative-serving-config-domain" {
 # Downloaded from https://github.com/knative/net-certmanager/releases/download/v0.18.0/release.yaml
 resource "null_resource" "knative-serving-certmanager-extension" {
   provisioner "local-exec" {
-    command = "kubectl apply --filename manifests/knative-knative-serving-certmanager-extension.yaml"
+    command = "kubectl apply --filename manifests/knative-serving-certmanager-extension.yaml"
   }
   depends_on = [
     null_resource.knative-serving-config-domain
