@@ -58,7 +58,7 @@ Build the remainder of the Terraform resources:
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Copy the webhook_secret value from Terraform output
 * Create the new GitHub webhook using webhook_secret as the Secret value and set .
-    * Payload URL: https://argocd.apps[workspace].greenlightcoop.dev/api/webhook
+    * Payload URL: https://argocd.(workspace-)apps.greenlightcoop.dev/api/webhook
     * Content type: application/json
 
 ## Update Configuration
