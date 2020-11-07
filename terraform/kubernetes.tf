@@ -193,7 +193,7 @@ resource "helm_release" "argo-cd" {
     installCRDs: false
     server:
       config:
-        url: https://argocd${local.workspace_suffix}.dev.greenlight.coop
+        url: https://argocd.${local.apps_domain_name}
         repositories: |
           - url: git@github.com:greenlight-coop/argocd-apps.git
             type: git
@@ -203,7 +203,7 @@ resource "helm_release" "argo-cd" {
       ingress:
         enabled: true
         hosts:
-          - argocd${local.workspace_suffix}.dev.greenlight.coop
+          - argocd.${local.apps_domain_name}
         annotations:
           kubernetes.io/ingress.class: nginx
           cert-manager.io/cluster-issuer: ${local.tls_cert_issuer}
@@ -213,7 +213,7 @@ resource "helm_release" "argo-cd" {
         tls:
           - secretName: ${local.tls_secret_name}
             hosts:
-              - argocd${local.workspace_suffix}.dev.greenlight.coop
+              - argocd.${local.apps_domain_name}
         https: true
     configs:
       secret:
@@ -228,7 +228,8 @@ resource "helm_release" "argo-cd" {
     k8s_manifest.letsencrypt-production-issuer,
     k8s_manifest.argocd-github-ssh-key-secret,
     k8s_manifest.grafana-datasources-secret,
-    kubernetes_namespace.argocd
+    kubernetes_namespace.argocd,
+    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
 
@@ -251,7 +252,8 @@ resource "k8s_manifest" "argocd-apps-application" {
   )
   depends_on = [
     k8s_manifest.argocd-project,
-    k8s_manifest.default-admin-password-secret
+    k8s_manifest.default-admin-password-secret,
+    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
 
@@ -344,11 +346,12 @@ resource "null_resource" "knative-serving-config-domain" {
       kubectl patch configmap/config-domain \
         --namespace knative-serving \
         --type merge \
-        --patch '{"data":{"knative${local.workspace_suffix}.dev.greenlight.coop":""}}'
+        --patch '{"data":{"${local.knative_domain_name}":""}}'
     EOT
   }
   depends_on = [
     k8s_manifest.knative-serving-istio,
-    k8s_manifest.knative-serving-core
+    k8s_manifest.knative-serving-core,
+    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
 }
