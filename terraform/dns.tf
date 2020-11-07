@@ -48,7 +48,7 @@ resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
 resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" {
   name         = "*.${local.ingress_domain_name}"
   project      = google_project.development.project_id
-  managed_zone = google_dns_managed_zone.dev.name
+  managed_zone = google_dns_managed_zone.ingress.name
   type         = "A"
   ttl          = 300
 
@@ -93,7 +93,7 @@ resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
 resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
   name         = "*.${local.knative_domain_name}"
   project      = google_project.development.project_id
-  managed_zone = google_dns_managed_zone.dev.name
+  managed_zone = google_dns_managed_zone.knative.name
   type         = "A"
   ttl          = 300
 
@@ -123,7 +123,7 @@ resource "google_dns_record_set" "apps_name_servers" {
 resource "google_dns_record_set" "wildcard-apps-greenlightcoop-dev-cname-record" {
   name         = "*.${local.apps_domain_name}"
   project      = google_project.development.project_id
-  managed_zone = google_dns_managed_zone.dev.name
+  managed_zone = google_dns_managed_zone.apps.name
   type         = "CNAME"
   ttl          = 300
 
@@ -153,7 +153,7 @@ resource "google_dns_record_set" "api_name_servers" {
 resource "google_dns_record_set" "wildcard-api-greenlightcoop-dev-cname-record" {
   name         = "*.${local.api_domain_name}"
   project      = google_project.development.project_id
-  managed_zone = google_dns_managed_zone.dev.name
+  managed_zone = google_dns_managed_zone.api.name
   type         = "CNAME"
   ttl          = 300
 
