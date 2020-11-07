@@ -38,7 +38,7 @@ Run the following commands (once only for the Green Light organization)
             -target=google_dns_record_set.api_name_servers \
             -target=google_dns_record_set.apps_name_servers \
             -target=google_dns_record_set.knative_name_servers \
-            -target=google_dns_record_set.ingress_name_servers \
+            -target=google_dns_record_set.ingress_name_servers
 
 Add the newly created Kubernetes cluster to your local configuration run:
 
