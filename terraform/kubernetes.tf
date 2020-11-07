@@ -347,5 +347,6 @@ resource "null_resource" "knative-serving-config-domain" {
   }
   depends_on = [
     k8s_manifest.knative-serving-istio,
+    k8s_manifest.knative-serving-core
   ]
 }
