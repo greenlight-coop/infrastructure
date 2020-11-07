@@ -285,7 +285,7 @@ resource "null_resource" "istioctl-install" {
     command = "istioctl install --skip-confirmation"
   }
   depends_on = [
-    k8s_manifest.knative-serving-core,
+    null_resource.knative-serving-core,
   ]
 }
 
@@ -334,8 +334,10 @@ resource "k8s_manifest" "knative-serving-permissive" {
 }
 
 # Downloaded from https://github.com/knative/net-istio/releases/download/v0.18.0/release.yaml
-resource "k8s_manifest" "knative-serving-istio" {
-  content = file("manifests/knative-serving-istio.yaml")
+resource "null_resource" "knative-serving-istio" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-serving-istio.yaml"
+  }
   depends_on = [
     k8s_manifest.knative-serving-permissive
   ]
@@ -359,11 +361,9 @@ resource "null_resource" "knative-serving-config-domain" {
 
 # Downloaded from https://github.com/knative/net-certmanager/releases/download/v0.18.0/release.yaml
 resource "k8s_manifest" "knative-serving-certmanager-extension" {
-  content = templatefile("manifests/knative-serving-certmanager-extension.yaml",
-    {
-      tls_cert_issuer = local.tls_cert_issuer
-    }
-  )
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-knative-serving-certmanager-extension.yaml"
+  }
   depends_on = [
     null_resource.knative-serving-config-domain
   ]
@@ -374,6 +374,11 @@ resource "k8s_manifest" "knative-serving-certmanager-extension" {
 resource "null_resource" "knative-serving-certmanager-extension-issuer" {
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-certmanager-extension-issuer.yaml"
+    command = <<-EOT
+      cat <<EOF | kubectl apply -f -
+      ${templatefile("manifests/knative-serving-certmanager-extension-issuer.yaml", {tls_cert_issuer = local.tls_cert_issuer})}
+      EOF
+    EOT
   }
   depends_on = [
     k8s_manifest.knative-serving-certmanager-extension
