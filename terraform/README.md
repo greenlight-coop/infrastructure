@@ -37,14 +37,8 @@ Run the following commands (once only for the Green Light organization)
         && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
             -target=google_dns_record_set.ingress_name_servers -target=google_dns_record_set.knative_name_servers
 
-(TBD: EDIT) Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
-append `-feature-<issue number>` to the hostname in each record.
-
-    ingress.dev.greenlight.coop A       <look up ingress-nginx-controller EXTERNAL-IP>
-
-    argocd.dev.greenlight.coop  CNAME   ingress.dev.greenlight.coop
-    api.dev.greenlight.coop	    CNAME   ingress.dev.greenlight.coop 
-    grafana.dev.greenlight.coop	CNAME   ingress.dev.greenlight.coop
+Look up the generated NS records for the cluster and knative subdomains and refer to these name servers in the
+Google Domains managed greenlightcoop.dev records.
 
 Build the remainder of the Terraform resources:
 
