@@ -363,8 +363,6 @@ resource "null_resource" "knative-serving-config-domain" {
 }
 
 # Downloaded from https://github.com/knative/net-certmanager/releases/download/v0.18.0/release.yaml
-# Edited to include installed letsencrypt ClusterIssuer configuration starting line 119 per instructions at
-# https://knative.dev/docs/serving/using-auto-tls/#configure-config-certmanager-configmap
 resource "k8s_manifest" "knative-serving-certmanager-extension" {
   content = templatefile("manifests/knative-serving-certmanager-extension.yaml",
     {
@@ -376,11 +374,22 @@ resource "k8s_manifest" "knative-serving-certmanager-extension" {
   ]
 }
 
+# Edited to include installed letsencrypt ClusterIssuer configuration per instructions at
+# https://knative.dev/docs/serving/using-auto-tls/#configure-config-certmanager-configmap
+resource "null_resource" "knative-serving-certmanager-extension-issuer" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/knative-serving-certmanager-issuer.yaml"
+  }
+  depends_on = [
+    k8s_manifest.knative-serving-certmanager-extension
+  ]
+}
+
 resource "null_resource" "knative-serving-config-network-tls" {
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-config-network-tls.yaml"
   }
   depends_on = [
-    k8s_manifest.knative-serving-certmanager-extension
+    null_resource.knative-serving-certmanager-extension-issuer
   ]
 }

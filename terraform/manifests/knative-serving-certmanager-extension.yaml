@@ -115,9 +115,6 @@ metadata:
     serving.knative.dev/release: "v0.18.0"
     networking.knative.dev/certificate-provider: cert-manager
 data:
-  issuerRef: |
-    kind: ClusterIssuer
-    name: ${tls_cert_issuer}
   _example: |
     ################################
     #                              #
