@@ -37,16 +37,16 @@ Run the following commands (once only for the Green Light organization)
         && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
             -target=google_dns_record_set.ingress_name_servers -target=google_dns_record_set.knative_name_servers
 
+Add the newly created Kubernetes cluster to your local configuration run:
+
+    $(terraform output kubeconfig_command)
+
 Look up the generated NS records for the cluster and knative subdomains and refer to these name servers in the
 Google Domains managed greenlightcoop.dev records.
 
 Build the remainder of the Terraform resources:
 
     terraform apply
-
-To add the newly created Kubernetes cluster to your local configuration run:
-
-    $(terraform output kubeconfig_command)
 
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Copy the webhook_secret value from Terraform output
