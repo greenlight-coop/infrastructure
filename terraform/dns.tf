@@ -13,7 +13,7 @@ resource "google_dns_managed_zone" "ingress" {
   dns_name    = local.ingress_domain_name
   project     = google_project.development.project_id
   description = "DNS for ingress${local.workspace_suffix}.greenlightcoop.dev"
-  depends_on  = [google_project_service.dns-network]
+  depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "ingress_name_servers" {
@@ -56,7 +56,7 @@ resource "google_dns_managed_zone" "knative" {
   dns_name    = local.knative_domain_name
   project     = google_project.development.project_id
   description = "DNS for knative${local.workspace_suffix}.greenlightcoop.dev"
-  depends_on  = [google_project_service.dns-network]
+  depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "knative_name_servers" {
