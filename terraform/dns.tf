@@ -4,10 +4,11 @@ resource "google_project_service" "dns-development" {
 }
 
 locals {
-  ingress_domain_name = "ingress${local.workspace_suffix}.greenlightcoop.dev."
-  knative_domain_name = "knative${local.workspace_suffix}.greenlightcoop.dev."
-  apps_domain_name = "apps${local.workspace_suffix}.greenlightcoop.dev."
-  api_domain_name = "api${local.workspace_suffix}.greenlightcoop.dev."
+  domain_name_prefix  = terraform.workspace == "default" ? "" : "${terraform.workspace}-"
+  ingress_domain_name = "${local.domain_name_prefix}ingress.greenlightcoop.dev."
+  knative_domain_name = "${local.domain_name_prefix}knative.greenlightcoop.dev."
+  apps_domain_name    = "${local.domain_name_prefix}apps.greenlightcoop.dev."
+  api_domain_name     = "${local.domain_name_prefix}api.greenlightcoop.dev."
 }
 
 # Ingress
@@ -16,7 +17,7 @@ resource "google_dns_managed_zone" "ingress" {
   name        = "ingress-greenlightcoop-dev-zone"
   dns_name    = local.ingress_domain_name
   project     = google_project.development.project_id
-  description = "DNS for ingress${local.workspace_suffix}.greenlightcoop.dev"
+  description = "DNS for ${ingress_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -61,7 +62,7 @@ resource "google_dns_managed_zone" "knative" {
   name        = "knative-greenlightcoop-dev-zone"
   dns_name    = local.knative_domain_name
   project     = google_project.development.project_id
-  description = "DNS for knative${local.workspace_suffix}.greenlightcoop.dev"
+  description = "DNS for ${knative_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -106,7 +107,7 @@ resource "google_dns_managed_zone" "apps" {
   name        = "apps-greenlightcoop-dev-zone"
   dns_name    = local.apps_domain_name
   project     = google_project.development.project_id
-  description = "DNS for apps${local.workspace_suffix}.greenlightcoop.dev"
+  description = "DNS for ${apps_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -136,7 +137,7 @@ resource "google_dns_managed_zone" "api" {
   name        = "api-greenlightcoop-dev-zone"
   dns_name    = local.api_domain_name
   project     = google_project.development.project_id
-  description = "DNS for api${local.workspace_suffix}.greenlightcoop.dev"
+  description = "DNS for ${api_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
