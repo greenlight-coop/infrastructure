@@ -68,6 +68,7 @@ locals {
 }
 
 resource "google_project" "development" {
+  count           = var.existing_project ? 0 : 1
   name            = local.project_name
   project_id      = local.project_id
   org_id          = var.org_id
@@ -75,6 +76,6 @@ resource "google_project" "development" {
 }
 
 resource "google_project_service" "container-development" {
-  project = google_project.development.project_id
+  project = local.project_id
   service = "container.googleapis.com"
 }

@@ -32,6 +32,7 @@ If reusing a GCP project
 
     export TF_VAR_project_id=(project id)
     export TF_VAR_project_name=(project name)
+    export TF_VAR_existing_project=true
 
 To create the GCP project, cluster and resources
 

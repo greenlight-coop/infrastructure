@@ -1,5 +1,5 @@
 output "development_project_id" {
-  value = google_project.development.project_id
+  value = local.project_id
 }
 
 output "admin_password" {
@@ -15,7 +15,7 @@ output "cluster_endpoint" {
 }
 
 output "kubeconfig_command" {
-  value = "gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${google_project.development.project_id} --zone ${var.zone}"
+  value = "gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${local.project_id} --zone ${var.zone}"
 }
 
 output "api_name_servers" {

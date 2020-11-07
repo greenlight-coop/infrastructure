@@ -13,6 +13,11 @@ variable "org_id" {
   default = "636256323415"
 }
 
+variable "existing_project" {
+  type = bool
+  default = false
+}
+
 variable "project_id" {
   type = string
   default = ""

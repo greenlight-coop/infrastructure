@@ -39,7 +39,7 @@ locals {
 
 resource "google_container_cluster" "development" {
   name                     = "greenlight-development-cluster"
-  project                  = google_project.development.project_id
+  project                  = local.project_id
   location                 = var.zone
   min_master_version       = var.k8s_version
   remove_default_node_pool = true
@@ -51,7 +51,7 @@ resource "google_container_cluster" "development" {
 
 resource "google_container_node_pool" "development_primary_nodes" {
   name               = "primary-node-pool"
-  project            = google_project.development.project_id
+  project            = local.project_id
   location           = var.zone
   cluster            = google_container_cluster.development.name
   version            = var.k8s_version
