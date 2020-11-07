@@ -36,7 +36,7 @@ resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
   rrdatas = [data.kubernetes_service.ingress-nginx-controller.load_balancer_ingress[0].ip]
 
   depends_on = [
-    google_dns_record_set.ingress_name_servers
+    google_dns_record_set.ingress_name_servers,
     data.kubernetes_service.ingress-nginx-controller
   ]
 }
@@ -79,7 +79,7 @@ resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
   rrdatas = [data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip]
 
   depends_on = [
-    google_dns_record_set.knative_name_servers
+    google_dns_record_set.knative_name_servers,
     data.kubernetes_service.istio-ingressgateway
   ]
 }
