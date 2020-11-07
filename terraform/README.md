@@ -23,14 +23,17 @@ keys in a `./.ssh` directory relative to this `terraform` directory.
 Run the following commands (once only for the Green Light organization)
     
     gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID --set-as-default
-
     ./setup-sa.sh -o $GCP_ORGANIZATION_ID -p $SEED_GCP_PROJECT_ID -b $GCP_BILLING_ACCOUNT_ID
-
     gsutil mb -b on -c nearline -p $SEED_GCP_PROJECT_ID gs://$TF_BACKEND_BUCKET
-
     gsutil versioning set on gs://$TF_BACKEND_BUCKET
-
     gsutil acl ch -u $SEED_GCP_SERVICE_ACCOUNT:OWNER gs://$TF_BACKEND_BUCKET
+
+If reusing a GCP project
+
+    export TF_VAR_project_id=(project id)
+    export TF_VAR_project_name=(project name)
+
+To create the GCP project, cluster and resources
 
     terraform init \
         && tf apply -auto-approve -target=google_container_cluster.development \

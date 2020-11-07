@@ -55,7 +55,8 @@ resource "random_password" "webhook_secret" {
 
 locals {
   development_project_id_suffix = random_id.project_id_suffix.hex
-  disabled                      = 0
+  project_id                    = var.project_id == "" ? "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}" : var.project_id
+  project_name                  = var.project_name == "" ? "gl-development${local.workspace_suffix}" : var.project_name
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
   admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
@@ -67,8 +68,8 @@ locals {
 }
 
 resource "google_project" "development" {
-  name            = "gl-development${local.workspace_suffix}"
-  project_id      = "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}"
+  name            = local.project_name
+  project_id      = local.project_id
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }

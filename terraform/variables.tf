@@ -13,6 +13,16 @@ variable "org_id" {
   default = "636256323415"
 }
 
+variable "project_id" {
+  type = string
+  default = ""
+}
+
+variable "project_name" {
+  type = string
+  default = ""
+}
+
 variable "min_node_count" {
   type    = number
   default = 1
