@@ -19,17 +19,17 @@ output "kubeconfig_command" {
 }
 
 output "api_name_servers" {
-  value = "google_dns_managed_zone.api.name_servers"
+  value = google_dns_managed_zone.api.name_servers
 }
 
 output "apps_name_servers" {
-  value = "google_dns_managed_zone.apps.name_servers"
+  value = google_dns_managed_zone.apps.name_servers
 }
 
 output "ingress_name_servers" {
-  value = "google_dns_managed_zone.ingress.name_servers"
+  value = google_dns_managed_zone.ingress.name_servers
 }
 
 output "knative_name_servers" {
-  value = "google_dns_managed_zone.knative.name_servers"
+  value = google_dns_managed_zone.knative.name_servers
 }
