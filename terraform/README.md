@@ -100,6 +100,4 @@ after the modifications have been vetted and merged to master.
         terraform workspace select default
         terraform workspace delete feature-<issue number>
         git checkout master && git pull
-        terraform apply --var enable_dns_named_resources=false
-        # Create DNS records for *-feature-<issue number> resources
-        terraform apply apply
+        terraform apply
