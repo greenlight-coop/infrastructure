@@ -378,7 +378,7 @@ resource "k8s_manifest" "knative-serving-certmanager-extension" {
 # https://knative.dev/docs/serving/using-auto-tls/#configure-config-certmanager-configmap
 resource "null_resource" "knative-serving-certmanager-extension-issuer" {
   provisioner "local-exec" {
-    command = "kubectl apply --filename manifests/knative-serving-certmanager-issuer.yaml"
+    command = "kubectl apply --filename manifests/knative-serving-certmanager-extension-issuer.yaml"
   }
   depends_on = [
     k8s_manifest.knative-serving-certmanager-extension
