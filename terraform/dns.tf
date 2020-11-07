@@ -6,8 +6,8 @@ resource "google_project_service" "dns-development" {
 locals {
   ingress_domain_name = "ingress${local.workspace_suffix}.greenlightcoop.dev."
   knative_domain_name = "knative${local.workspace_suffix}.greenlightcoop.dev."
-  ingress_domain_name = "apps${local.workspace_suffix}.greenlightcoop.dev."
-  ingress_domain_name = "api${local.workspace_suffix}.greenlightcoop.dev."
+  apps_domain_name = "apps${local.workspace_suffix}.greenlightcoop.dev."
+  api_domain_name = "api${local.workspace_suffix}.greenlightcoop.dev."
 }
 
 # Ingress
