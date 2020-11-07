@@ -4,21 +4,21 @@ resource "google_project_service" "dns-development" {
 }
 
 locals {
-  ingress_domain_name = "ingress${workspace_suffix}.greenlightcoop.dev."
-  knative_domain_name = "knative${workspace_suffix}.greenlightcoop.dev."
+  ingress_domain_name = "ingress${local.workspace_suffix}.greenlightcoop.dev."
+  knative_domain_name = "knative${local.workspace_suffix}.greenlightcoop.dev."
 }
 
 resource "google_dns_managed_zone" "ingress" {
   name        = "ingress-greenlightcoop-dev-zone"
-  dns_name    = ingress_domain_name
-  project     = google_project.network.project_id
-  description = "DNS for ingress${workspace_suffix}.greenlightcoop.dev"
+  dns_name    = local.ingress_domain_name
+  project     = google_project.development.project_id
+  description = "DNS for ingress${local.workspace_suffix}.greenlightcoop.dev"
   depends_on  = [google_project_service.dns-network]
 }
 
 resource "google_dns_record_set" "ingress_name_servers" {
-  name         = ingress_domain_name
-  project      = google_project.network.project_id
+  name         = local.ingress_domain_name
+  project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.ingress.name
   type         = "NS"
   ttl          = 300
@@ -27,7 +27,7 @@ resource "google_dns_record_set" "ingress_name_servers" {
 }
 
 resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
-  name         = ingress_domain_name
+  name         = local.ingress_domain_name
   project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.ingress.name
   type         = "A"
@@ -42,7 +42,7 @@ resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
 }
 
 resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" {
-  name         = "*.${ingress_domain_name}"
+  name         = "*.${local.ingress_domain_name}"
   project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.dev.name
   type         = "A"
@@ -53,15 +53,15 @@ resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" 
 
 resource "google_dns_managed_zone" "knative" {
   name        = "knative-greenlightcoop-dev-zone"
-  dns_name    = knative_domain_name
-  project     = google_project.network.project_id
-  description = "DNS for knative${workspace_suffix}.greenlightcoop.dev"
+  dns_name    = local.knative_domain_name
+  project     = google_project.development.project_id
+  description = "DNS for knative${local.workspace_suffix}.greenlightcoop.dev"
   depends_on  = [google_project_service.dns-network]
 }
 
 resource "google_dns_record_set" "knative_name_servers" {
-  name         = knative_domain_name
-  project      = google_project.network.project_id
+  name         = local.knative_domain_name
+  project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.knative.name
   type         = "NS"
   ttl          = 300
@@ -70,7 +70,7 @@ resource "google_dns_record_set" "knative_name_servers" {
 }
 
 resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
-  name         = knative_domain_name
+  name         = local.knative_domain_name
   project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.knative.name
   type         = "A"
@@ -85,7 +85,7 @@ resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
 }
 
 resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
-  name         = "*.${knative_domain_name}"
+  name         = "*.${local.knative_domain_name}"
   project      = google_project.development.project_id
   managed_zone = google_dns_managed_zone.dev.name
   type         = "A"

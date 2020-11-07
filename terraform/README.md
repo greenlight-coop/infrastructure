@@ -34,9 +34,10 @@ Run the following commands (once only for the Green Light organization)
 
     terraform init \
         && tf apply -auto-approve -target=google_container_cluster.development \
-        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller
+        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
+            -target=google_dns_record_set.ingress_name_servers -target=google_dns_record_set.knative_name_servers
 
-Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
+(TBD: EDIT) Manually create the following records in DNS. If creating a feature branch environment in a Terraform workspace,
 append `-feature-<issue number>` to the hostname in each record.
 
     ingress.dev.greenlight.coop A       <look up ingress-nginx-controller EXTERNAL-IP>
