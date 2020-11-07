@@ -17,7 +17,7 @@ resource "google_dns_managed_zone" "ingress" {
   name        = "ingress-greenlightcoop-dev-zone"
   dns_name    = local.ingress_domain_name
   project     = local.project_id
-  description = "DNS for ${ingress_domain_name}"
+  description = "DNS for ${local.ingress_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -62,7 +62,7 @@ resource "google_dns_managed_zone" "knative" {
   name        = "knative-greenlightcoop-dev-zone"
   dns_name    = local.knative_domain_name
   project     = local.project_id
-  description = "DNS for ${knative_domain_name}"
+  description = "DNS for ${local.knative_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -107,7 +107,7 @@ resource "google_dns_managed_zone" "apps" {
   name        = "apps-greenlightcoop-dev-zone"
   dns_name    = local.apps_domain_name
   project     = local.project_id
-  description = "DNS for ${apps_domain_name}"
+  description = "DNS for ${local.apps_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
@@ -137,7 +137,7 @@ resource "google_dns_managed_zone" "api" {
   name        = "api-greenlightcoop-dev-zone"
   dns_name    = local.api_domain_name
   project     = local.project_id
-  description = "DNS for ${api_domain_name}"
+  description = "DNS for ${local.api_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
