@@ -353,14 +353,14 @@ resource "null_resource" "knative-serving-config-domain" {
     EOT
   }
   depends_on = [
-    k8s_manifest.knative-serving-istio,
-    k8s_manifest.knative-serving-core,
+    null_resource.knative-serving-istio,
+    null_resource.knative-serving-core,
     google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
 }
 
 # Downloaded from https://github.com/knative/net-certmanager/releases/download/v0.18.0/release.yaml
-resource "k8s_manifest" "knative-serving-certmanager-extension" {
+resource "null_resource" "knative-serving-certmanager-extension" {
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-knative-serving-certmanager-extension.yaml"
   }
@@ -380,7 +380,7 @@ resource "null_resource" "knative-serving-certmanager-extension-issuer" {
     EOT
   }
   depends_on = [
-    k8s_manifest.knative-serving-certmanager-extension
+    null_resource.knative-serving-certmanager-extension
   ]
 }
 
