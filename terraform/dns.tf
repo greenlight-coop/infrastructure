@@ -5,24 +5,28 @@ resource "google_project_service" "dns-development" {
 
 locals {
   domain_name_prefix  = terraform.workspace == "default" ? "" : "${terraform.workspace}-"
-  ingress_domain_name = "${local.domain_name_prefix}ingress.greenlightcoop.dev."
-  knative_domain_name = "${local.domain_name_prefix}knative.greenlightcoop.dev."
-  apps_domain_name    = "${local.domain_name_prefix}apps.greenlightcoop.dev."
-  api_domain_name     = "${local.domain_name_prefix}api.greenlightcoop.dev."
+  ingress_domain_name             = "${local.domain_name_prefix}ingress.greenlightcoop.dev"
+  knative_domain_name             = "${local.domain_name_prefix}knative.greenlightcoop.dev"
+  apps_domain_name                = "${local.domain_name_prefix}apps.greenlightcoop.dev"
+  api_domain_name                 = "${local.domain_name_prefix}api.greenlightcoop.dev"
+  ingress_domain_name_terminated  = "${local.ingress_domain_name}."
+  knative_domain_name_terminated  = "${local.knative_domain_name}."
+  apps_domain_name_terminated     = "${local.apps_domain_name}."
+  api_domain_name_terminated      = "${local.api_domain_name}."
 }
 
 # Ingress
 
 resource "google_dns_managed_zone" "ingress" {
   name        = "ingress-greenlightcoop-dev-zone"
-  dns_name    = local.ingress_domain_name
+  dns_name    = local.ingress_domain_name_terminated
   project     = local.project_id
   description = "DNS for ${local.ingress_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "ingress_name_servers" {
-  name         = local.ingress_domain_name
+  name         = local.ingress_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.ingress.name
   type         = "NS"
@@ -32,7 +36,7 @@ resource "google_dns_record_set" "ingress_name_servers" {
 }
 
 resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
-  name         = local.ingress_domain_name
+  name         = local.ingress_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.ingress.name
   type         = "A"
@@ -47,7 +51,7 @@ resource "google_dns_record_set" "ingress-greenlightcoop-dev-a-record" {
 }
 
 resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" {
-  name         = "*.${local.ingress_domain_name}"
+  name         = "*.${local.ingress_domain_name_terminated}"
   project      = local.project_id
   managed_zone = google_dns_managed_zone.ingress.name
   type         = "A"
@@ -60,14 +64,14 @@ resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" 
 
 resource "google_dns_managed_zone" "knative" {
   name        = "knative-greenlightcoop-dev-zone"
-  dns_name    = local.knative_domain_name
+  dns_name    = local.knative_domain_name_terminated
   project     = local.project_id
   description = "DNS for ${local.knative_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "knative_name_servers" {
-  name         = local.knative_domain_name
+  name         = local.knative_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.knative.name
   type         = "NS"
@@ -77,7 +81,7 @@ resource "google_dns_record_set" "knative_name_servers" {
 }
 
 resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
-  name         = local.knative_domain_name
+  name         = local.knative_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.knative.name
   type         = "A"
@@ -92,7 +96,7 @@ resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
 }
 
 resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
-  name         = "*.${local.knative_domain_name}"
+  name         = "*.${local.knative_domain_name_terminated}"
   project      = local.project_id
   managed_zone = google_dns_managed_zone.knative.name
   type         = "A"
@@ -105,14 +109,14 @@ resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" 
 
 resource "google_dns_managed_zone" "apps" {
   name        = "apps-greenlightcoop-dev-zone"
-  dns_name    = local.apps_domain_name
+  dns_name    = local.apps_domain_name_terminated
   project     = local.project_id
   description = "DNS for ${local.apps_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "apps_name_servers" {
-  name         = local.apps_domain_name
+  name         = local.apps_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.apps.name
   type         = "NS"
@@ -122,7 +126,7 @@ resource "google_dns_record_set" "apps_name_servers" {
 }
 
 resource "google_dns_record_set" "wildcard-apps-greenlightcoop-dev-cname-record" {
-  name         = "*.${local.apps_domain_name}"
+  name         = "*.${local.apps_domain_name_terminated}"
   project      = local.project_id
   managed_zone = google_dns_managed_zone.apps.name
   type         = "CNAME"
@@ -135,14 +139,14 @@ resource "google_dns_record_set" "wildcard-apps-greenlightcoop-dev-cname-record"
 
 resource "google_dns_managed_zone" "api" {
   name        = "api-greenlightcoop-dev-zone"
-  dns_name    = local.api_domain_name
+  dns_name    = local.api_domain_name_terminated
   project     = local.project_id
   description = "DNS for ${local.api_domain_name}"
   depends_on  = [google_project_service.dns-development]
 }
 
 resource "google_dns_record_set" "api_name_servers" {
-  name         = local.api_domain_name
+  name         = local.api_domain_name_terminated
   project      = local.project_id
   managed_zone = google_dns_managed_zone.api.name
   type         = "NS"
@@ -152,7 +156,7 @@ resource "google_dns_record_set" "api_name_servers" {
 }
 
 resource "google_dns_record_set" "wildcard-api-greenlightcoop-dev-cname-record" {
-  name         = "*.${local.api_domain_name}"
+  name         = "*.${local.api_domain_name_terminated}"
   project      = local.project_id
   managed_zone = google_dns_managed_zone.api.name
   type         = "CNAME"
