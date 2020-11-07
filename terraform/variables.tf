@@ -43,11 +43,6 @@ variable "k8s_version" {
   default = "1.17.12-gke.1504"
 }
 
-variable "enable_dns" {
-  type = bool
-  default = false
-}
-
 variable "admin_password" {
   type    = string
   default = ""

@@ -22,10 +22,10 @@ output "kubeconfig_command" {
   value = "gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${google_project.development.project_id} --zone ${var.zone}"
 }
 
-output "ingress_dns_record" {
-  value = "ingress${local.workspace_suffix}.dev.greenlight.coop IN A ${local.ingress_ip_address}"
+output "ingress_name_servers" {
+  value = "google_dns_managed_zone.ingress.name_servers"
 }
 
-output "istio-ingress_dns_record" {
-  value = "istio-ingress.knative${local.workspace_suffix}.dev.greenlight.coop IN A ${local.istio_ingress_ip_address}"
+output "knative_name_servers" {
+  value = "google_dns_managed_zone.knative.name_servers"
 }

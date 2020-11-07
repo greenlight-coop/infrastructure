@@ -39,8 +39,7 @@ provider "google" {
   region      = var.region
 }
 
-resource "random_id" "suffix" {
-  count       = 2
+resource "random_id" "project_id_suffix" {
   byte_length = 2
 }
 
@@ -55,8 +54,7 @@ resource "random_password" "webhook_secret" {
 }
 
 locals {
-  network_project_id_suffix     = random_id.suffix[0].hex
-  development_project_id_suffix = random_id.suffix[1].hex
+  development_project_id_suffix = random_id.project_id_suffix.hex
   disabled                      = 0
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
@@ -66,13 +64,6 @@ locals {
   webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
   bot_private_key_file          = "./.ssh/id_ed25519"
   bot_private_key               = file(local.bot_private_key_file)
-}
-
-resource "google_project" "network" {
-  name            = "gl-network${local.workspace_suffix}"
-  project_id      = "gl-net${local.workspace_suffix}-${local.network_project_id_suffix}"
-  org_id          = var.org_id
-  billing_account = var.billing_account_id
 }
 
 resource "google_project" "development" {
