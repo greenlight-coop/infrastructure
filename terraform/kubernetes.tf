@@ -270,14 +270,13 @@ resource "null_resource" "knative-serving-crds" {
     command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
   }
   depends_on = [
-    helm_release.ingress-nginx
+    helm_release.ingress-nginx,
     helm_release.cert-manager
   ]
 }
 
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
 resource "null_resource" "knative-serving-core" {
-  count = 2   # Applying twice to ensure all resources are available
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-core.yaml"
   }
