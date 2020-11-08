@@ -256,22 +256,28 @@ resource "k8s_manifest" "argocd-apps-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     k8s_manifest.default-admin-password-secret,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
+    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
+    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record,
+    google_dns_record_set.api-greenlightcoop-dev-a-record,
+    null_resource.knative-serving-config-network-tls
   ]
 }
 
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
 resource "null_resource" "knative-serving-crds" {
+  count = 2   # Applying twice to ensure all resources are available
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
   }
   depends_on = [
-    k8s_manifest.argocd-apps-application
+    helm_release.ingress-nginx
+    helm_release.cert-manager
   ]
 }
 
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
 resource "null_resource" "knative-serving-core" {
+  count = 2   # Applying twice to ensure all resources are available
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-core.yaml"
   }
