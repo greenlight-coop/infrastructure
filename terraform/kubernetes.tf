@@ -263,6 +263,17 @@ resource "k8s_manifest" "argocd-apps-application" {
   ]
 }
 
+# Downloaded from https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.17.3/release.yaml
+resource "null_resource" "tekton-pipelines" {
+  provisioner "local-exec" {
+    command = "kubectl apply --filename manifests/tekton-pipelines-0.17.3"
+  }
+  depends_on = [
+    helm_release.ingress-nginx,
+    helm_release.cert-manager
+  ]
+}
+
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
 resource "null_resource" "knative-serving-crds" {
   provisioner "local-exec" {
