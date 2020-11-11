@@ -265,7 +265,6 @@ resource "k8s_manifest" "argocd-apps-application" {
 
 # Downloaded from https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
 resource "null_resource" "knative-serving-crds" {
-  count = 2   # Applying twice to ensure all resources are available
   provisioner "local-exec" {
     command = "kubectl apply --filename manifests/knative-serving-crds.yaml"
   }
