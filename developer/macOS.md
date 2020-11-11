@@ -100,6 +100,7 @@ Update .zshrc per directions at start of install
     brew install argocd
     brew install kustomize
     brew install tektoncd-cli
+    brew install k9s
 
 ### Istio
 
