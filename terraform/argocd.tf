@@ -6,7 +6,7 @@ resource "kubernetes_namespace" "argocd" {
 
 resource "k8s_manifest" "argocd-github-ssh-key-secret" {
   content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
-    bot_private_key = local.bot_private_key
+    bot_private_key = var.bot_private_key
   })
   depends_on = [
     kubernetes_namespace.argocd
