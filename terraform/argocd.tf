@@ -6,7 +6,7 @@ resource "kubernetes_namespace" "argocd" {
 
 resource "k8s_manifest" "argocd-github-ssh-key-secret" {
   content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
-    bot_private_key = var.bot_private_key
+    bot_private_key = local.bot_private_key
   })
   depends_on = [
     kubernetes_namespace.argocd
@@ -120,9 +120,9 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
   }
 }
 
-resource "k8s_manifest" "greenlight-pipelines-auth-secret" {
-  content = templatefile("manifests/greenlight-pipelines-auth-secret.yaml", {
-    bot_github_token  = local.bot_github_token
+resource "k8s_manifest" "greenlight-pipelines-git-auth-secret" {
+  content = templatefile("manifests/greenlight-pipelines-git-auth-secret.yaml", {
+    bot_github_token  = var.bot_github_token
   })
   depends_on = [
     kubernetes_namespace.greenlight-pipelines
