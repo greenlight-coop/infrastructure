@@ -36,6 +36,10 @@ If reusing a GCP project
 
 To create the GCP project, cluster and resources
 
+    # Step below is temporary and should be used with caution - delete the environment variable after use 
+    # Another option is to supply the value when prompted
+    export TF_VAR_bot_password=(Green Light bot password value)
+
     terraform init \
         && tf apply -auto-approve -target=google_container_cluster.development \
         && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \

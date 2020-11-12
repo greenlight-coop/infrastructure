@@ -77,3 +77,12 @@ variable "use_staging_certs" {
   type    = bool
   default = false
 }
+
+variable "bot_password" {
+  type    = string
+  
+  validation {
+    condition     = length(var.bot_password) > 0
+    error_message = "Value for bot_password must be set."
+  }
+}
