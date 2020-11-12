@@ -36,9 +36,11 @@ If reusing a GCP project
 
 To create the GCP project, cluster and resources
 
-    # Step below is temporary and should be used with caution - delete the environment variable after use 
-    # Another option is to supply the value when prompted
+    # Steps below are temporary and should be used with caution - delete the environment variables after use 
+    # Another option is to supply the values when prompted
+
     export TF_VAR_bot_password=(Green Light bot password value)
+    export TF_VAR_bot_github_token=(Green Light GitHub access token)
 
     terraform init \
         && tf apply -auto-approve -target=google_container_cluster.development \

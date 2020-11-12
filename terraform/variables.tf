@@ -86,3 +86,12 @@ variable "bot_password" {
     error_message = "Value for bot_password must be set."
   }
 }
+
+variable "bot_github_token" {
+  type    = string
+  
+  validation {
+    condition     = length(var.bot_github_token) > 0
+    error_message = "Value for bot_github_token must be set."
+  }
+}

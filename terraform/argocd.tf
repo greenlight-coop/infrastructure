@@ -113,3 +113,18 @@ resource "k8s_manifest" "argocd-apps-application" {
     null_resource.knative-serving-config-network-tls
   ]
 }
+
+resource "kubernetes_namespace" "greenlight-pipelines" {
+  metadata {
+    name = "greenlight-pipelines"
+  }
+}
+
+resource "k8s_manifest" "greenlight-pipelines-auth-secret" {
+  content = templatefile("manifests/greenlight-pipelines-auth-secret.yaml", {
+    bot_github_token  = local.bot_github_token
+  })
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+}
