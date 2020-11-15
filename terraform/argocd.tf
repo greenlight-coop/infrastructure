@@ -128,3 +128,27 @@ resource "k8s_manifest" "greenlight-pipelines-git-auth-secret" {
     kubernetes_namespace.greenlight-pipelines
   ]
 }
+
+resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" {
+  metadata {
+    name = "docker-registry-credentials"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    ".dockerconfigjson" = <<DOCKER
+    {
+      "auths": {
+        "https://index.docker.io/v1/": {
+          "username": "greenlightcoopbot",
+          "password": "${local.admin_password}",
+          "email": "bot@greenlight.coop",
+          "auth": "${base64encode("greenlightcoopbot:${local.admin_password}")}"
+        }
+      }
+    }
+    DOCKER
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}
