@@ -155,5 +155,4 @@ resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" 
   depends_on = [
     kubernetes_namespace.greenlight-pipelines
   ]
-
 }
