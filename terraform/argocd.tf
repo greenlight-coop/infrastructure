@@ -132,7 +132,7 @@ resource "kubernetes_secret" "greenlight-pipelines-git-auth" {
   data = {
     known_hosts = "github.com"
     ssh-privatekey = <<DOCKER
-    ${indent(4, bot_private_key)}
+    ${local.bot_private_key}
     DOCKER
   }
 
