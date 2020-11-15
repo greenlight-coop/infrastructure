@@ -151,4 +151,9 @@ resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" 
   }
 
   type = "kubernetes.io/dockerconfigjson"
+
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+
 }
