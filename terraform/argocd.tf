@@ -122,7 +122,7 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
 
 resource "k8s_manifest" "greenlight-pipelines-git-auth-secret" {
   content = templatefile("manifests/greenlight-pipelines-git-auth-secret.yaml", {
-    bot_github_token  = var.bot_github_token
+    bot_private_key = local.bot_private_key
   })
   depends_on = [
     kubernetes_namespace.greenlight-pipelines
