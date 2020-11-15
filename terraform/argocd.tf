@@ -120,14 +120,43 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
   }
 }
 
-resource "k8s_manifest" "greenlight-pipelines-git-auth-secret" {
-  content = templatefile("manifests/greenlight-pipelines-git-auth-secret.yaml", {
-    bot_private_key = local.bot_private_key
-  })
+resource "kubernetes_secret" "greenlight-pipelines-git-auth" {
+  metadata {
+    name = "git-auth"
+    namespace = "greenlight-pipelines"
+    annotations = {
+      "tekton.dev/git-0" = "github.com"
+    }
+  }
+
+  data = {
+    known_hosts = github.com
+    ssh-privatekey = <<DOCKER
+    ${indent(4, bot_private_key)}
+    DOCKER
+  }
+
+  type = "kubernetes.io/ssh-auth"
+
   depends_on = [
     kubernetes_namespace.greenlight-pipelines
   ]
 }
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: greenlight-pipelines-git-auth
+#   namespace: greenlight-pipelines
+#   annotations:
+#     tekton.dev/git-0: github.com
+#   labels:
+#     pipeline: tekton
+#     deploy: argocd
+# type: kubernetes.io/ssh-auth
+# stringData:
+#   ssh-privatekey: |
+#     ${indent(4, bot_private_key)}
+#   known_hosts: github.com
 
 resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" {
   metadata {
