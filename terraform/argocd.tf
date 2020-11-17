@@ -180,7 +180,7 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
   }
 
   data = {
-    webhookSecretValue = "${local.webhook_secret}"
+    webhookSecretValue = local.webhook_secret
   }
 
   depends_on = [
