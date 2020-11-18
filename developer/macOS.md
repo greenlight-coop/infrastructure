@@ -101,6 +101,7 @@ Update .zshrc per directions at start of install
     brew install kustomize
     brew install tektoncd-cli
     brew install k9s
+    go get -u github.com/tektoncd/triggers/cmd/binding-eval
 
 ### Istio
 
