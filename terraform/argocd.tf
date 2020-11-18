@@ -209,4 +209,19 @@ resource "kubernetes_secret" "prow-hmac-token" {
   ]
 }
 
+resource "kubernetes_secret" "prow-github-token" {
+  metadata {
+    name = "github-token"
+    namespace = "prow"
+  }
+
+  data = {
+    token = var.bot_github_token
+  }
+
+  depends_on = [
+    kubernetes_namespace.prow
+  ]
+}
+
 
