@@ -188,3 +188,25 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
   ]
 }
 
+resource "kubernetes_namespace" "prow" {
+  metadata {
+    name = "prow"
+  }
+}
+
+resource "kubernetes_secret" "prow-webhook-secret" {
+  metadata {
+    name = "hmac-token"
+    namespace = "prow"
+  }
+
+  data = {
+    hmac = local.webhook_secret
+  }
+
+  depends_on = [
+    kubernetes_namespace.prow
+  ]
+}
+
+
