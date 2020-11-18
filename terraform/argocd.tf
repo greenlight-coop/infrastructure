@@ -194,7 +194,7 @@ resource "kubernetes_namespace" "prow" {
   }
 }
 
-resource "kubernetes_secret" "prow-webhook-secret" {
+resource "kubernetes_secret" "prow-hmac-token" {
   metadata {
     name = "hmac-token"
     namespace = "prow"
