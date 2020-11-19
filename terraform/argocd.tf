@@ -198,6 +198,12 @@ resource "kubernetes_namespace" "prow" {
   }
 }
 
+resource "kubernetes_namespace" "test-pods" {
+  metadata {
+    name = "test-pods"
+  }
+}
+
 resource "kubernetes_secret" "prow-hmac-token" {
   metadata {
     name = "hmac-token"
@@ -243,8 +249,39 @@ resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
   role = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
 resource "google_storage_bucket_iam_member" "prow-artifacts--prow-gcs-publisher" {
   bucket = google_storage_bucket.prow-artifacts.name
   role = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.prow-gcs-publisher.email}"
+}
+
+resource "google_service_account_key" "prow-gcs-publisher-key" {
+  service_account_id = google_service_account.prow-gcs-publisher.name
+}
+
+resource "kubernetes_secret" "gcs-credentials" {
+  metadata {
+    name      = "gcs-credentials"
+    namespace = "test-pods"
+  }
+  data = {
+    "service-account.json" = <<DATA
+    {
+      "type": "service_account",
+      "project_id": "${local.project_id}",
+      "private_key": "${base64decode(google_service_account_key.prow-gcs-publisher-key.private_key)}"
+      "client_email": "${google_service_account.prow-gcs-publisher.email}",
+      "client_id": "${google_service_account.prow-gcs-publisher.unique_id}",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/${google_service_account.prow-gcs-publisher.account_id}%40${local.project_id}.iam.gserviceaccount.com"
+    }
+    DATA
+  }
+
+  depends_on = [
+    kubernetes_namespace.test-pods
+  ]
 }
