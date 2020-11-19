@@ -260,7 +260,21 @@ resource "google_service_account_key" "prow-gcs-publisher-key" {
   service_account_id = google_service_account.prow-gcs-publisher.name
 }
 
-resource "kubernetes_secret" "gcs-credentials" {
+resource "kubernetes_secret" "prow-gcs-credentials" {
+  metadata {
+    name      = "gcs-credentials"
+    namespace = "prow"
+  }
+  data = {
+    "service-account.json" = base64decode(google_service_account_key.prow-gcs-publisher-key.private_key)
+  }
+
+  depends_on = [
+    kubernetes_namespace.test-pods
+  ]
+}
+
+resource "kubernetes_secret" "test-pods-gcs-credentials" {
   metadata {
     name      = "gcs-credentials"
     namespace = "test-pods"
