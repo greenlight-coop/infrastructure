@@ -229,11 +229,13 @@ resource "kubernetes_secret" "prow-github-token" {
 }
 
 resource "google_service_account" "prow-gcs-publisher" {
-  account_id   = "prow-gcs-publisher"
+  account_id  = "prow-gcs-publisher"
+  project     = local.project_id
 }
 
 resource "google_storage_bucket" "prow-artifacts" {
-  name          = "prow-artifacts"
+  name    = "prow-artifacts"
+  project = local.project_id
 }
 
 # resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
