@@ -114,6 +114,8 @@ resource "k8s_manifest" "argocd-apps-application" {
   ]
 }
 
+# greenlight-pipelines configuration
+
 resource "kubernetes_namespace" "greenlight-pipelines" {
   metadata {
     name = "greenlight-pipelines"
@@ -188,6 +190,8 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
   ]
 }
 
+# Prow configuration
+
 resource "kubernetes_namespace" "prow" {
   metadata {
     name = "prow"
@@ -224,4 +228,16 @@ resource "kubernetes_secret" "prow-github-token" {
   ]
 }
 
+resource "google_service_account" "prow-gcs-publisher" {
+  account_id   = "prow-gcs-publisher"
+}
 
+resource "google_storage_bucket" "prow-artifacts" {
+  name          = "prow-artifacts"
+}
+
+# resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
+#   bucket = google_storage_bucket.prow-artifacts.name
+#   role = "roles/storage.admin"
+#   member = "user:jane@example.com"
+# }
