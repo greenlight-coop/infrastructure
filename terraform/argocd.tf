@@ -234,12 +234,17 @@ resource "google_service_account" "prow-gcs-publisher" {
 }
 
 resource "google_storage_bucket" "prow-artifacts" {
-  name    = "prow-artifacts"
+  name    = "greenlight-prow-artifacts${local.workspace_suffix}"
   project = local.project_id
 }
 
-# resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
-#   bucket = google_storage_bucket.prow-artifacts.name
-#   role = "roles/storage.admin"
-#   member = "user:jane@example.com"
-# }
+resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
+  bucket = google_storage_bucket.prow-artifacts.name
+  role = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+resource "google_storage_bucket_iam_member" "prow-artifacts--prow-gcs-publisher" {
+  bucket = google_storage_bucket.prow-artifacts.name
+  role = "roles/storage.objectAdmin"
+  member = google_service_account.prow-gcs-publisher.email
+}
