@@ -102,7 +102,7 @@ after the modifications have been vetted and merged to master.
         $(terraform output kubeconfig_command)
 
 * When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
-  deafult workspace from master
+  default workspace from master
 
         terraform destroy
         terraform workspace select default
