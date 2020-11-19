@@ -246,5 +246,5 @@ resource "google_storage_bucket_iam_member" "prow-artifacts--all-users" {
 resource "google_storage_bucket_iam_member" "prow-artifacts--prow-gcs-publisher" {
   bucket = google_storage_bucket.prow-artifacts.name
   role = "roles/storage.objectAdmin"
-  member = google_service_account.prow-gcs-publisher.email
+  member = "serviceAccount:${google_service_account.prow-gcs-publisher.email}"
 }
