@@ -240,7 +240,7 @@ resource "google_service_account" "prow-gcs-publisher" {
 }
 
 resource "google_storage_bucket" "prow-artifacts" {
-  name    = "greenlight-prow-artifacts${local.workspace_suffix}"
+  name    = "prow-artifacts-greenlight${local.workspace_suffix}"
   project = local.project_id
 }
 
@@ -286,4 +286,26 @@ resource "kubernetes_secret" "test-pods-gcs-credentials" {
   depends_on = [
     kubernetes_namespace.test-pods
   ]
+}
+
+resource "google_storage_bucket" "tide" {
+  name    = "tide-greenlight${local.workspace_suffix}"
+  project = local.project_id
+}
+
+resource "google_storage_bucket_iam_member" "tide--prow-gcs-publisher" {
+  bucket = google_storage_bucket.tide.name
+  role = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.prow-gcs-publisher.email}"
+}
+
+resource "google_storage_bucket" "status-reconciler" {
+  name    = "status-reconciler-greenlight${local.workspace_suffix}"
+  project = local.project_id
+}
+
+resource "google_storage_bucket_iam_member" "status-reconciler--prow-gcs-publisher" {
+  bucket = google_storage_bucket.status-reconciler.name
+  role = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.prow-gcs-publisher.email}"
 }
