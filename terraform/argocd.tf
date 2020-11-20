@@ -189,3 +189,18 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
     kubernetes_namespace.greenlight-pipelines
   ]
 }
+
+resource "kubernetes_secret" "greenlight-pipelines-bot-github-token" {
+  metadata {
+    name = "bot-github-token"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    botGithubTokenValue = var.bot_github_token
+  }
+
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+}
