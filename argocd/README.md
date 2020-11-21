@@ -1,2 +1,0 @@
-# Green Light Argo CD
-

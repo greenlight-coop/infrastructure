@@ -1,5 +1,10 @@
 data "google_client_config" "provider" {}
 
+resource "google_project_service" "container-development" {
+  project = local.project_id
+  service = "container.googleapis.com"
+}
+
 provider "kubernetes" {
   load_config_file = false
 
