@@ -14,6 +14,7 @@ resource "k8s_manifest" "default-admin-password-secret" {
     namespace       = "default"
     admin_password  = local.admin_password
   })
+  depends_on = [google_container_node_pool.development_primary_nodes]
 }
 
 # Grafana
@@ -22,6 +23,7 @@ resource "k8s_manifest" "grafana-datasources-secret" {
   content = templatefile("manifests/grafana-datasources-secret.yaml", {
     namespace = "default"
   })
+  depends_on = [google_container_node_pool.development_primary_nodes]
 }
 
 # greenlight-pipelines

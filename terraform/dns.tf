@@ -80,20 +80,20 @@ resource "google_dns_record_set" "knative_name_servers" {
   rrdatas = google_dns_managed_zone.knative.name_servers
 }
 
-resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
-  name         = local.knative_domain_name_terminated
-  project      = local.project_id
-  managed_zone = google_dns_managed_zone.knative.name
-  type         = "A"
-  ttl          = 300
+# resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
+#   name         = local.knative_domain_name_terminated
+#   project      = local.project_id
+#   managed_zone = google_dns_managed_zone.knative.name
+#   type         = "A"
+#   ttl          = 300
 
-  rrdatas = [data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip]
+#   rrdatas = [data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip]
 
-  depends_on = [
-    google_dns_record_set.knative_name_servers,
-    data.kubernetes_service.istio-ingressgateway
-  ]
-}
+#   depends_on = [
+#     google_dns_record_set.knative_name_servers,
+#     data.kubernetes_service.istio-ingressgateway
+#   ]
+# }
 
 resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
   name         = "*.${local.knative_domain_name_terminated}"

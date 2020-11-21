@@ -3,15 +3,6 @@ locals {
   tls_secret_name = var.use_staging_certs ? "letsencrypt-staging" : "letsencrypt-production" 
 }
 
-resource "kubernetes_namespace" "cert-manager" {
-  metadata {
-    name = "cert-manager"
-  }
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
-  ]
-}
-
 resource "helm_release" "cert-manager" {
   name        = "cert-manager"
   repository  = "https://charts.jetstack.io"
