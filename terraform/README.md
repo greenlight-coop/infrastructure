@@ -90,13 +90,16 @@ To test non-trivial infrastructure configuration changes, it's recommended to us
 for deployment of the infrastructure to a temporary environment (GCP project and cluster) that can then be destroyed
 after the modifications have been vetted and merged to master.
 
-* Checkout a branch of the infrastructure and/or argocd-apps projects based on the current GitHub issue number.
+* Checkout a branch of the infrastructure and argocd-apps projects based on the current GitHub issue number and push
+  to GitHub.
 
-        git checkout -b feature/<issue number>
+        git checkout -b feature/<issue number> && git push --set-upstream origin $(git_current_branch)
 
 * Create a new workspace using the issue number as part of the workspace name, replacing '/' with '-'
 
         terraform workspace new feature-<issue number>
+
+* Follow the Environment Creation instructions given earlier in this README.
 
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 
