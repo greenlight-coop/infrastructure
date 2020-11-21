@@ -41,7 +41,7 @@ resource "kubernetes_secret" "grafana-datasources-secret" {
   }
 
   data = {
-    datasource.yaml = <<DATASOURCES
+    "datasource.yaml" = <<DATASOURCES
 ${file("manifests/grafana-datasources.yaml")}
     DATASOURCES
   }
