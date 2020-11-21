@@ -22,7 +22,10 @@ Kubernetes cluster and applications via Argo CD.
 
 ## DNS
 
-DNS for the domain greenlight.coop is managed at https://marcaria.com/. Subdomains will be Managed Zones in GCP DNS.
+DNS for the domain greenlight.coop is managed at https://marcaria.com/.
+
+Development work will be performed using teh domain greenlightcoop.dev. This domain is managed in Google Domains and
+subdomains are managed in GCP Cloud DNS.
 
 ## Public Website
 
