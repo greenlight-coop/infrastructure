@@ -112,7 +112,12 @@ resource "k8s_manifest" "argocd-apps-application" {
     google_dns_record_set.api-greenlightcoop-dev-a-record,
     null_resource.knative-serving-config-network-tls
   ]
+  timeouts {
+    delete = "10m"
+  }
 }
+
+# greenlight-pipelines configuration
 
 resource "kubernetes_namespace" "greenlight-pipelines" {
   metadata {
@@ -188,3 +193,17 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
   ]
 }
 
+resource "kubernetes_secret" "greenlight-pipelines-bot-github-token" {
+  metadata {
+    name = "bot-github-token"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    botGithubTokenValue = var.bot_github_token
+  }
+
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+}
