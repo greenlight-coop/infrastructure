@@ -81,9 +81,9 @@ resource "k8s_manifest" "argocd-apps-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.default-admin-password-secret,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record,
+    # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record,
-    null_resource.knative-serving-config-network-tls
+    # null_resource.knative-serving-config-network-tls
   ]
   timeouts {
     delete = "10m"

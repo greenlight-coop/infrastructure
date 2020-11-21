@@ -62,48 +62,48 @@ resource "google_dns_record_set" "wildcard-ingress-greenlightcoop-dev-a-record" 
 
 # Knative
 
-resource "google_dns_managed_zone" "knative" {
-  name        = "knative-greenlightcoop-dev-zone"
-  dns_name    = local.knative_domain_name_terminated
-  project     = local.project_id
-  description = "DNS for ${local.knative_domain_name}"
-  depends_on  = [google_project_service.dns-development]
-}
+# resource "google_dns_managed_zone" "knative" {
+#   name        = "knative-greenlightcoop-dev-zone"
+#   dns_name    = local.knative_domain_name_terminated
+#   project     = local.project_id
+#   description = "DNS for ${local.knative_domain_name}"
+#   depends_on  = [google_project_service.dns-development]
+# }
 
-resource "google_dns_record_set" "knative_name_servers" {
-  name         = local.knative_domain_name_terminated
-  project      = local.project_id
-  managed_zone = google_dns_managed_zone.knative.name
-  type         = "NS"
-  ttl          = 300
+# resource "google_dns_record_set" "knative_name_servers" {
+#   name         = local.knative_domain_name_terminated
+#   project      = local.project_id
+#   managed_zone = google_dns_managed_zone.knative.name
+#   type         = "NS"
+#   ttl          = 300
 
-  rrdatas = google_dns_managed_zone.knative.name_servers
-}
+#   rrdatas = google_dns_managed_zone.knative.name_servers
+# }
 
-resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
-  name         = local.knative_domain_name_terminated
-  project      = local.project_id
-  managed_zone = google_dns_managed_zone.knative.name
-  type         = "A"
-  ttl          = 300
+# resource "google_dns_record_set" "knative-greenlightcoop-dev-a-record" {
+#   name         = local.knative_domain_name_terminated
+#   project      = local.project_id
+#   managed_zone = google_dns_managed_zone.knative.name
+#   type         = "A"
+#   ttl          = 300
 
-  rrdatas = [data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip]
+#   rrdatas = [data.kubernetes_service.istio-ingressgateway.load_balancer_ingress[0].ip]
 
-  depends_on = [
-    google_dns_record_set.knative_name_servers,
-    data.kubernetes_service.istio-ingressgateway
-  ]
-}
+#   depends_on = [
+#     google_dns_record_set.knative_name_servers,
+#     data.kubernetes_service.istio-ingressgateway
+#   ]
+# }
 
-resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
-  name         = "*.${local.knative_domain_name_terminated}"
-  project      = local.project_id
-  managed_zone = google_dns_managed_zone.knative.name
-  type         = "A"
-  ttl          = 300
+# resource "google_dns_record_set" "wildcard-knative-greenlightcoop-dev-a-record" {
+#   name         = "*.${local.knative_domain_name_terminated}"
+#   project      = local.project_id
+#   managed_zone = google_dns_managed_zone.knative.name
+#   type         = "A"
+#   ttl          = 300
 
-  rrdatas = [google_dns_record_set.knative-greenlightcoop-dev-a-record.rrdatas[0]]
-}
+#   rrdatas = [google_dns_record_set.knative-greenlightcoop-dev-a-record.rrdatas[0]]
+# }
 
 # Apps
 
