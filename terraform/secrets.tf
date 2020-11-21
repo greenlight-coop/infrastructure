@@ -13,7 +13,7 @@ ${local.bot_private_key}
   }
 
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    kubernetes_namespace.argocd
   ]
 }
 
