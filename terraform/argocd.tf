@@ -49,8 +49,8 @@ resource "helm_release" "argo-cd" {
   depends_on = [
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
-    k8s_manifest.argocd-github-ssh-key-secret,
-    k8s_manifest.grafana-datasources-secret,
+    kubernetes_secret.argocd-github-ssh-key-secret,
+    kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd,
     helm_release.ingress-nginx,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
@@ -79,7 +79,7 @@ resource "k8s_manifest" "argocd-apps-application" {
   )
   depends_on = [
     k8s_manifest.argocd-project,
-    k8s_manifest.default-admin-password-secret,
+    kubernetes_secret.default-admin-password-secret,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record,
