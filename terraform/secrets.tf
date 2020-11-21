@@ -24,7 +24,7 @@ resource "kubernetes_secret" "default-admin-password-secret" {
   }
 
   data = {
-    password: ${local.admin_password}
+    password: local.admin_password
   }
 
   depends_on = [
