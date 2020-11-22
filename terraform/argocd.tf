@@ -25,11 +25,14 @@ resource "helm_release" "argo-cd" {
               key: sshPrivateKey
         resource.customizations: |
           admissionregistration.k8s.io/MutatingWebhookConfiguration:
-            # List of json pointers in the object to ignore differences
             ignoreDifferences: |
               jsonPointers:
               - /webhooks/0/clientConfig/caBundle
               - /webhooks/0/failurePolicy
+          apiextensions.k8s.io/CustomResourceDefinition:
+            ignoreDifferences: |
+              jsonPointers:
+              - /spec/preserveUnknownFields
       ingress:
         enabled: true
         hosts:
