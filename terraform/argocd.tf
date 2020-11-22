@@ -29,6 +29,11 @@ resource "helm_release" "argo-cd" {
               jsonPointers:
               - /webhooks/0/clientConfig/caBundle
               - /webhooks/0/failurePolicy
+          admissionregistration.k8s.io/ValidatingWebhookConfiguration:
+            ignoreDifferences: |
+              jsonPointers:
+              - /webhooks/0/clientConfig/caBundle
+              - /webhooks/0/failurePolicy
           apiextensions.k8s.io/CustomResourceDefinition:
             ignoreDifferences: |
               jsonPointers:
