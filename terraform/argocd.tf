@@ -23,6 +23,13 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
+        resource.customizations: |
+          admissionregistration.k8s.io/MutatingWebhookConfiguration:
+            # List of json pointers in the object to ignore differences
+            ignoreDifferences: |
+              jsonPointers:
+              - /webhooks/0/clientConfig/caBundle
+              - /webhooks/0/failurePolicy
       ingress:
         enabled: true
         hosts:
