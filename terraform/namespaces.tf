@@ -28,10 +28,11 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
 resource "kubernetes_namespace" "knative-serving" {
   metadata {
     name = "knative-serving"
+    labels = {
+      istio-injection = "enabled"
+    }
   }
-  labels {
-    istio-injection = "enabled"
-  }
+
   depends_on = [
     google_container_node_pool.development_primary_nodes
   ]
