@@ -38,6 +38,11 @@ resource "helm_release" "argo-cd" {
             ignoreDifferences: |
               jsonPointers:
               - /spec/preserveUnknownFields
+          v1/ConfigMap:
+            ignoreDifferences: |
+              namespace: knative-serving
+              jsonPointers:
+              - /data
       ingress:
         enabled: true
         hosts:
