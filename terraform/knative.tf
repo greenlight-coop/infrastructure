@@ -37,15 +37,15 @@
 #   ]
 # }
 
-# data "kubernetes_service" "istio-ingressgateway" {
-#   metadata {
-#     namespace = "istio-system"
-#     name      = "istio-ingressgateway"
-#   }
-#   depends_on = [
-#     null_resource.istio-minimal-operator
-#   ]
-# }
+data "kubernetes_service" "istio-ingressgateway" {
+  metadata {
+    namespace = "istio-system"
+    name      = "istio-ingressgateway"
+  }
+  depends_on = [
+    k8s_manifest.argocd-apps-application
+  ]
+}
 
 # resource "null_resource" "enable-serving-istio-injection" {
 #   provisioner "local-exec" {
