@@ -59,6 +59,13 @@ Add the newly created Kubernetes cluster to your local configuration run:
 Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
+Add Argo CD and wait until all the applications are configured. It's complete when all the applications show as
+configured (green) in the Argo CD UI and the Knative ingress is available. The following commands configure Argo CD
+and enable checking the Knative ingress:
+
+    terraform apply -auto-approve -target=k8s_manifest.argocd-apps-application
+    kubectl get svc -n istio-system
+
 Build the remainder of the Terraform resources:
 
     terraform apply -auto-approve
