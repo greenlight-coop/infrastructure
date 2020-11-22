@@ -60,8 +60,8 @@ Look up the generated NS records for the api, apps, ingress and knative subdomai
 servers in the Google Domains managed greenlightcoop.dev domain.
 
 Add Argo CD and wait until all the applications are configured. It's complete when all the applications show as
-configured (green) in the Argo CD UI and the Knative ingress is available. The following commands configure Argo CD
-and enable checking the Knative ingress:
+configured (green) in the Argo CD UI and the Knative ingress exteran IP is available. The following commands configure 
+Argo CD and enable checking the Knative ingress:
 
     terraform apply -auto-approve -target=k8s_manifest.argocd-apps-application
     kubectl get svc -n istio-system
