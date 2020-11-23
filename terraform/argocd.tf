@@ -106,6 +106,7 @@ resource "k8s_manifest" "argocd-apps-application" {
     k8s_manifest.argocd-project,
     kubernetes_namespace.greenlight-pipelines,
     kubernetes_namespace.staging,
+    kubernetes_namespace.knative-serving,
     kubernetes_secret.default-admin-password-secret,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record
