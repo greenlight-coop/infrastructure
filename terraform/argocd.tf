@@ -43,6 +43,11 @@ resource "helm_release" "argo-cd" {
               namespace: knative-serving
               jsonPointers:
               - /data
+          rbac.authorization.k8s.io/ClusterRole:
+            ignoreDifferences: |
+              namespace: knative-serving-admin
+              jsonPointers:
+              - /rules
       ingress:
         enabled: true
         hosts:
