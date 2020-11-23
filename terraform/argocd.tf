@@ -18,7 +18,12 @@ resource "helm_release" "argo-cd" {
       config:
         url: https://argocd.${local.apps_domain_name}
         repositories: |
-          - url: git@github.com:greenlight-coop/argocd-apps.git
+          - url: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/argocd-greenlight-software.git
             type: git
             sshPrivateKeySecret:
               name: github-ssh-key
