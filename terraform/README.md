@@ -12,7 +12,7 @@ Global for all instructions that follow
     export TF_BACKEND_BUCKET=tfstate-greenlight
     export SEED_GCP_SERVICE_ACCOUNT=<lookup_fq_sa_username_after_creation>
 
-## Initial Configuration
+## One Time Configuration
 
 Prepare an SSH key pair for automated GitHub access, etc. Note that these files are .gitignored and should be protected
 for future reference. After generation, add the public key to the bot@greenlight.coop GitHub account. Store the generated
@@ -27,6 +27,8 @@ Run the following commands (once only for the Green Light organization)
     gsutil mb -b on -c nearline -p $SEED_GCP_PROJECT_ID gs://$TF_BACKEND_BUCKET
     gsutil versioning set on gs://$TF_BACKEND_BUCKET
     gsutil acl ch -u $SEED_GCP_SERVICE_ACCOUNT:OWNER gs://$TF_BACKEND_BUCKET
+
+## Environment Creation 
 
 If reusing a GCP project
 
@@ -54,8 +56,15 @@ Add the newly created Kubernetes cluster to your local configuration run:
 
     $(terraform output kubeconfig_command)
 
-Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name servers in the
-Google Domains managed greenlightcoop.dev domain.
+Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
+servers in the Google Domains managed greenlightcoop.dev domain.
+
+Add Argo CD and wait until all the applications are configured. It's complete when all the applications show as
+configured (green) in the Argo CD UI and the Knative ingress exteran IP is available. The following commands configure 
+Argo CD and enable checking the Knative ingress:
+
+    terraform apply -auto-approve -target=k8s_manifest.argocd-apps-application
+    kubectl get svc -n istio-system
 
 Build the remainder of the Terraform resources:
 
@@ -63,10 +72,12 @@ Build the remainder of the Terraform resources:
 
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Copy the webhook_secret value from Terraform output
-* Create the new GitHub webhook using webhook_secret as the Secret value and set .
+* Create the new GitHub webhook using webhook_secret as the Secret value and set:
     * Payload URL: https://argocd.apps.greenlightcoop.dev/api/webhook
         * If using a feature branch and Terraform workspace, revise the above to include the feature suffix (e.g. argocd.apps-feature-n)
     * Content type: application/json
+
+Create Tekton webhooks for service projects as needed.
 
 ## Update Configuration
 
@@ -85,16 +96,19 @@ It's expected this will never be required
 ## Terraform Workspace
 
 To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
-for deployment of the infrastructure to a temporary environment (set of GCP projects) that can then be destroyed
+for deployment of the infrastructure to a temporary environment (GCP project and cluster) that can then be destroyed
 after the modifications have been vetted and merged to master.
 
-* Checkout a branch of the infrastructure and/or argocd-apps projects based on the current GitHub issue number.
+* Checkout a branch of the infrastructure and argocd-apps projects based on the current GitHub issue number and push
+  to GitHub.
 
-        git checkout -b feature/<issue number>
+        git checkout -b feature/<issue number> && git push --set-upstream origin $(git_current_branch)
 
 * Create a new workspace using the issue number as part of the workspace name, replacing '/' with '-'
 
         terraform workspace new feature-<issue number>
+
+* Follow the Environment Creation instructions given earlier in this README.
 
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 

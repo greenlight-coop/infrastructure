@@ -74,8 +74,3 @@ resource "google_project" "development" {
   org_id          = var.org_id
   billing_account = var.billing_account_id
 }
-
-resource "google_project_service" "container-development" {
-  project = local.project_id
-  service = "container.googleapis.com"
-}

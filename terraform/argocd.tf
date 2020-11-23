@@ -1,31 +1,3 @@
-resource "kubernetes_namespace" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-}
-
-resource "k8s_manifest" "argocd-github-ssh-key-secret" {
-  content = templatefile("manifests/argocd-github-ssh-key-secret.yaml", {
-    bot_private_key = local.bot_private_key
-  })
-  depends_on = [
-    kubernetes_namespace.argocd
-  ]
-}
-
-resource "k8s_manifest" "default-admin-password-secret" {
-  content = templatefile("manifests/admin-password-secret.yaml", {
-    namespace       = "default"
-    admin_password  = local.admin_password
-  })
-}
-
-resource "k8s_manifest" "grafana-datasources-secret" {
-  content = templatefile("manifests/grafana-datasources-secret.yaml", {
-    namespace = "default"
-  })
-}
-
 # Equivalent to: 
 #   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
 # 
@@ -51,6 +23,31 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
+        resource.customizations: |
+          admissionregistration.k8s.io/MutatingWebhookConfiguration:
+            ignoreDifferences: |
+              jsonPointers:
+              - /webhooks/0/clientConfig/caBundle
+              - /webhooks/0/failurePolicy
+          admissionregistration.k8s.io/ValidatingWebhookConfiguration:
+            ignoreDifferences: |
+              jsonPointers:
+              - /webhooks/0/clientConfig/caBundle
+              - /webhooks/0/failurePolicy
+          apiextensions.k8s.io/CustomResourceDefinition:
+            ignoreDifferences: |
+              jsonPointers:
+              - /spec/preserveUnknownFields
+          v1/ConfigMap:
+            ignoreDifferences: |
+              namespace: knative-serving
+              jsonPointers:
+              - /data
+          rbac.authorization.k8s.io/ClusterRole:
+            ignoreDifferences: |
+              namespace: knative-serving-admin
+              jsonPointers:
+              - /rules
       ingress:
         enabled: true
         hosts:
@@ -77,9 +74,11 @@ resource "helm_release" "argo-cd" {
   depends_on = [
     k8s_manifest.letsencrypt-staging-issuer,
     k8s_manifest.letsencrypt-production-issuer,
-    k8s_manifest.argocd-github-ssh-key-secret,
-    k8s_manifest.grafana-datasources-secret,
+    kubernetes_secret.argocd-github-ssh-key-secret,
+    kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd,
+    kubernetes_namespace.greenlight-pipelines,
+    helm_release.ingress-nginx,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
@@ -106,104 +105,11 @@ resource "k8s_manifest" "argocd-apps-application" {
   )
   depends_on = [
     k8s_manifest.argocd-project,
-    k8s_manifest.default-admin-password-secret,
+    kubernetes_secret.default-admin-password-secret,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record,
-    google_dns_record_set.api-greenlightcoop-dev-a-record,
-    null_resource.knative-serving-config-network-tls
+    google_dns_record_set.api-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
   }
-}
-
-# greenlight-pipelines configuration
-
-resource "kubernetes_namespace" "greenlight-pipelines" {
-  metadata {
-    name = "greenlight-pipelines"
-  }
-}
-
-resource "kubernetes_secret" "greenlight-pipelines-git-auth" {
-  metadata {
-    name = "git-auth"
-    namespace = "greenlight-pipelines"
-    annotations = {
-      "tekton.dev/git-0" = "github.com"
-    }
-  }
-
-  data = {
-    known_hosts = <<KNOWN_HOSTS
-github.com,192.30.253.112 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
-    KNOWN_HOSTS
-    ssh-privatekey = <<DOCKER
-${local.bot_private_key}
-    DOCKER
-  }
-
-  type = "kubernetes.io/ssh-auth"
-
-  depends_on = [
-    kubernetes_namespace.greenlight-pipelines
-  ]
-}
-
-resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" {
-  metadata {
-    name = "docker-registry-credentials"
-    namespace = "greenlight-pipelines"
-  }
-
-  data = {
-    ".dockerconfigjson" = <<DOCKER
-    {
-      "auths": {
-        "https://index.docker.io/v1/": {
-          "username": "greenlightcoopbot",
-          "password": "${var.bot_password}",
-          "email": "bot@greenlight.coop",
-          "auth": "${base64encode("greenlightcoopbot:${var.bot_password}")}"
-        }
-      }
-    }
-    DOCKER
-  }
-
-  type = "kubernetes.io/dockerconfigjson"
-
-  depends_on = [
-    kubernetes_namespace.greenlight-pipelines
-  ]
-}
-
-resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
-  metadata {
-    name = "webhook-secret"
-    namespace = "greenlight-pipelines"
-  }
-
-  data = {
-    webhookSecretValue = local.webhook_secret
-  }
-
-  depends_on = [
-    kubernetes_namespace.greenlight-pipelines
-  ]
-}
-
-resource "kubernetes_secret" "greenlight-pipelines-bot-github-token" {
-  metadata {
-    name = "bot-github-token"
-    namespace = "greenlight-pipelines"
-  }
-
-  data = {
-    botGithubTokenValue = var.bot_github_token
-  }
-
-  depends_on = [
-    kubernetes_namespace.greenlight-pipelines
-  ]
 }

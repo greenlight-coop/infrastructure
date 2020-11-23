@@ -17,12 +17,15 @@ resources for Green Light.
 
 ## Argo CD
 
-See the [README.md](argocd/README.md) in the `argocd` directory for artifacts and information on managing the 
-Kubernetes cluster and applications via Argo CD.
+See the artifacts and README.md in the `argocd-apps` repository for information on how Argo CD is configured to
+managed the Kubernetes environment and installed services.
 
 ## DNS
 
-DNS for the domain greenlight.coop is managed at https://marcaria.com/. Subdomains will be Managed Zones in GCP DNS.
+DNS for the domain greenlight.coop is managed at https://marcaria.com/.
+
+Development work will be performed using teh domain greenlightcoop.dev. This domain is managed in Google Domains and
+subdomains are managed in GCP Cloud DNS.
 
 ## Public Website
 
