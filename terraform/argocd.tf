@@ -110,6 +110,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     kubernetes_secret.default-admin-password-secret,
+    kubernetes_namespace.greenlight-pipelines,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record
   ]
