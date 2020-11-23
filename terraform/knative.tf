@@ -4,7 +4,7 @@ data "kubernetes_service" "istio-ingressgateway" {
     name      = "istio-ingressgateway"
   }
   depends_on = [
-    k8s_manifest.argocd-apps-application
+    k8s_manifest.argocd-greenlight-infrastructure-application
   ]
 }
 

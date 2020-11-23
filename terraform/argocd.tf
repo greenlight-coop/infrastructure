@@ -89,9 +89,9 @@ resource "k8s_manifest" "argocd-project" {
   ]
 }
 
-resource "k8s_manifest" "argocd-apps-application" {
+resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   content = templatefile(
-    "manifests/argocd-apps-application.yaml", 
+    "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
       tls_cert_issuer     = local.tls_cert_issuer
@@ -104,12 +104,34 @@ resource "k8s_manifest" "argocd-apps-application" {
   )
   depends_on = [
     k8s_manifest.argocd-project,
-    kubernetes_namespace.greenlight-pipelines,
-    kubernetes_namespace.staging,
-    kubernetes_namespace.knative-serving,
     kubernetes_secret.default-admin-password-secret,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record
+  ]
+  timeouts {
+    delete = "10m"
+  }
+}
+
+resource "k8s_manifest" "argocd-greenlight-software-application" {
+  content = templatefile(
+    "manifests/argocd-greenlight-software-application.yaml", 
+    {
+      target_revision     = local.argocd_source_target_revision
+      tls_cert_issuer     = local.tls_cert_issuer
+      tls_secret_name     = local.tls_secret_name
+      workspace_suffix    = local.workspace_suffix
+      api_domain_name     = local.api_domain_name
+      apps_domain_name    = local.apps_domain_name
+      knative_domain_name = local.knative_domain_name
+    }
+  )
+  depends_on = [
+    k8s_manifest.argocd-project,
+    k8s_manifest.argocd-greenlight-infrastructure-application,
+    kubernetes_namespace.staging,
+    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
