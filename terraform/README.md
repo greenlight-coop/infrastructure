@@ -59,11 +59,11 @@ Add the newly created Kubernetes cluster to your local configuration run:
 Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
-Add Argo CD and wait until all the applications are configured. It's complete when all the applications show as
-configured (green) in the Argo CD UI and the Knative ingress exteran IP is available. The following commands configure 
-Argo CD and enable checking the Knative ingress:
+Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
+configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
+the Argo CD infrastructure application and enable checking the Knative ingress:
 
-    terraform apply -auto-approve -target=k8s_manifest.argocd-apps-application
+    terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
     kubectl get svc -n istio-system
 
 Build the remainder of the Terraform resources:
@@ -99,8 +99,8 @@ To test non-trivial infrastructure configuration changes, it's recommended to us
 for deployment of the infrastructure to a temporary environment (GCP project and cluster) that can then be destroyed
 after the modifications have been vetted and merged to master.
 
-* Checkout a branch of the infrastructure and argocd-apps projects based on the current GitHub issue number and push
-  to GitHub.
+* Checkout a branch of the infrastructure, argocd-greenlight-infrastructure, and argocd-greenlight-software projects 
+  based on the current GitHub issue number and push to GitHub.
 
         git checkout -b feature/<issue number> && git push --set-upstream origin $(git_current_branch)
 
