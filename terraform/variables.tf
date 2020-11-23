@@ -55,7 +55,7 @@ variable "billing_account_id" {
 
 variable "k8s_version" {
   type = string
-  default = "1.17.12-gke.1504"
+  default = "1.17.13-gke.2001"
 }
 
 variable "admin_password" {
