@@ -28,6 +28,16 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/argocd-greenlight-staging.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/argocd-greenlight-production.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
         resource.customizations: |
           admissionregistration.k8s.io/MutatingWebhookConfiguration:
             ignoreDifferences: |
