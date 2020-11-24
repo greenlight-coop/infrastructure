@@ -7,16 +7,11 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: greenlight-project
-
-  # Source of the application manifests
   source:
     repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
     targetRevision: ${target_revision}
     path: apps
-
-    # helm specific config
     helm:
-      # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
       - name: "global.apiDomainName"
         value: ${api_domain_name}
@@ -30,29 +25,18 @@ spec:
         value: ${tls_secret_name}
       - name: "global.targetRevision"
         value: ${target_revision}
-
-      # Optional Helm version to template with. If omitted it will fallback to look at the 'apiVersion' in Chart.yaml
-      # and decide which Helm binary to use automatically. This field can be either 'v2' or 'v3'.
       version: v2
-
-  # Destination cluster and namespace to deploy the application
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-
-  # Sync policy
   syncPolicy:
-    automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
-      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
-      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
-    syncOptions:     # Sync options which modifies sync behavior
-    - Validate=false # disables resource validation (equivalent to 'kubectl apply --validate=true')
-    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
-    # The retry feature is available since v1.7
+    automated:
+      prune: true
+      selfHeal: true
     retry:
-      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      limit:
       backoff:
-        duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
-        factor: 2 # a factor to multiply the base duration after each failed retry
-        maxDuration: 3m # the maximum amount of time allowed for the backoff strategy
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
 
