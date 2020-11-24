@@ -157,7 +157,7 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
-    k8s_manifest.argocd-argocd-greenlight-software-application,
+    k8s_manifest.argocd-greenlight-software-application,
     kubernetes_namespace.staging,
     google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
     google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
@@ -183,7 +183,7 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
-    k8s_manifest.argocd-argocd-greenlight-software-application,
+    k8s_manifest.argocd-greenlight-software-application,
     kubernetes_namespace.production,
     google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
     google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
