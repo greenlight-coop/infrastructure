@@ -71,13 +71,20 @@ Build the remainder of the Terraform resources:
     terraform apply -auto-approve
 
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
-* Copy the webhook_secret value from Terraform output
-* Create the new GitHub webhook using webhook_secret as the Secret value and set:
+* Create the new GitHub webhook at the greenlight-coop organization level with the following settings:
     * Payload URL: https://argocd.apps.greenlightcoop.dev/api/webhook
-        * If using a feature branch and Terraform workspace, revise the above to include the feature suffix (e.g. argocd.apps-feature-n)
+        * If using a feature branch and Terraform workspace, revise the above to include the feature suffix 
+          (e.g. https://argocd.apps-feature-123.greenlightcoop.dev/api/webhook)
     * Content type: application/json
+    * Secret: the generated webhook_secret value from Terraform output
+    * Which events...: Just the push event
 
-Create Tekton webhooks for service projects as needed.
+Create Tekton webhooks for service projects as needed. Example for Node.js webhook:
+* Create new GitHub webhook in the target project
+    * Payload URL: https://tekton.apps.greenlightcoop.dev/webhook/node-pipeline (revise with feature suffix if necessary)
+    * Content type: application/json
+    * Secret: the generated webhook_secret value from Terraform output
+    * Which events...: Send me everything
 
 ## Update Configuration
 
