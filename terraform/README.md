@@ -61,7 +61,7 @@ servers in the Google Domains managed greenlightcoop.dev domain.
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
 configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
-the Argo CD infrastructure application and enable checking the Knative ingress:
+the Argo CD infrastructure application and check for the Knative ingress:
 
     terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
     kubectl get svc -n istio-system
