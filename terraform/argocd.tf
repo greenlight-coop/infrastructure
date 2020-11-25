@@ -125,7 +125,6 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-bot-github-token,
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
-    kubernetes_namespace.greenlight-pipeline-runs,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record
   ]

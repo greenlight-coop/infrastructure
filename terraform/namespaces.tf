@@ -25,15 +25,6 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
   ]
 }
 
-resource "kubernetes_namespace" "greenlight-pipeline-runs" {
-  metadata {
-    name = "greenlight-pipeline-runs"
-  }
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
-  ]
-}
-
 resource "kubernetes_namespace" "staging" {
   metadata {
     name = "staging"
