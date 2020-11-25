@@ -51,12 +51,12 @@ ${file("manifests/grafana-datasources.yaml")}
   ]
 }
 
-# greenlight-pipelines
+# greenlight-pipelines / greenlight-pipeline-runs
 
 resource "kubernetes_secret" "greenlight-pipelines-git-auth" {
   metadata {
     name = "git-auth"
-    namespace = "greenlight-pipelines"
+    namespace = "greenlight-pipeline-runs"
     annotations = {
       "tekton.dev/git-0" = "github.com"
     }
@@ -73,14 +73,14 @@ ${local.bot_private_key}
   type = "kubernetes.io/ssh-auth"
 
   depends_on = [
-    kubernetes_namespace.greenlight-pipelines
+    kubernetes_namespace.greenlight-pipeline-runs
   ]
 }
 
 resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" {
   metadata {
     name = "docker-registry-credentials"
-    namespace = "greenlight-pipelines"
+    namespace = "greenlight-pipeline-runs"
   }
 
   data = {
@@ -107,14 +107,14 @@ resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" 
   type = "kubernetes.io/dockerconfigjson"
 
   depends_on = [
-    kubernetes_namespace.greenlight-pipelines
+    kubernetes_namespace.greenlight-pipeline-runs
   ]
 }
 
 resource "kubernetes_secret" "greenlight-pipelines-bot-github-token" {
   metadata {
     name = "bot-github-token"
-    namespace = "greenlight-pipelines"
+    namespace = "greenlight-pipeline-runs"
   }
 
   data = {
@@ -122,7 +122,7 @@ resource "kubernetes_secret" "greenlight-pipelines-bot-github-token" {
   }
 
   depends_on = [
-    kubernetes_namespace.greenlight-pipelines
+    kubernetes_namespace.greenlight-pipeline-runs
   ]
 }
 
