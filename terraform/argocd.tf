@@ -28,6 +28,16 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/argocd-greenlight-staging.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/argocd-greenlight-production.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
         resource.customizations: |
           admissionregistration.k8s.io/MutatingWebhookConfiguration:
             ignoreDifferences: |
@@ -110,6 +120,10 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     kubernetes_secret.default-admin-password-secret,
+    kubernetes_secret.greenlight-pipelines-git-auth,
+    kubernetes_secret.greenlight-pipelines-docker-registry-credentials,
+    kubernetes_secret.greenlight-pipelines-bot-github-token,
+    kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
     google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
     google_dns_record_set.api-greenlightcoop-dev-a-record
@@ -119,9 +133,9 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   }
 }
 
-resource "k8s_manifest" "argocd-greenlight-software-application" {
+resource "k8s_manifest" "argocd-greenlight-staging-application" {
   content = templatefile(
-    "manifests/argocd-greenlight-software-application.yaml", 
+    "manifests/argocd-greenlight-staging-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
       tls_cert_issuer     = local.tls_cert_issuer
@@ -136,6 +150,31 @@ resource "k8s_manifest" "argocd-greenlight-software-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
     kubernetes_namespace.staging,
+    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+  ]
+  timeouts {
+    delete = "10m"
+  }
+}
+
+resource "k8s_manifest" "argocd-greenlight-production-application" {
+  content = templatefile(
+    "manifests/argocd-greenlight-production-application.yaml", 
+    {
+      target_revision     = local.argocd_source_target_revision
+      tls_cert_issuer     = local.tls_cert_issuer
+      tls_secret_name     = local.tls_secret_name
+      workspace_suffix    = local.workspace_suffix
+      api_domain_name     = local.api_domain_name
+      apps_domain_name    = local.apps_domain_name
+      knative_domain_name = local.knative_domain_name
+    }
+  )
+  depends_on = [
+    k8s_manifest.argocd-project,
+    k8s_manifest.argocd-greenlight-infrastructure-application,
+    kubernetes_namespace.production,
     google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
     google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]

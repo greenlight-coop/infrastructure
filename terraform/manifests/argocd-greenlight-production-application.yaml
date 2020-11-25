@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-greenlight-infrastructure
+  name: argocd-greenlight-production
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: greenlight-project
   source:
-    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
+    repoURL: git@github.com:greenlight-coop/argocd-greenlight-production.git
     targetRevision: ${target_revision}
     path: apps
     helm:

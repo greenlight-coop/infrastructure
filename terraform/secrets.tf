@@ -92,6 +92,12 @@ resource "kubernetes_secret" "greenlight-pipelines-docker-registry-credentials" 
           "password": "${var.bot_password}",
           "email": "bot@greenlight.coop",
           "auth": "${base64encode("greenlightcoopbot:${var.bot_password}")}"
+        },
+        "https://hub.docker.com/v2/": {
+          "username": "greenlightcoopbot",
+          "password": "${var.bot_password}",
+          "email": "bot@greenlight.coop",
+          "auth": "${base64encode("greenlightcoopbot:${var.bot_password}")}"
         }
       }
     }
