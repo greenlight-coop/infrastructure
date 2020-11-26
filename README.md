@@ -17,8 +17,8 @@ resources for Green Light.
 
 ## Argo CD
 
-See the artifacts in the `argocd-greenlight-infrastructure` and `argocd-greenlight-software` repositories for 
-information on how Argo CD is configured to manage the Kubernetes environment and installed services.
+See the artifacts in the `argocd-greenlight-infrastructure` repository for information on how Argo CD is configured 
+to manage the Kubernetes environment and installed services.
 
 ## DNS
 

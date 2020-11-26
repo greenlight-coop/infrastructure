@@ -23,7 +23,7 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/argocd-greenlight-software.git
+          - url: git@github.com:greenlight-coop/greenlight-helm-charts.git
             type: git
             sshPrivateKeySecret:
               name: github-ssh-key
