@@ -10,7 +10,7 @@ resource "null_resource" "ingress-nginx" {
 
 data "kubernetes_service" "ingress-nginx-controller" {
   metadata {
-    namespace = "default"
+    namespace = "ingress-nginx"
     name      = "ingress-nginx-controller"
   }
   depends_on = [

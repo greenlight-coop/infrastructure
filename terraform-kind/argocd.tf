@@ -92,7 +92,7 @@ resource "helm_release" "argo-cd" {
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd,
-    helm_release.ingress-nginx,
+    null_resource.ingress-nginx,
     # google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
