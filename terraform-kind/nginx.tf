@@ -6,6 +6,9 @@ resource "null_resource" "ingress-nginx" {
     when    = destroy
     command = "kubectl delete -f manifests/ingress-nginx-kind-3.12.0.yaml"
   }
+  depends_on = [
+    null_resource.greenlight-kind
+  ]
 }
 
 data "kubernetes_service" "ingress-nginx-controller" {

@@ -9,8 +9,7 @@ provider "helm" {
 
 resource "null_resource" "greenlight-kind" {
   provisioner "local-exec" {
-    # command = "kind create cluster --name greenlight --config manifests/kind-config.yaml"
-    command = "kind create cluster --name greenlight"
+    command = "kind create cluster --name greenlight --config manifests/kind-config.yaml"
   }
   provisioner "local-exec" {
     when    = destroy
