@@ -7,23 +7,24 @@ networking:
   serviceSubnet: "10.0.0.0/16"
   disableDefaultCNI: true
 nodes:
-- role: control-plane
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "ingress-ready=true"
-  extraPortMappings:
-  - containerPort: 30000
-    hostPort: 80
-    listenAddress: "127.0.0.1"
-    protocol: TCP
-  - containerPort: 30001
-    hostPort: 443
-    listenAddress: "127.0.0.1"
-    protocol: TCP
-  - containerPort: 30002
-    hostPort: 15021
-    listenAddress: "127.0.0.1"
-    protocol: TCP
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 30000
+        hostPort: 80
+        listenAddress: "127.0.0.1"
+        protocol: TCP
+      - containerPort: 30001
+        hostPort: 443
+        listenAddress: "127.0.0.1"
+        protocol: TCP
+      - containerPort: 30002
+        hostPort: 15021
+        listenAddress: "127.0.0.1"
+        protocol: TCP
+  - role: worker
