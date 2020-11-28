@@ -2,8 +2,8 @@
 *.iml
 .idea/
 
-# Visual Studio Code
-*.code-workspace
+# Terraform
+terraform.tfstate
 
 # MacOS
 .DS_Store
