@@ -1,11 +1,11 @@
-resource "helm_release" "ingress-nginx" {
-  name        = "ingress-nginx"
-  repository  = "https://kubernetes.github.io/ingress-nginx"
-  chart       = "ingress-nginx"
-  version     = "3.11.0"
-  depends_on = [
-    null_resource.greenlight-kind
-  ]
+resource "null_resource" "ingress-nginx" {
+  provisioner "local-exec" {
+    command = "kubectl apply -f manifests/ingress-nginx-kind-3.12.0.yaml"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "kubectl delete -f manifests/ingress-nginx-kind-3.12.0.yaml"
+  }
 }
 
 data "kubernetes_service" "ingress-nginx-controller" {
@@ -14,6 +14,6 @@ data "kubernetes_service" "ingress-nginx-controller" {
     name      = "ingress-nginx-controller"
   }
   depends_on = [
-    helm_release.ingress-nginx
+    null_resource.ingress-nginx
   ]
 }
