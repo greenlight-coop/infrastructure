@@ -25,14 +25,6 @@ terraform {
   }
 }
 
-provider "google" {
-  region      = var.region
-}
-
-resource "random_id" "project_id_suffix" {
-  byte_length = 2
-}
-
 resource "random_password" "admin" {
   length  = 12
   special = false
