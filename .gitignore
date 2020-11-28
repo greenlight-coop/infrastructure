@@ -3,7 +3,7 @@
 .idea/
 
 # Terraform
-terraform.tfstate
+terraform.tfstate*
 
 # MacOS
 .DS_Store
