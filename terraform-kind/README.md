@@ -25,15 +25,7 @@ To create the resources
 
     terraform init \
         && tf apply -auto-approve -target=null_resource.greenlight-kind \
-        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
-            -target=google_dns_record_set.api_name_servers \
-            -target=google_dns_record_set.apps_name_servers \
-            -target=google_dns_record_set.knative_name_servers \
-            -target=google_dns_record_set.ingress_name_servers
-
-Add the newly created Kubernetes cluster to your local configuration run:
-
-    $(terraform output kubeconfig_command)
+        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller
 
 Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
