@@ -150,8 +150,8 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
     kubernetes_namespace.staging,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
@@ -175,8 +175,8 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
     kubernetes_namespace.production,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"

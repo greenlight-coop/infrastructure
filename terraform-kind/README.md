@@ -4,13 +4,6 @@
 
 Global for all instructions that follow
 
-    gcloud auth application-default login
-    export GCP_ORGANIZATION_ID=636256323415
-    export SEED_GCP_PROJECT_ID=greenlight-seed
-    export SEED_GCP_PROJECT_NAME=greenlight-seed
-    export GCP_BILLING_ACCOUNT_ID=01614C-82BAE7-678369
-    export TF_BACKEND_BUCKET=tfstate-greenlight
-    export SEED_GCP_SERVICE_ACCOUNT=<lookup_fq_sa_username_after_creation>
 
 ## One Time Configuration
 
@@ -20,23 +13,9 @@ keys in a `./.ssh` directory relative to this `terraform` directory.
 
     ssh-keygen -t ed25519 -C "bot@greenlight.coop"
 
-Run the following commands (once only for the Green Light organization)
-    
-    gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID --set-as-default
-    ./setup-sa.sh -o $GCP_ORGANIZATION_ID -p $SEED_GCP_PROJECT_ID -b $GCP_BILLING_ACCOUNT_ID
-    gsutil mb -b on -c nearline -p $SEED_GCP_PROJECT_ID gs://$TF_BACKEND_BUCKET
-    gsutil versioning set on gs://$TF_BACKEND_BUCKET
-    gsutil acl ch -u $SEED_GCP_SERVICE_ACCOUNT:OWNER gs://$TF_BACKEND_BUCKET
-
 ## Environment Creation 
 
-If reusing a GCP project
-
-    export TF_VAR_project_id=(project id)
-    export TF_VAR_project_name=(project name)
-    export TF_VAR_existing_project=true
-
-To create the GCP project, cluster and resources
+To create the resources
 
     # Steps below are temporary and should be used with caution - delete the environment variables after use 
     # Another option is to supply the values when prompted
@@ -45,16 +24,7 @@ To create the GCP project, cluster and resources
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
 
     terraform init \
-        && tf apply -auto-approve -target=google_container_cluster.development \
-        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller \
-            -target=google_dns_record_set.api_name_servers \
-            -target=google_dns_record_set.apps_name_servers \
-            -target=google_dns_record_set.knative_name_servers \
-            -target=google_dns_record_set.ingress_name_servers
-
-Add the newly created Kubernetes cluster to your local configuration run:
-
-    $(terraform output kubeconfig_command)
+        && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller
 
 Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
