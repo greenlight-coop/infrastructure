@@ -103,6 +103,7 @@ Update .zshrc per directions at start of install
     brew install tektoncd-cli
     brew install k9s
     brew install kind
+    brew install octant
     go get -u github.com/tektoncd/triggers/cmd/binding-eval
 
 ### Istio
