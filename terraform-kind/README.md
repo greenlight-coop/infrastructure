@@ -27,8 +27,8 @@ To create the resources
         && tf apply -auto-approve -target=null_resource.greenlight-kind \
         && tf apply -auto-approve -target=data.kubernetes_service.ingress-nginx-controller
 
-Look up the generated NS records for the api, apps, ingress and knative subdomains and add NS records for these name 
-servers in the Google Domains managed greenlightcoop.dev domain.
+Ensure there DNS entries for the various subdomains and wildcards (kn-home, *.kn-home, etc.) mapped to the current external
+IP address for the home network.
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
 configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
