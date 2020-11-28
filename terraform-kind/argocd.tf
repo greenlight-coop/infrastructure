@@ -93,7 +93,7 @@ resource "helm_release" "argo-cd" {
     kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd,
     helm_release.ingress-nginx,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
+    # google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
 
@@ -125,8 +125,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-bot-github-token,
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
-    google_dns_record_set.api-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.api-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
