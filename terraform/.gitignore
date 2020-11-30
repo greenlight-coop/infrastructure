@@ -3,7 +3,8 @@ kubeconfig
 credentials.json
 
 ## Terraform
-.terraform*
+.terraform
+terraform*
 
 ## SSH key pair
 .ssh
