@@ -12,19 +12,17 @@ spec:
     targetRevision: ${target_revision}
     path: apps
     helm:
-      parameters:
-      - name: "global.apiDomainName"
-        value: ${api_domain_name}
-      - name: "global.appsDomainName"
-        value: ${apps_domain_name}
-      - name: "global.knativeDomainName"
-        value: ${knative_domain_name}
-      - name: "global.tlsCertIssuer"
-        value: ${tls_cert_issuer}
-      - name: "global.tlsSecretName"
-        value: ${tls_secret_name}
-      - name: "global.targetRevision"
-        value: ${target_revision}
+      values: |
+        global:
+          apiDomainName: ${api_domain_name}
+          appsDomainName: ${apps_domain_name}
+          knativeDomainName: ${knative_domain_name}
+          tlsCertIssuer: ${tls_cert_issuer}
+          tlsSecretName: ${tls_secret_name}
+          targetRevision: ${target_revision}
+          isLocalKindCluster: ${is_local_kind_cluster}
+          istioHttpPort: ${istio_http_port}
+          istioHttpsPort: ${istio_https_port}
       version: v2
   destination:
     server: https://kubernetes.default.svc

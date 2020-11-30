@@ -3,7 +3,7 @@ resource "kubernetes_namespace" "cert-manager" {
     name = "cert-manager"
   }
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    null_resource.greenlight-kind
   ]
 }
 
@@ -12,7 +12,7 @@ resource "kubernetes_namespace" "argocd" {
     name = "argocd"
   }
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    null_resource.greenlight-kind
   ]
 }
 
@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
     name = "greenlight-pipelines"
   }
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    null_resource.greenlight-kind
   ]
 }
 
@@ -29,9 +29,8 @@ resource "kubernetes_namespace" "staging" {
   metadata {
     name = "staging"
   }
-
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    null_resource.greenlight-kind
   ]
 }
 
@@ -39,8 +38,7 @@ resource "kubernetes_namespace" "production" {
   metadata {
     name = "production"
   }
-
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    null_resource.greenlight-kind
   ]
 }

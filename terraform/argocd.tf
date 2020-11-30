@@ -92,8 +92,8 @@ resource "helm_release" "argo-cd" {
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd,
-    helm_release.ingress-nginx,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
+    null_resource.ingress-nginx,
+    # google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
   ]
 }
 
@@ -108,13 +108,16 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   content = templatefile(
     "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
-      target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
-      workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
-      apps_domain_name    = local.apps_domain_name
-      knative_domain_name = local.knative_domain_name
+      target_revision       = local.argocd_source_target_revision
+      tls_cert_issuer       = local.tls_cert_issuer
+      tls_secret_name       = local.tls_secret_name
+      workspace_suffix      = local.workspace_suffix
+      api_domain_name       = local.api_domain_name
+      apps_domain_name      = local.apps_domain_name
+      knative_domain_name   = local.knative_domain_name
+      is_local_kind_cluster = "${local.is_local_kind_cluster}"
+      istio_http_port       = "${local.istio_http_port}"
+      istio_https_port      = "${local.istio_https_port}"
     }
   )
   depends_on = [
@@ -125,8 +128,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-bot-github-token,
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
-    google_dns_record_set.api-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.api-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
@@ -150,8 +153,8 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
     kubernetes_namespace.staging,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"
@@ -175,8 +178,8 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
     kubernetes_namespace.production,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    # google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
+    # google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
   ]
   timeouts {
     delete = "10m"

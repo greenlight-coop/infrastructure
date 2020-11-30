@@ -45,10 +45,6 @@ resource "kubernetes_secret" "grafana-datasources-secret" {
 ${file("manifests/grafana-datasources.yaml")}
     DATASOURCES
   }
-
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
-  ]
 }
 
 # greenlight-pipelines
