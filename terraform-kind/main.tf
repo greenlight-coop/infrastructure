@@ -37,12 +37,16 @@ resource "random_password" "webhook_secret" {
 
 locals {
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  # argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
   admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
   admin_password_hash           = bcrypt(local.admin_password)
   admin_password_mtime          = timestamp()
   webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
   bot_private_key_file          = "./.ssh/id_ed25519"
   bot_private_key               = file(local.bot_private_key_file)
+  is_local_kind_cluster         = true
+  istio_http_port               = 30080
+  istio_https_port              = 30443
+  argocd_source_target_revision = "feature/49"
 }
 

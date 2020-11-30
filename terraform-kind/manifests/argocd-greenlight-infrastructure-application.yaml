@@ -25,6 +25,12 @@ spec:
         value: ${tls_secret_name}
       - name: "global.targetRevision"
         value: ${target_revision}
+      - name: "global.isLocalKindCluster"
+        value: ${is_local_kind_cluster}
+      - name: "global.istioHttpPort"
+        value: ${istio_http_port}
+      - name: "global.istioHttpsPort"
+        value: ${istio_https_port}
       version: v2
   destination:
     server: https://kubernetes.default.svc

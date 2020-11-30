@@ -108,13 +108,16 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   content = templatefile(
     "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
-      target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
-      workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
-      apps_domain_name    = local.apps_domain_name
-      knative_domain_name = local.knative_domain_name
+      target_revision       = local.argocd_source_target_revision
+      tls_cert_issuer       = local.tls_cert_issuer
+      tls_secret_name       = local.tls_secret_name
+      workspace_suffix      = local.workspace_suffix
+      api_domain_name       = local.api_domain_name
+      apps_domain_name      = local.apps_domain_name
+      knative_domain_name   = local.knative_domain_name
+      is_local_kind_cluster = local.is_local_kind_cluster
+      istio_http_port       = local.istio_http_port
+      istio_https_port      = local.istio_https_port
     }
   )
   depends_on = [
