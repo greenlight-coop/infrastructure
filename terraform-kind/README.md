@@ -30,7 +30,7 @@ To create the resources
 Ensure there DNS entries for the various subdomains and wildcards (kn-home, *.kn-home, etc.) mapped to the current external
 IP address for the home network.
 
-Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
+Add Argo CD and wait until all the infrastructure applications are configured. It's complete when all the applications show as
 configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
 the Argo CD infrastructure application and check for the Knative ingress:
 

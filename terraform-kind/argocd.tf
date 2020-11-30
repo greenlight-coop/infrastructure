@@ -115,9 +115,9 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       api_domain_name       = local.api_domain_name
       apps_domain_name      = local.apps_domain_name
       knative_domain_name   = local.knative_domain_name
-      is_local_kind_cluster = local.is_local_kind_cluster
-      istio_http_port       = local.istio_http_port
-      istio_https_port      = local.istio_https_port
+      is_local_kind_cluster = "${local.is_local_kind_cluster}"
+      istio_http_port       = "${local.istio_http_port}"
+      istio_https_port      = "${local.istio_https_port}"
     }
   )
   depends_on = [
