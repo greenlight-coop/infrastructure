@@ -45,10 +45,8 @@ locals {
   bot_private_key_file          = "./.ssh/id_ed25519"
   bot_private_key               = file(local.bot_private_key_file)
   is_local_kind_cluster         = true
-  # istio_http_port               = 30080
-  # istio_https_port              = 30443
-  istio_http_port               = 80
-  istio_https_port              = 443
+  istio_http_port               = 30080
+  istio_https_port              = 30443
   argocd_source_target_revision = "feature/49"
 }
 
