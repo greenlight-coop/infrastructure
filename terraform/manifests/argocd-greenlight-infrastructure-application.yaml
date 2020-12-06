@@ -19,10 +19,10 @@ spec:
         value: ${apps_domain_name}
       - name: "global.knativeDomainName"
         value: ${knative_domain_name}
-      - name: "global.tlsCertIssuer"
-        value: ${tls_cert_issuer}
-      - name: "global.tlsSecretName"
-        value: ${tls_secret_name}
+      - name: "global.useStagingCertificates"
+        value: ${use_staging_certs}
+      - name: "global.adminEmail"
+        value: ${admin_email}
       - name: "global.targetRevision"
         value: ${target_revision}
       version: v2

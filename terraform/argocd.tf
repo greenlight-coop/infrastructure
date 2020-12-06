@@ -63,21 +63,6 @@ resource "helm_release" "argo-cd" {
               namespace: knative-serving-admin
               jsonPointers:
               - /rules
-      ingress:
-        enabled: true
-        hosts:
-          - argocd.${local.apps_domain_name}
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          cert-manager.io/cluster-issuer: ${local.tls_cert_issuer}
-          kubernetes.io/tls-acme: "true"
-          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        tls:
-          - secretName: ${local.tls_secret_name}
-            hosts:
-              - argocd.${local.apps_domain_name}
-        https: true
     configs:
       secret:
         githubSecret: ${local.webhook_secret}
@@ -87,13 +72,9 @@ resource "helm_release" "argo-cd" {
   ]
 
   depends_on = [
-    k8s_manifest.letsencrypt-staging-issuer,
-    k8s_manifest.letsencrypt-production-issuer,
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_secret.grafana-datasources-secret,
-    kubernetes_namespace.argocd,
-    helm_release.ingress-nginx,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
+    kubernetes_namespace.argocd
   ]
 }
 
@@ -109,8 +90,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
+      admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
       api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
