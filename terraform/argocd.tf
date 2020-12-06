@@ -90,7 +90,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      use_staging_certs   = tostring(var.use_staging_certs)
+      use_staging_certs   = var.use_staging_certs
       admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
       api_domain_name     = local.api_domain_name
