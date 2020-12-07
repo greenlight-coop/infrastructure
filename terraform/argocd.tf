@@ -93,8 +93,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       use_staging_certs   = var.use_staging_certs
       admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
+      ingress_domain_name = local.ingress_domain_name
       knative_domain_name = local.knative_domain_name
     }
   )
