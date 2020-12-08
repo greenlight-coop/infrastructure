@@ -121,10 +121,8 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
     "manifests/argocd-greenlight-staging-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
     }
@@ -144,10 +142,8 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
     "manifests/argocd-greenlight-production-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
     }
