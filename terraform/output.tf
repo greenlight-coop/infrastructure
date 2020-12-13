@@ -18,16 +18,8 @@ output "kubeconfig_command" {
   value = "gcloud container clusters get-credentials ${google_container_cluster.development.name} --project ${local.project_id} --zone ${var.zone}"
 }
 
-output "api_name_servers" {
-  value = google_dns_managed_zone.api.name_servers
-}
-
 output "apps_name_servers" {
   value = google_dns_managed_zone.apps.name_servers
-}
-
-output "ingress_name_servers" {
-  value = google_dns_managed_zone.ingress.name_servers
 }
 
 output "knative_name_servers" {

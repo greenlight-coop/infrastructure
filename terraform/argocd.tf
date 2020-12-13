@@ -63,21 +63,29 @@ resource "helm_release" "argo-cd" {
               namespace: knative-serving-admin
               jsonPointers:
               - /rules
-      ingress:
-        enabled: true
-        hosts:
-          - argocd.${local.apps_domain_name}
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          cert-manager.io/cluster-issuer: ${local.tls_cert_issuer}
-          kubernetes.io/tls-acme: "true"
-          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        tls:
-          - secretName: ${local.tls_secret_name}
-            hosts:
-              - argocd.${local.apps_domain_name}
-        https: true
+          cert-manager.io/ClusterIssuer:
+            health.lua: |
+              hs = {}
+              if obj.status ~= nil then
+                if obj.status.conditions ~= nil then
+                  for i, condition in ipairs(obj.status.conditions) do
+                    if condition.type == "Ready" and condition.status == "False" then
+                      hs.status = "Degraded"
+                      hs.message = condition.message
+                      return hs
+                    end
+                    if condition.type == "Ready" and condition.status == "True" then
+                      hs.status = "Healthy"
+                      hs.message = condition.message
+                      return hs
+                    end
+                  end
+                end
+              end
+
+              hs.status = "Progressing"
+              hs.message = "Initializing issuer"
+              return hs
     configs:
       secret:
         githubSecret: ${local.webhook_secret}
@@ -87,13 +95,9 @@ resource "helm_release" "argo-cd" {
   ]
 
   depends_on = [
-    k8s_manifest.letsencrypt-staging-issuer,
-    k8s_manifest.letsencrypt-production-issuer,
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_secret.grafana-datasources-secret,
-    kubernetes_namespace.argocd,
-    helm_release.ingress-nginx,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record
+    kubernetes_namespace.argocd
   ]
 }
 
@@ -109,15 +113,15 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     "manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
+      admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
     }
   )
   depends_on = [
+    helm_release.argo-cd,
     k8s_manifest.argocd-project,
     kubernetes_secret.default-admin-password-secret,
     kubernetes_secret.greenlight-pipelines-git-auth,
@@ -125,8 +129,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-bot-github-token,
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
-    google_dns_record_set.wildcard-apps-greenlightcoop-dev-cname-record,
-    google_dns_record_set.api-greenlightcoop-dev-a-record
+    google_dns_record_set.apps_name_servers,
+    google_dns_record_set.knative_name_servers
   ]
   timeouts {
     delete = "10m"
@@ -138,10 +142,8 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
     "manifests/argocd-greenlight-staging-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
     }
@@ -149,9 +151,7 @@ resource "k8s_manifest" "argocd-greenlight-staging-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
-    kubernetes_namespace.staging,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    kubernetes_namespace.staging
   ]
   timeouts {
     delete = "10m"
@@ -163,10 +163,8 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
     "manifests/argocd-greenlight-production-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
-      tls_cert_issuer     = local.tls_cert_issuer
-      tls_secret_name     = local.tls_secret_name
+      use_staging_certs   = var.use_staging_certs
       workspace_suffix    = local.workspace_suffix
-      api_domain_name     = local.api_domain_name
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
     }
@@ -174,9 +172,7 @@ resource "k8s_manifest" "argocd-greenlight-production-application" {
   depends_on = [
     k8s_manifest.argocd-project,
     k8s_manifest.argocd-greenlight-infrastructure-application,
-    kubernetes_namespace.production,
-    google_dns_record_set.wildcard-api-greenlightcoop-dev-cname-record,
-    google_dns_record_set.wildcard-knative-greenlightcoop-dev-a-record
+    kubernetes_namespace.production
   ]
   timeouts {
     delete = "10m"
