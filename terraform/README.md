@@ -44,12 +44,10 @@ To create the GCP project, cluster and resources
     export TF_VAR_bot_password=(Green Light bot password value)
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
 
-### START EXTERNAL DNS PROTOTYPE CONTENT
     terraform init \
         && terraform apply -auto-approve -target=google_container_cluster.development \
             -target=google_dns_record_set.apps_name_servers \
-            -target=google_dns_record_set.knative_name_servers \
-            -target=google_dns_record_set.ingress_name_servers
+            -target=google_dns_record_set.knative_name_servers
 
 Look up the generated NS records for the apps, ingress and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
@@ -59,16 +57,9 @@ Add the newly created Kubernetes cluster to your local configuration run:
     $(terraform output kubeconfig_command)
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
-configured (green) in the Argo CD UI
-
-    terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
-
-### END EXTERNAL DNS PROTOTYPE CONTENT
-
-TBD ...
-
- and the Knative ingress external IP is available. The following commands configure 
+configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
 the Argo CD infrastructure application and check for the Knative ingress:
+
 
     terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
     kubectl get svc -n istio-system

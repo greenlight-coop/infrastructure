@@ -22,10 +22,6 @@ output "apps_name_servers" {
   value = google_dns_managed_zone.apps.name_servers
 }
 
-output "ingress_name_servers" {
-  value = google_dns_managed_zone.ingress.name_servers
-}
-
 output "knative_name_servers" {
   value = google_dns_managed_zone.knative.name_servers
 }
