@@ -23,26 +23,31 @@ BRANCH=$(echo $TF_WORKSPACE | tr '-' '/')
 
 cd $GL_HELM_CHARTS
 git checkout main
+git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 
 cd $GL_PRODUCTION
 git checkout main
+git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 
 cd $GL_STAGING
 git checkout main
+git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 
 cd $GL_ARGOCD_INFRA
 git checkout main
+git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 
 cd $GL_TERRAFORM
 git checkout master
+git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 

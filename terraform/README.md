@@ -49,7 +49,7 @@ To create the GCP project, cluster and resources
             -target=google_dns_record_set.apps_name_servers \
             -target=google_dns_record_set.knative_name_servers
 
-Look up the generated NS records for the apps, ingress and knative subdomains and add NS records for these name 
+Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
 Add the newly created Kubernetes cluster to your local configuration run:
@@ -57,12 +57,12 @@ Add the newly created Kubernetes cluster to your local configuration run:
     $(terraform output kubeconfig_command)
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as
-configured (green) in the Argo CD UI and the Knative ingress external IP is available. The following commands configure 
-the Argo CD infrastructure application and check for the Knative ingress:
-
+configured (green) in the Argo CD UI. The following command installs Argo CD and the infrastructure application:
 
     terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
-    kubectl get svc -n istio-system
+
+Check that the Tekton Dashboard ingress certificate was correctly configured and if not (due to timeout) delete the certificate
+in Argo CD and it will be automatically recreated.
 
 Build the remainder of the Terraform resources:
 
@@ -108,24 +108,13 @@ after the modifications have been vetted and merged to master.
   argocd-greenlight-production, and greenlight-helm-charts projects based on the current GitHub 
   issue number and push to GitHub.
 
-        git checkout -b feature/<issue number> && git push --set-upstream origin $(git_current_branch)
-
-* Create a new workspace using the issue number as part of the workspace name, replacing '/' with '-'
-
-        terraform workspace new feature-<issue number>
+        ./setup-workspace.sh feature/<feature number>
 
 * Follow the Environment Creation instructions given earlier in this README.
 
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 
-        terraform apply
-        $(terraform output kubeconfig_command)
-
 * When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
   default workspace from master
 
-        terraform destroy
-        terraform workspace select default
-        terraform workspace delete feature-<issue number>
-        git checkout master && git pull
-        terraform apply
+        ./teardown-workspace.sh
