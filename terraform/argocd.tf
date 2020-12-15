@@ -133,7 +133,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     google_dns_record_set.knative_name_servers
   ]
   timeouts {
-    delete = "10m"
+    delete = "20m"
   }
 }
 
