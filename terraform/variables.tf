@@ -75,7 +75,7 @@ variable "webhook_secret" {
 
 variable "use_staging_certs" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "bot_password" {
