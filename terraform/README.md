@@ -62,6 +62,9 @@ Add Argo CD and wait until all the infrasturce applications are configured. It's
 
 Check that the various ingress certificates were correctly configured and if not (due to timeout) delete the affected ingress (or the certificate) and it will be automatically recreated.
 
+Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
+prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
+
 Build the remainder of the Terraform resources:
 
     terraform apply -auto-approve
