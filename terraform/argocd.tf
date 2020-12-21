@@ -28,12 +28,22 @@ resource "helm_release" "argo-cd" {
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/argocd-greenlight-staging.git
+          - url: git@github.com:greenlight-coop/greenlight-stage-template.git
             type: git
             sshPrivateKeySecret:
               name: github-ssh-key
               key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/argocd-greenlight-production.git
+          - url: git@github.com:greenlight-coop/greenlight-stage-test.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/greenlight-stage-staging.git
+            type: git
+            sshPrivateKeySecret:
+              name: github-ssh-key
+              key: sshPrivateKey
+          - url: git@github.com:greenlight-coop/greenlight-stage-production.git
             type: git
             sshPrivateKeySecret:
               name: github-ssh-key
@@ -134,47 +144,5 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   ]
   timeouts {
     delete = "20m"
-  }
-}
-
-resource "k8s_manifest" "argocd-greenlight-staging-application" {
-  content = templatefile(
-    "manifests/argocd-greenlight-staging-application.yaml", 
-    {
-      target_revision     = local.argocd_source_target_revision
-      use_staging_certs   = var.use_staging_certs
-      workspace_suffix    = local.workspace_suffix
-      apps_domain_name    = local.apps_domain_name
-      knative_domain_name = local.knative_domain_name
-    }
-  )
-  depends_on = [
-    k8s_manifest.argocd-project,
-    k8s_manifest.argocd-greenlight-infrastructure-application,
-    kubernetes_namespace.staging
-  ]
-  timeouts {
-    delete = "10m"
-  }
-}
-
-resource "k8s_manifest" "argocd-greenlight-production-application" {
-  content = templatefile(
-    "manifests/argocd-greenlight-production-application.yaml", 
-    {
-      target_revision     = local.argocd_source_target_revision
-      use_staging_certs   = var.use_staging_certs
-      workspace_suffix    = local.workspace_suffix
-      apps_domain_name    = local.apps_domain_name
-      knative_domain_name = local.knative_domain_name
-    }
-  )
-  depends_on = [
-    k8s_manifest.argocd-project,
-    k8s_manifest.argocd-greenlight-infrastructure-application,
-    kubernetes_namespace.production
-  ]
-  timeouts {
-    delete = "10m"
   }
 }

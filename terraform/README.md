@@ -85,6 +85,12 @@ Create Tekton webhooks for service projects as needed. Example for Node.js webho
     * Secret: the generated webhook_secret value from Terraform output
     * Which events...: Send me everything
 
+Create Tekton webhook for the greenlight-stage-test project:
+* Payload URL: https://tekton.apps.greenlightcoop.dev/webhook/test-stage-pipeline (revise with feature suffix if necessary)
+* Content type: application/json
+* Secret: the generated webhook_secret value from Terraform output
+* Which events...: Send me everything
+
 ## Update Configuration
 
     terraform apply
