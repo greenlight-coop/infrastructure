@@ -1,7 +1,7 @@
 resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
-    annotations = {
+    labels = {
       "webhooks.knative.dev/exclude" = "true"
     }
   }
@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "argocd" {
 resource "kubernetes_namespace" "greenlight-pipelines" {
   metadata {
     name = "greenlight-pipelines"
-    annotations = {
+    labels = {
       "webhooks.knative.dev/exclude" = "true"
     }
   }
