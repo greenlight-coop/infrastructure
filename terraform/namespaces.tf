@@ -1,7 +1,7 @@
 resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
-    labels = {
+    annotations = {
       webhooks.knative.dev/exclude = "true"
     }
   }
@@ -13,23 +13,10 @@ resource "kubernetes_namespace" "argocd" {
 resource "kubernetes_namespace" "greenlight-pipelines" {
   metadata {
     name = "greenlight-pipelines"
-    labels = {
+    annotations = {
       webhooks.knative.dev/exclude = "true"
     }
   }
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
-  ]
-}
-
-resource "kubernetes_namespace" "stages" {
-  metadata {
-    name = "test"
-    labels = {
-      webhooks.knative.dev/exclude = "true"
-    }
-  }
-
   depends_on = [
     google_container_node_pool.development_primary_nodes
   ]
