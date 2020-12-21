@@ -2,7 +2,7 @@ resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
     annotations = {
-      webhooks.knative.dev/exclude = "true"
+      "webhooks.knative.dev/exclude" = "true"
     }
   }
   depends_on = [
@@ -14,7 +14,7 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
   metadata {
     name = "greenlight-pipelines"
     annotations = {
-      webhooks.knative.dev/exclude = "true"
+      "webhooks.knative.dev/exclude" = "true"
     }
   }
   depends_on = [
