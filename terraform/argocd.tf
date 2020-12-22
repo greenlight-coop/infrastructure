@@ -104,7 +104,7 @@ resource "helm_release" "argo-cd" {
                       hs.message = condition.type .. " not ready"
                       return hs
                     end
-                    if condition.type == "Ready" condition.type:sub(-string.len(suffix)) == suffix and condition.status == "True" then
+                    if condition.type:sub(-#readySuffix) == readySuffix and condition.status == "True" then
                       hs.status = "Healthy"
                       hs.message = "Service is ready"
                     end
