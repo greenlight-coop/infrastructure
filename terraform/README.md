@@ -78,9 +78,9 @@ Configure a webhook for the [greenlight-coop GitHub organization](https://github
     * Secret: the generated webhook_secret value from Terraform output
     * Which events...: Just the push event
 
-Create Tekton webhooks for service projects as needed. Example for Node.js webhook:
+Create Tekton webhooks for service projects as needed. Example for Node.js Knative Service webhook:
 * Create new GitHub webhook in the target project
-    * Payload URL: https://tekton.apps.greenlightcoop.dev/webhook/node-pipeline (revise with feature suffix if necessary)
+    * Payload URL: https://tekton.apps.greenlightcoop.dev/webhook/node-service-pipeline (revise with feature suffix if necessary)
     * Content type: application/json
     * Secret: the generated webhook_secret value from Terraform output
     * Which events...: Send me everything
