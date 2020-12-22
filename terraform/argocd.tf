@@ -92,27 +92,6 @@ resource "helm_release" "argo-cd" {
                   end
                 end
               end
-          serving.knative.dev/Service:
-            health.lua: |
-              hs = {}
-              readySuffix = "Ready"
-              if obj.status ~= nil then
-                if obj.status.conditions ~= nil then
-                  for i, condition in ipairs(obj.status.conditions) do
-                    if condition.type:sub(-#readySuffix) == readySuffix and condition.status == "False" then
-                      hs.status = "Degraded"
-                      hs.message = condition.type .. " not ready"
-                      return hs
-                    end
-                    if condition.type:sub(-#readySuffix) == readySuffix and condition.status == "True" then
-                      hs.status = "Healthy"
-                      hs.message = "Service is ready"
-                    end
-                  end
-                  return hs
-                end
-              end
-
               hs.status = "Progressing"
               hs.message = "Initializing issuer"
               return hs
