@@ -92,7 +92,6 @@ resource "helm_release" "argo-cd" {
                   end
                 end
               end
-
               hs.status = "Progressing"
               hs.message = "Initializing issuer"
               return hs
