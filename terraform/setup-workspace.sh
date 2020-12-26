@@ -11,8 +11,7 @@ GL_DEVOPS=$GL_GIT_BASE/devops
 GL_INFRA=$GL_DEVOPS/infrastructure
 GL_ARGOCD_INFRA=$GL_DEVOPS/argocd-greenlight-infrastructure
 GL_STAGES=$GL_GIT_BASE/stages
-GL_STAGING=$GL_STAGES/argocd-greenlight-staging
-GL_PRODUCTION=$GL_STAGES/argocd-greenlight-production
+GL_STAGE_TEST=$GL_STAGES/greenlight-stage-test
 GL_SOFTWARE=$GL_GIT_BASE/software
 GL_HELM_CHARTS=$GL_SOFTWARE/greenlight-helm-charts
 
@@ -28,11 +27,7 @@ cd $GL_ARGOCD_INFRA
 git checkout -b $BRANCH
 git push --set-upstream origin $BRANCH
 
-cd $GL_STAGING
-git checkout -b $BRANCH
-git push --set-upstream origin $BRANCH
-
-cd $GL_PRODUCTION
+cd $GL_STAGE_TEST
 git checkout -b $BRANCH
 git push --set-upstream origin $BRANCH
 
