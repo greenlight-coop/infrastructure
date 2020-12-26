@@ -13,8 +13,7 @@ GL_DEVOPS=$GL_GIT_BASE/devops
 GL_INFRA=$GL_DEVOPS/infrastructure
 GL_ARGOCD_INFRA=$GL_DEVOPS/argocd-greenlight-infrastructure
 GL_STAGES=$GL_GIT_BASE/stages
-GL_STAGING=$GL_STAGES/argocd-greenlight-staging
-GL_PRODUCTION=$GL_STAGES/argocd-greenlight-production
+GL_STAGE_TEST=$GL_STAGES/greenlight-stage-test
 GL_SOFTWARE=$GL_GIT_BASE/software
 GL_HELM_CHARTS=$GL_SOFTWARE/greenlight-helm-charts
 
@@ -27,13 +26,7 @@ git pull
 git branch -d $BRANCH
 git push origin --delete $BRANCH
 
-cd $GL_PRODUCTION
-git checkout main
-git pull
-git branch -d $BRANCH
-git push origin --delete $BRANCH
-
-cd $GL_STAGING
+cd $GL_STAGE_TEST
 git checkout main
 git pull
 git branch -d $BRANCH
