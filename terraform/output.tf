@@ -27,5 +27,5 @@ output "knative_name_servers" {
 }
 
 output "kong_name_servers" {
-  value = google_dns_managed_zone.knative.name_servers
+  value = google_dns_managed_zone.kong.name_servers
 }
