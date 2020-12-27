@@ -79,6 +79,12 @@ Update to the following plugins in .zshrc
     git config --global alias.st status
     git config --global alias.unstage 'reset HEAD --'
     brew install hub
+    npm i -g meta
+
+Checkout all Green Light platform repositories:
+
+    cd ~/dev/git
+    meta git clone git@github.com:greenlight-coop/greenlight-meta.git greenlight
 
 ### Google Cloud Platform
 
