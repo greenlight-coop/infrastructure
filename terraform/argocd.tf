@@ -127,6 +127,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       workspace_suffix    = local.workspace_suffix
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
+      kong_domain_name    = local.kong_domain_name
     }
   )
   depends_on = [
@@ -139,7 +140,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
     google_dns_record_set.apps_name_servers,
-    google_dns_record_set.knative_name_servers
+    google_dns_record_set.knative_name_servers,
+    google_dns_record_set.kong_name_servers
   ]
   timeouts {
     delete = "20m"

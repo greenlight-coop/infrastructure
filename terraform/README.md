@@ -47,7 +47,8 @@ To create the GCP project, cluster and resources
     terraform init \
         && terraform apply -auto-approve -target=google_container_cluster.development \
             -target=google_dns_record_set.apps_name_servers \
-            -target=google_dns_record_set.knative_name_servers
+            -target=google_dns_record_set.knative_name_servers \
+            -target=google_dns_record_set.kong_name_servers
 
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.

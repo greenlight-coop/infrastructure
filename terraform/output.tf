@@ -25,3 +25,7 @@ output "apps_name_servers" {
 output "knative_name_servers" {
   value = google_dns_managed_zone.knative.name_servers
 }
+
+output "kong_name_servers" {
+  value = google_dns_managed_zone.knative.name_servers
+}

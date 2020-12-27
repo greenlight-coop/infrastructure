@@ -16,6 +16,7 @@ spec:
         global:
           appsDomainName: ${apps_domain_name}
           knativeDomainName: ${knative_domain_name}
+          kongDomainName: ${kong_domain_name}
           useStagingCertificates: ${use_staging_certs}
           adminEmail: ${admin_email}
           targetRevision: ${target_revision}
