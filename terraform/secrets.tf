@@ -17,37 +17,21 @@ ${local.bot_private_key}
   ]
 }
 
-resource "kubernetes_secret" "default-admin-password-secret" {
+# Grafana
+
+resource "kubernetes_secret" "grafana-admin-password-secret" {
   metadata {
-    name = "admin-password-secret"
+    name = "grafana-admin-password-secret"
     namespace = "default"
   }
 
   data = {
-    password: local.admin_password
+    admin-user: "admin"
+    admin-password: local.admin_password
   }
 
   depends_on = [
     kubernetes_namespace.argocd
-  ]
-}
-
-# Grafana
-
-resource "kubernetes_secret" "grafana-datasources-secret" {
-  metadata {
-    name = "grafana-datasources"
-    namespace = "default"
-  }
-
-  data = {
-    "datasource.yaml" = <<DATASOURCES
-${file("manifests/grafana-datasources.yaml")}
-    DATASOURCES
-  }
-
-  depends_on = [
-    google_container_node_pool.development_primary_nodes
   ]
 }
 
