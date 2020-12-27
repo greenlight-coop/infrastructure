@@ -105,7 +105,6 @@ resource "helm_release" "argo-cd" {
 
   depends_on = [
     kubernetes_secret.argocd-github-ssh-key-secret,
-    kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd
   ]
 }
@@ -133,7 +132,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   depends_on = [
     helm_release.argo-cd,
     k8s_manifest.argocd-project,
-    kubernetes_secret.default-admin-password-secret,
+    kubernetes_secret.grafana-admin-password-secret,
     kubernetes_secret.greenlight-pipelines-git-auth,
     kubernetes_secret.greenlight-pipelines-docker-registry-credentials,
     kubernetes_secret.greenlight-pipelines-bot-github-token,
