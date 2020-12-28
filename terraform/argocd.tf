@@ -126,6 +126,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       workspace_suffix    = local.workspace_suffix
       apps_domain_name    = local.apps_domain_name
       knative_domain_name = local.knative_domain_name
+      google_project_id   = local.project_id
     }
   )
   depends_on = [
