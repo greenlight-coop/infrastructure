@@ -115,9 +115,8 @@ To test non-trivial infrastructure configuration changes, it's recommended to us
 for deployment of the infrastructure to a temporary environment (GCP project and cluster) that can then be destroyed
 after the modifications have been vetted and merged to master.
 
-* Checkout a branch of the infrastructure, argocd-greenlight-infrastructure, argocd-greenlight-staging, 
-  argocd-greenlight-production, and greenlight-helm-charts projects based on the current GitHub 
-  issue number and push to GitHub.
+* Create a new Terraform workspace, checkout a branch of all repositories based on the current GitHub issue number 
+  and push to GitHub.
 
         ./setup-workspace.sh feature/<feature number>
 
