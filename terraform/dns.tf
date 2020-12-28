@@ -3,6 +3,19 @@ resource "google_project_service" "dns-development" {
   service = "dns.googleapis.com"
 }
 
+resource "google_service_account" "dns01-solver" {
+  project = local.project_id
+  account_id   = "dns01-solver"
+}
+
+resource "google_service_account_iam_binding" "dns01-solver-account-iam" {
+  service_account_id = google_service_account.dns01-solver.name
+  role               = "roles/iam.workloadIdentityUser"
+  members = [
+    "serviceAccount:${local.project_id}.svc.id.goog[cert-manager/cert-manager]",
+  ]
+}
+
 locals {
   domain_name_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   knative_domain_name             = "kn${local.domain_name_suffix}.greenlightcoop.dev"

@@ -139,7 +139,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
     google_dns_record_set.apps_name_servers,
-    google_dns_record_set.knative_name_servers
+    google_dns_record_set.knative_name_servers,
+    google_service_account_iam_binding.dns01-solver-account-iam
   ]
   timeouts {
     delete = "20m"
