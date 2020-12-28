@@ -105,7 +105,6 @@ resource "helm_release" "argo-cd" {
 
   depends_on = [
     kubernetes_secret.argocd-github-ssh-key-secret,
-    kubernetes_secret.grafana-datasources-secret,
     kubernetes_namespace.argocd
   ]
 }
