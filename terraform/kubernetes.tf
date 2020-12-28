@@ -44,6 +44,9 @@ resource "google_container_cluster" "development" {
   min_master_version       = var.k8s_version
   remove_default_node_pool = true
   initial_node_count       = 1
+  workload_identity_config {
+    identity_namespace = "${local.project_id}.svc.id.goog"
+  }
   depends_on = [
     google_project_service.container-development
   ]
