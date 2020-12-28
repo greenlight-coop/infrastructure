@@ -18,8 +18,8 @@ spec:
           knativeDomainName: ${knative_domain_name}
           useStagingCertificates: ${use_staging_certs}
           adminEmail: ${admin_email}
-          googleProjectId: ${google_project_id}
           targetRevision: ${target_revision}
+        googleProjectId: ${google_project_id}
       version: v2
   destination:
     server: https://kubernetes.default.svc
