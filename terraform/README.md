@@ -103,6 +103,23 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
 
     terraform destroy
 
+## Manual Removal
+
+In GCP Console
+* Delete cluster (wait for completion)
+* Delete Record Sets and Zones in Cloud DNS
+* Delete Load Balancers
+* Check that all External IP Addresses are deleted (delete if necessary)
+* Delete k8s_* Firewall Rules
+* Delete Service Accounts
+
+If using a Terraform workspace for isolated cluster testing
+* Delete Terraform workspace
+
+        terraform workspace select default
+        terraform workspace delete -force feature-<branch number>
+
+
 ### Remove Seed Project
 
 It's expected this will never be required
