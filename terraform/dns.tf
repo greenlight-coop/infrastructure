@@ -21,7 +21,7 @@ resource "google_service_account_iam_binding" "dns-admin-iam-binding-workload-id
   role               = "roles/iam.workloadIdentityUser"
   members = [
     "serviceAccount:${local.project_id}.svc.id.goog[cert-manager/cert-manager]",
-    "serviceAccount:${local.project_id}.svc.id.goog[external-dns/external-dns]"
+    "serviceAccount:${local.project_id}.svc.id.goog[default/external-dns]"
   ]
 }
 
