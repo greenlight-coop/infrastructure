@@ -65,6 +65,9 @@ resource "google_container_node_pool" "development_primary_nodes" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+    workload_metadata_config {
+      node_metadata = "GKE_METADATA_SERVER"
+    }
   }
   autoscaling { 
     min_node_count = var.min_node_count
