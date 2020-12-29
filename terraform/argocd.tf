@@ -15,6 +15,8 @@ resource "helm_release" "argo-cd" {
   values = [ <<-EOT
     installCRDs: false
     server:
+      extraArgs:
+      - --insecure
       config:
         url: https://argocd.${local.apps_domain_name}
         repositories: |
