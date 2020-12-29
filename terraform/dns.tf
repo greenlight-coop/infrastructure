@@ -3,16 +3,25 @@ resource "google_project_service" "dns-development" {
   service = "dns.googleapis.com"
 }
 
-resource "google_service_account" "dns01-solver" {
+resource "google_service_account" "dns-admin" {
   project = local.project_id
-  account_id   = "dns01-solver"
+  account_id   = "dns-admin"
 }
 
-resource "google_service_account_iam_binding" "dns01-solver-account-iam" {
-  service_account_id = google_service_account.dns01-solver.name
+resource "google_service_account_iam_binding" "project-account-binding-dns-admin" {
+  service_account_id = "projects/${local.project_id}"
+  role               = "roles/dns.admin"
+  members = [
+    "serviceAccount:${google_service_account.dns-admin.email}"
+  ]
+}
+
+resource "google_service_account_iam_binding" "dns-admin-account-binding-workload-identity" {
+  service_account_id = google_service_account.dns-admin.name
   role               = "roles/iam.workloadIdentityUser"
   members = [
     "serviceAccount:${local.project_id}.svc.id.goog[cert-manager/cert-manager]",
+    "serviceAccount:${local.project_id}.svc.id.goog[external-dns/external-dns]"
   ]
 }
 
