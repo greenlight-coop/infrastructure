@@ -43,6 +43,7 @@ To create the GCP project, cluster and resources
 
     export TF_VAR_bot_password=(Green Light bot password value)
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
+    export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
     terraform init \
         && terraform apply -auto-approve -target=google_container_cluster.development \
