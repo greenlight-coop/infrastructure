@@ -9,7 +9,7 @@ resource "helm_release" "argo-cd" {
   name        = "argo-cd"
   repository  = "https://argoproj.github.io/argo-helm"
   chart       = "argo-cd"
-  version     = "2.9.5"
+  version     = "2.11.0"
   namespace   = "argocd"
 
   values = [ <<-EOT
