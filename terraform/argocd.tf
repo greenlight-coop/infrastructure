@@ -15,6 +15,8 @@ resource "helm_release" "argo-cd" {
   values = [ <<-EOT
     installCRDs: false
     server:
+      extraArgs:
+      - --insecure
       config:
         url: https://argocd.${local.apps_domain_name}
         repositories: |
@@ -125,7 +127,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
       apps_domain_name    = local.apps_domain_name
-      knative_domain_name = local.knative_domain_name
+      google_project_id   = local.project_id
     }
   )
   depends_on = [
@@ -138,7 +140,8 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     kubernetes_secret.greenlight-pipelines-webhook-secret,
     kubernetes_namespace.greenlight-pipelines,
     google_dns_record_set.apps_name_servers,
-    google_dns_record_set.knative_name_servers
+    google_project_iam_binding.project-iam-binding-dns-admin,
+    google_service_account_iam_binding.dns-admin-iam-binding-workload-identity,
   ]
   timeouts {
     delete = "20m"

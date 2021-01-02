@@ -43,11 +43,11 @@ To create the GCP project, cluster and resources
 
     export TF_VAR_bot_password=(Green Light bot password value)
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
+    export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
     terraform init \
         && terraform apply -auto-approve -target=google_container_cluster.development \
-            -target=google_dns_record_set.apps_name_servers \
-            -target=google_dns_record_set.knative_name_servers
+            -target=google_dns_record_set.apps_name_servers
 
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
@@ -102,6 +102,23 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
 ## Removal
 
     terraform destroy
+
+## Manual Removal
+
+In GCP Console
+* Delete cluster (wait for completion)
+* Delete Record Sets and Zones in Cloud DNS
+* Delete Load Balancers
+* Check that all External IP Addresses are deleted (delete if necessary)
+* Delete k8s_* Firewall Rules
+* Delete Service Accounts
+
+If using a Terraform workspace for isolated cluster testing
+* Delete Terraform workspace
+
+        terraform workspace select default
+        terraform workspace delete -force feature-<branch number>
+
 
 ### Remove Seed Project
 
