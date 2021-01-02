@@ -77,7 +77,8 @@ resource "google_container_node_pool" "development_primary_nodes" {
     max_node_count = var.max_node_count
   }
   management {
-    auto_upgrade = false
+    auto_upgrade = true
+    auto_repair = true
   }
   timeouts {
     create = "15m"
