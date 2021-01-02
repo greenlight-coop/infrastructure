@@ -84,7 +84,7 @@ Update to the following plugins in .zshrc
 Checkout all Green Light platform repositories:
 
     cd ~/dev/git
-    meta git clone git@github.com:greenlight-coop/greenlight-meta.git greenlight
+    meta git clone git@github.com:greenlight-coop/greenlight-platform.git
     
 ### Google Cloud Platform
 
