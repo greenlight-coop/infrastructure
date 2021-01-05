@@ -37,15 +37,16 @@ resource "local_file" "argocd_kustomization_manifests" {
     filename = "${path.module}/manifests/argocd/install/${each.key}"
 }
 
-data "kustomization_build" "argocd" {
-  path = "manifests/argocd/install"
-}
-
-resource "kustomization_resource" "argocd" {
-  for_each = data.kustomization_build.argocd.ids
-  manifest = data.kustomization_build.argocd.manifests[each.value]
+resource "null_resource" "argocd" {
+  provisioner "local-exec" {
+    command = "kubectl kustomize manifests/argocd/install | kubectl apply -n argocd -f -"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "kubectl kustomize manifests/argocd/install | kubectl delete -n argocd -f -"
+  }
   depends_on = [
-    local_file.argocd_kustomization_manifests,
+    local_file.argocd_kustomization_manifests,  
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_namespace.argocd
   ]
@@ -54,7 +55,7 @@ resource "kustomization_resource" "argocd" {
 resource "k8s_manifest" "argocd-project" {
   content = templatefile("manifests/argocd-project.yaml", {})
   depends_on = [
-    helm_release.argo-cd
+    null_resource.argocd
   ]
 }
 
@@ -71,7 +72,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     }
   )
   depends_on = [
-    helm_release.argo-cd,
+    null_resource.argocd,
     k8s_manifest.argocd-project,
     kubernetes_secret.grafana-admin-password-secret,
     kubernetes_secret.greenlight-pipelines-git-auth,
