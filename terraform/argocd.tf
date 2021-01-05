@@ -1,111 +1,24 @@
-# Equivalent to: 
-#   helm upgrade --install argocd argo/argo-cd --version 2.9.5 --namespace argocd --values helm/argocd-values.yaml --wait
-# 
-# After reaching the UI the first time you can login with username: admin and the password will be the
-# name of the server pod. You can get the pod name by running:
-# 
-# kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
-resource "helm_release" "argo-cd" {
-  name        = "argo-cd"
-  repository  = "https://argoproj.github.io/argo-helm"
-  chart       = "argo-cd"
-  version     = "2.9.5"
-  namespace   = "argocd"
+resource "local_file" "argocd_kustomization_manifests" {
+    for_each = fileset("${path.module}/manifests/argocd/install_templates", "*.yaml")
+    content  = templatefile("${path.module}/manifests/argocd/install_templates/${each.key}", {
+      apps_domain_name      = local.apps_domain_name,
+      webhook_secret        = local.webhook_secret,
+      admin_password_hash   = local.admin_password_hash,
+      admin_password_mtime  = local.admin_password_mtime,
+    })
+    filename = "${path.module}/manifests/argocd/install/${each.key}"
+}
 
-  values = [ <<-EOT
-    installCRDs: false
-    server:
-      extraArgs:
-      - --insecure
-      config:
-        url: https://argocd.${local.apps_domain_name}
-        repositories: |
-          - url: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/greenlight-helm-charts.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/greenlight-stage-template.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/greenlight-stage-test.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/greenlight-stage-staging.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-          - url: git@github.com:greenlight-coop/greenlight-stage-production.git
-            type: git
-            sshPrivateKeySecret:
-              name: github-ssh-key
-              key: sshPrivateKey
-        resource.customizations: |
-          admissionregistration.k8s.io/MutatingWebhookConfiguration:
-            ignoreDifferences: |
-              jsonPointers:
-              - /webhooks/0/clientConfig/caBundle
-              - /webhooks/0/failurePolicy
-          admissionregistration.k8s.io/ValidatingWebhookConfiguration:
-            ignoreDifferences: |
-              jsonPointers:
-              - /webhooks/0/clientConfig/caBundle
-              - /webhooks/0/failurePolicy
-          apiextensions.k8s.io/CustomResourceDefinition:
-            ignoreDifferences: |
-              jsonPointers:
-              - /spec/preserveUnknownFields
-          v1/ConfigMap:
-            ignoreDifferences: |
-              namespace: knative-serving
-              jsonPointers:
-              - /data
-          rbac.authorization.k8s.io/ClusterRole:
-            ignoreDifferences: |
-              namespace: knative-serving-admin
-              jsonPointers:
-              - /rules
-          cert-manager.io/ClusterIssuer:
-            health.lua: |
-              hs = {}
-              if obj.status ~= nil then
-                if obj.status.conditions ~= nil then
-                  for i, condition in ipairs(obj.status.conditions) do
-                    if condition.type == "Ready" and condition.status == "False" then
-                      hs.status = "Degraded"
-                      hs.message = condition.message
-                      return hs
-                    end
-                    if condition.type == "Ready" and condition.status == "True" then
-                      hs.status = "Healthy"
-                      hs.message = condition.message
-                      return hs
-                    end
-                  end
-                end
-              end
-              hs.status = "Progressing"
-              hs.message = "Initializing issuer"
-              return hs
-    configs:
-      secret:
-        githubSecret: ${local.webhook_secret}
-        argocdServerAdminPassword: ${local.admin_password_hash}
-        argocdServerAdminPasswordMtime: ${local.admin_password_mtime}
-  EOT
-  ]
-
+resource "null_resource" "argocd" {
+  provisioner "local-exec" {
+    command = "kubectl kustomize manifests/argocd/install | kubectl apply -n argocd -f -"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "kubectl kustomize manifests/argocd/install | kubectl delete -n argocd -f -"
+  }
   depends_on = [
+    local_file.argocd_kustomization_manifests,  
     kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_namespace.argocd
   ]
@@ -114,7 +27,7 @@ resource "helm_release" "argo-cd" {
 resource "k8s_manifest" "argocd-project" {
   content = templatefile("manifests/argocd-project.yaml", {})
   depends_on = [
-    helm_release.argo-cd
+    null_resource.argocd
   ]
 }
 
@@ -131,7 +44,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     }
   )
   depends_on = [
-    helm_release.argo-cd,
+    null_resource.argocd,
     k8s_manifest.argocd-project,
     kubernetes_secret.grafana-admin-password-secret,
     kubernetes_secret.greenlight-pipelines-git-auth,
