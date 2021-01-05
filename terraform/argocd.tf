@@ -41,7 +41,7 @@ resource "kustomization_resource" "argocd" {
   provider = kustomization
   manifest = "manifests/argocd/install"
   depends_on = [
-    helm_release.argo-cd
+    local_file.argocd_kustomization_manifests
   ]
 }
 
