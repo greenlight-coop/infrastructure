@@ -37,9 +37,13 @@ resource "local_file" "argocd_kustomization_manifests" {
     filename = "${path.module}/manifests/argocd/install/${each.key}"
 }
 
+data "kustomization_build" "argocd" {
+  path = "manifests/argocd/install"
+}
+
 resource "kustomization_resource" "argocd" {
-  provider = kustomization
-  manifest = "manifests/argocd/install"
+  for_each = data.kustomization_build.argocd.ids
+  manifest = data.kustomization_build.argocd.manifests[each.value]
   depends_on = [
     local_file.argocd_kustomization_manifests
   ]
