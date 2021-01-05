@@ -19,7 +19,6 @@ spec:
           adminEmail: ${admin_email}
           targetRevision: ${target_revision}
         googleProjectId: ${google_project_id}
-      version: v2
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
