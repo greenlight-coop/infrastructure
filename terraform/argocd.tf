@@ -45,7 +45,9 @@ resource "kustomization_resource" "argocd" {
   for_each = data.kustomization_build.argocd.ids
   manifest = data.kustomization_build.argocd.manifests[each.value]
   depends_on = [
-    local_file.argocd_kustomization_manifests
+    local_file.argocd_kustomization_manifests,
+    kubernetes_secret.argocd-github-ssh-key-secret,
+    kubernetes_namespace.argocd
   ]
 }
 
