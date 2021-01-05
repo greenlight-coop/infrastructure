@@ -3,3 +3,4 @@ bases:
 patchesStrategicMerge:
 - argocd-cm.yaml
 - argocd-secret.yaml
+- argocd-server-deployment.yaml
