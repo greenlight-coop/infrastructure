@@ -19,8 +19,8 @@ terraform {
       version = "~> 1.3.2"
     }
     kustomization = {
-      source =  "kbst/kustomize"
-      version = "~> 0.2.0-beta.3"
+      source =  "kbst/kustomization"
+      version = "~> 0.3.0"
     }
     local = {
       source = "hashicorp/local"
