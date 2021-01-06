@@ -54,7 +54,7 @@ servers in the Google Domains managed greenlightcoop.dev domain.
 
 Add the newly created Kubernetes cluster to your local configuration run:
 
-    $(terraform output kubeconfig_command)
+    $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//')
 
 Install Argo CD and wait for all the services and pods to become available.
 
