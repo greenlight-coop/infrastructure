@@ -32,6 +32,9 @@ resource "google_container_cluster" "development" {
   min_master_version       = var.k8s_version
   remove_default_node_pool = true
   initial_node_count       = 1
+  release_channel {
+    channel = var.k8s_release_channel
+  }
   workload_identity_config {
     identity_namespace = "${local.project_id}.svc.id.goog"
   }
@@ -62,7 +65,8 @@ resource "google_container_node_pool" "development_primary_nodes" {
     max_node_count = var.max_node_count
   }
   management {
-    auto_upgrade = false
+    auto_upgrade = true
+    auto_repair = true
   }
   timeouts {
     create = "15m"
