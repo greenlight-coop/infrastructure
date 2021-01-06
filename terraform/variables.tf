@@ -59,8 +59,9 @@ variable "k8s_version" {
 }
 
 variable "admin_password" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
+  sensitive = true
 }
 
 variable "admin_email" {
@@ -69,8 +70,9 @@ variable "admin_email" {
 }
 
 variable "webhook_secret" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
+  sensitive = true
 }
 
 variable "use_staging_certs" {
@@ -79,8 +81,8 @@ variable "use_staging_certs" {
 }
 
 variable "bot_password" {
-  type    = string
-  
+  type      = string
+  sensitive = true
   validation {
     condition     = length(var.bot_password) > 0
     error_message = "Value for bot_password must be set."
@@ -88,8 +90,8 @@ variable "bot_password" {
 }
 
 variable "bot_github_token" {
-  type    = string
-  
+  type      = string
+  sensitive = true
   validation {
     condition     = length(var.bot_github_token) > 0
     error_message = "Value for bot_github_token must be set."

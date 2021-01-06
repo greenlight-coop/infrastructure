@@ -4,6 +4,7 @@ credentials.json
 
 ## Terraform
 .terraform/
+.terraform.lock.hcl
 
 ## SSH key pair
 .ssh
