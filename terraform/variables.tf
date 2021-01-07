@@ -53,9 +53,9 @@ variable "billing_account_id" {
   default = "01614C-82BAE7-678369"
 }
 
-variable "k8s_release_channel" {
+variable "k8s_version" {
   type = string
-  default = "RAPID"
+  default = "1.17.13-gke.2001"
 }
 
 variable "admin_password" {
