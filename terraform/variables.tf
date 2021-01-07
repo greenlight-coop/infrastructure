@@ -58,11 +58,6 @@ variable "k8s_release_channel" {
   default = "RAPID"
 }
 
-variable "k8s_version" {
-  type = string
-  default = "1.18.12-gke.1201"
-}
-
 variable "admin_password" {
   type      = string
   default   = ""
