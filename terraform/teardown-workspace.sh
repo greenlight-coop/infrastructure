@@ -14,9 +14,10 @@ TF_WORKSPACE=$(terraform workspace show)
 BRANCH=$(echo $TF_WORKSPACE | tr '-' '/')
 
 terraform workspace select default
-terraform workspace delete $TF_WORKSPACE
+terraform workspace delete -force $TF_WORKSPACE
 
 cd $GL_GIT_BASE
+meta git fetch --all
 meta git checkout main
 meta git pull
 meta git branch -d $BRANCH
