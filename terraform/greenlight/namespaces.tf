@@ -5,9 +5,6 @@ resource "kubernetes_namespace" "argocd" {
       "webhooks.knative.dev/exclude" = "true"
     }
   }
-  depends_on = [
-    # google_container_node_pool.development_primary_nodes
-  ]
 }
 
 resource "kubernetes_namespace" "greenlight-pipelines" {
@@ -17,9 +14,6 @@ resource "kubernetes_namespace" "greenlight-pipelines" {
       "webhooks.knative.dev/exclude" = "true"
     }
   }
-  depends_on = [
-    # google_container_node_pool.development_primary_nodes
-  ]
 }
 
 resource "kubernetes_namespace" "knative-serving" {
@@ -29,16 +23,10 @@ resource "kubernetes_namespace" "knative-serving" {
       "istio-injection" = "enabled"
     }
   }
-  depends_on = [
-    # google_container_node_pool.development_primary_nodes
-  ]
 }
 
 resource "kubernetes_namespace" "istio-system" {
   metadata {
     name = "istio-system"
   }
-  depends_on = [
-    # google_container_node_pool.development_primary_nodes
-  ]
 }
