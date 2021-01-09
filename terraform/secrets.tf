@@ -127,7 +127,7 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
 
 resource "kubernetes_secret" "istio-letsencrypt" {
   metadata {
-    name = "webhook-secret"
+    name = "istio-letsencrypt"
     namespace = "istio-system"
   }
 
