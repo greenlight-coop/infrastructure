@@ -132,8 +132,8 @@ resource "kubernetes_secret" "istio-letsencrypt" {
   }
 
   data = {
-    tls.crt = var.kind_tls_crt
-    tls.key = var.kind_tls_key
+    "tls.crt" = var.kind_tls_crt
+    "tls.key" = var.kind_tls_key
   }
 
   depends_on = [
