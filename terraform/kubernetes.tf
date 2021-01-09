@@ -76,10 +76,10 @@ provider "k8s" {
 
 resource "null_resource" "kind_greenlight" {
   provisioner "local-exec" {
-    command = "kind create greenlight"
+    command = "kind create cluster --name greenlight"
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "kind delete greenlight"
+    command = "kind delete cluster --name greenlight"
   }
 }
