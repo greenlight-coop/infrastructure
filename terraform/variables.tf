@@ -80,6 +80,11 @@ variable "use_staging_certs" {
   default = false
 }
 
+variable "is_kind_cluster" {
+  type    = bool
+  default = false
+}
+
 variable "bot_password" {
   type      = string
   sensitive = true

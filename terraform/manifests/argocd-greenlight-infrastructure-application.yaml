@@ -18,6 +18,7 @@ spec:
           useStagingCertificates: ${use_staging_certs}
           adminEmail: ${admin_email}
           targetRevision: ${target_revision}
+          isKindCluster: ${is_kind_cluster}
         googleProjectId: ${google_project_id}
   destination:
     server: https://kubernetes.default.svc
