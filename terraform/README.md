@@ -36,6 +36,8 @@ If reusing a GCP project
     export TF_VAR_project_name=(project name)
     export TF_VAR_existing_project=true
 
+Ensure that current `home` DNS records reflect the current IP address.
+
 To create the GCP project, cluster and resources
 
     # Steps below are temporary and should be used with caution - delete the environment variables after use 
@@ -50,20 +52,17 @@ To create the GCP project, cluster and resources
             -target=google_dns_record_set.apps_name_servers -->
 
     terraform init \
-        && terraform apply -auto-approve -target=null_resource.kind_greenlight
+        && terraform apply -auto-approve -target=null_resource.kind_greenlight \
+        && terraform apply -auto-approve -target=null_resource.argocd
 
 <!-- Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain. -->
-
-Ensure that current `home` DNS records reflect the current IP address.
-
 <!-- Add the newly created Kubernetes cluster to your local configuration run:
 
     $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//') -->
 
-Install Argo CD and wait for all the services and pods to become available.
-
-    terraform apply -auto-approve -target=null_resource.argocd
+Wait for Argo CD services and pods to become available.
+    
     kubectl -n argocd get all
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as configured (green) in the Argo CD UI. The following command installs Argo CD and the infrastructure application:
