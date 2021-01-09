@@ -45,16 +45,21 @@ To create the GCP project, cluster and resources
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
     export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
-    terraform init \
+    <!-- terraform init \
         && terraform apply -auto-approve -target=google_container_cluster.development \
-            -target=google_dns_record_set.apps_name_servers
+            -target=google_dns_record_set.apps_name_servers -->
 
-Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
-servers in the Google Domains managed greenlightcoop.dev domain.
+    terraform init \
+        && terraform apply -auto-approve -target=null_resource.kind_greenlight
 
-Add the newly created Kubernetes cluster to your local configuration run:
+<!-- Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
+servers in the Google Domains managed greenlightcoop.dev domain. -->
 
-    $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//')
+Ensure that current `home` DNS records reflect the current IP address.
+
+<!-- Add the newly created Kubernetes cluster to your local configuration run:
+
+    $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//') -->
 
 Install Argo CD and wait for all the services and pods to become available.
 
