@@ -39,6 +39,6 @@ resource "kubernetes_namespace" "istio-system" {
     name = "istio-system"
   }
   depends_on = [
-    google_container_node_pool.development_primary_nodes
+    # google_container_node_pool.development_primary_nodes
   ]
 }
