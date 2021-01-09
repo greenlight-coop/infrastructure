@@ -101,4 +101,17 @@ variable "bot_github_token" {
     condition     = length(var.bot_github_token) > 0
     error_message = "Value for bot_github_token must be set."
   }
+
+  variable "kind_tls_crt" {
+    type      = string
+    default   = ""
+    sensitive = true
+  }
+
+  variable "kind_tls_key" {
+    type      = string
+    default   = ""
+    sensitive = true
+  }
+
 }

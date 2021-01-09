@@ -33,3 +33,12 @@ resource "kubernetes_namespace" "knative-serving" {
     # google_container_node_pool.development_primary_nodes
   ]
 }
+
+resource "kubernetes_namespace" "istio-system" {
+  metadata {
+    name = "istio-system"
+  }
+  depends_on = [
+    google_container_node_pool.development_primary_nodes
+  ]
+}

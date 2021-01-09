@@ -124,3 +124,19 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
     kubernetes_namespace.greenlight-pipelines
   ]
 }
+
+resource "kubernetes_secret" "istio-letsencrypt" {
+  metadata {
+    name = "webhook-secret"
+    namespace = "istio-system"
+  }
+
+  data = {
+    tls.crt = var.kind_tls_crt
+    tls.key = kind_tls_key
+  }
+
+  depends_on = [
+    kubernetes_namespace.istio-system
+  ]
+}
