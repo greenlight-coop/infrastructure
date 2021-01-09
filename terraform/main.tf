@@ -58,6 +58,7 @@ locals {
   # project_id                    = var.project_id == "" ? "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}" : var.project_id
   # project_name                  = var.project_name == "" ? "gl-development${local.workspace_suffix}" : var.project_name
   # workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  workspace_suffix              = ""
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
   admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
   admin_password_hash           = bcrypt(local.admin_password)
