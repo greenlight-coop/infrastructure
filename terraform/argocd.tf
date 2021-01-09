@@ -40,7 +40,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       admin_email         = var.admin_email
       workspace_suffix    = local.workspace_suffix
       apps_domain_name    = local.apps_domain_name
-      # google_project_id   = local.project_id
+      google_project_id   = local.project_id
     }
   )
   depends_on = [
