@@ -57,6 +57,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
     # google_dns_record_set.apps_name_servers,
     # google_project_iam_binding.project-iam-binding-dns-admin,
     # google_service_account_iam_binding.dns-admin-iam-binding-workload-identity,
+    kubernetes_secret.istio-letsencrypt
   ]
   timeouts {
     delete = "20m"
