@@ -25,7 +25,7 @@ resource "null_resource" "argocd" {
 }
 
 resource "k8s_manifest" "argocd-project" {
-  content = templatefile("manifests/argocd-project.yaml", {})
+  content = templatefile("${path.module}/manifests/argocd-project.yaml", {})
   depends_on = [
     null_resource.argocd
   ]
@@ -33,7 +33,7 @@ resource "k8s_manifest" "argocd-project" {
 
 resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
   content = templatefile(
-    "manifests/argocd-greenlight-infrastructure-application.yaml", 
+    "${path.module}/manifests/argocd-greenlight-infrastructure-application.yaml", 
     {
       target_revision     = local.argocd_source_target_revision
       use_staging_certs   = var.use_staging_certs
