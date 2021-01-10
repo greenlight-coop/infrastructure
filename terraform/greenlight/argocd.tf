@@ -38,9 +38,9 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       target_revision     = local.argocd_source_target_revision
       use_staging_certs   = var.use_staging_certs
       admin_email         = var.admin_email
-      workspace_suffix    = local.workspace_suffix
-      apps_domain_name    = local.apps_domain_name
-      google_project_id   = local.project_id
+      workspace_suffix    = var.workspace_suffix
+      apps_domain_name    = var.apps_domain_name
+      google_project_id   = var.project_id
       is_kind_cluster     = var.is_kind_cluster
     }
   )

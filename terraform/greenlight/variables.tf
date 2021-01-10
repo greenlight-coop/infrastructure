@@ -50,3 +50,7 @@ variable "project_id" {
 variable "workspace_suffix" {
   type = string
 }
+
+variable "apps_domain_name" {
+  type = string
+}

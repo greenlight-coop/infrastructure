@@ -7,6 +7,7 @@ module "greenlight" {
   use_staging_certs = var.use_staging_certs
   bot_password      = var.bot_password
   bot_github_token  = var.bot_github_token
+  apps_domain_name  = "apps-home.greenlightcoop.dev"
   is_kind_cluster   = true
   project_id        = ""
   workspace_suffix  = ""
