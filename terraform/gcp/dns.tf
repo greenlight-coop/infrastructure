@@ -26,7 +26,6 @@ resource "google_service_account_iam_binding" "dns-admin-iam-binding-workload-id
 }
 
 locals {
-  apps_domain_name                = "apps-home.greenlightcoop.dev"
   domain_name_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   apps_domain_name                = "apps${local.domain_name_suffix}.greenlightcoop.dev"
   apps_domain_name_terminated     = "${local.apps_domain_name}."
