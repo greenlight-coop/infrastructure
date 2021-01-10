@@ -16,8 +16,8 @@ Create the cluster and resources
     export TF_VAR_bot_password=(Green Light bot password value)
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
     export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
-    export TF_VAR_kind_tls_crt=(Green Light Let's Encrypt certificates)
-    export TF_VAR_kind_tls_key=(Green Light Let's Encrypt private key)
+    export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/fullchain.pem)
+    export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/privkey.pem)
 
     terraform init \
         && terraform apply -auto-approve -target=null_resource.kind_greenlight
