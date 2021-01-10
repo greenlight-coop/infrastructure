@@ -11,11 +11,11 @@ resource "local_file" "argocd_kustomization_manifests" {
 
 resource "null_resource" "argocd" {
   provisioner "local-exec" {
-    command = "kubectl kustomize manifests/argocd/install | kubectl apply -n argocd -f -"
+    command = "kubectl kustomize ${path.module}/manifests/argocd/install | kubectl apply -n argocd -f -"
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "kubectl kustomize manifests/argocd/install | kubectl delete -n argocd -f -"
+    command = "kubectl kustomize ${path.module}/manifests/argocd/install | kubectl delete -n argocd -f -"
   }
   depends_on = [
     local_file.argocd_kustomization_manifests,  
