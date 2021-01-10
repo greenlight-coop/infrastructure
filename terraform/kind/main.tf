@@ -16,12 +16,3 @@ terraform {
     }
   }
 }
-
-locals {
-  admin_password                = var.admin_password == "" ? random_password.admin.result : var.admin_password
-  admin_password_hash           = bcrypt(local.admin_password)
-  admin_password_mtime          = timestamp()
-  bot_private_key_file          = "./.ssh/id_ed25519"
-  bot_private_key               = file(local.bot_private_key_file)
-}
-
