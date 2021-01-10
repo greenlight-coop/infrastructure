@@ -25,7 +25,7 @@ resource "null_resource" "argocd" {
 }
 
 resource "k8s_manifest" "argocd-project" {
-  content = templatefile("${path.module}/manifests/argocd-project.yaml", {})
+  content = file("${path.module}/manifests/argocd-project.yaml")
   depends_on = [
     null_resource.argocd
   ]
