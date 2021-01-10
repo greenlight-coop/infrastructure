@@ -10,4 +10,8 @@ keys in a `./.ssh` directory relative to this `terraform` directory.
 
 ## Install Cluster GCP
 
+See the README.md in the `gcp` directory.
+
 ## Install Cluster with Kind
+
+See the README.md in the `kind` directory.

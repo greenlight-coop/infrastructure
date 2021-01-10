@@ -113,6 +113,8 @@ In GCP Console
 * Check that all External IP Addresses are deleted (delete if necessary)
 * Delete k8s_* Firewall Rules
 * Delete Service Accounts
+* Delete all Compute Engine Disks
+* Delete all Compute Engine Instance Group Health Checks
 
 If using a Terraform workspace for isolated cluster testing
 * Delete Terraform workspace
