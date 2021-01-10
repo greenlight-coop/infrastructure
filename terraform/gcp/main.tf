@@ -43,25 +43,11 @@ resource "random_id" "project_id_suffix" {
   byte_length = 2
 }
 
-resource "random_password" "admin" {
-  length  = 12
-  special = false
-}
-
-resource "random_password" "webhook_secret" {
-  length  = 24
-  special = false
-}
-
 locals {
   development_project_id_suffix = random_id.project_id_suffix.hex
   project_id                    = var.project_id == "" ? "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}" : var.project_id
   project_name                  = var.project_name == "" ? "gl-development${local.workspace_suffix}" : var.project_name
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
-  webhook_secret                = var.webhook_secret == "" ? random_password.webhook_secret.result : var.webhook_secret
-  bot_private_key_file          = "./.ssh/id_ed25519"
-  bot_private_key               = file(local.bot_private_key_file)
 }
 
 resource "google_project" "development" {
