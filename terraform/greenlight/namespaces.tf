@@ -24,9 +24,3 @@ resource "kubernetes_namespace" "knative-serving" {
     }
   }
 }
-
-resource "kubernetes_namespace" "istio-system" {
-  metadata {
-    name = "istio-system"
-  }
-}
