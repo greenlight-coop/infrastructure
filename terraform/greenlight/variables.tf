@@ -42,3 +42,11 @@ variable "bot_github_token" {
     error_message = "Value for bot_github_token must be set."
   }
 }
+
+variable "project_id" {
+  type = string
+}
+
+variable "workspace_suffix" {
+  type = string
+}

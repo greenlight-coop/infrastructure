@@ -2,10 +2,10 @@ terraform {
   required_version = ">= 0.14.3"
 
   required_providers {
-    # google = {
-    #   source =  "hashicorp/google"
-    #   version = "~> 3.51.0"
-    # }
+    google = {
+      source =  "hashicorp/google"
+      version = "~> 3.51.0"
+    }
     kubernetes = {
       source =  "hashicorp/kubernetes"
       version = "~> 1.13.3"
@@ -28,20 +28,20 @@ terraform {
     }
   }
 
-  # backend "gcs" {
-  #   bucket      = "tfstate-greenlight"
-  #   prefix      = "terraform/state"
-  #   credentials = "credentials.json"
-  # }
+  backend "gcs" {
+    bucket      = "tfstate-greenlight"
+    prefix      = "terraform/state"
+    credentials = "credentials.json"
+  }
 }
 
-# provider "google" {
-#   region      = var.region
-# }
+provider "google" {
+  region      = var.region
+}
 
-# resource "random_id" "project_id_suffix" {
-#   byte_length = 2
-# }
+resource "random_id" "project_id_suffix" {
+  byte_length = 2
+}
 
 resource "random_password" "admin" {
   length  = 12

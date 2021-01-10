@@ -20,11 +20,6 @@ variable "use_staging_certs" {
   default = false
 }
 
-variable "is_kind_cluster" {
-  type    = bool
-  default = false
-}
-
 variable "bot_password" {
   type      = string
   sensitive = true
@@ -45,12 +40,18 @@ variable "bot_github_token" {
 
 variable "kind_tls_crt" {
   type      = string
-  default   = ""
   sensitive = true
+  validation {
+    condition     = length(var.kind_tls_crt) > 0
+    error_message = "Value for kind_tls_crt must be set."
+  }
 }
 
 variable "kind_tls_key" {
   type      = string
-  default   = ""
   sensitive = true
+  validation {
+    condition     = length(var.kind_tls_key) > 0
+    error_message = "Value for kind_tls_key must be set."
+  }
 }

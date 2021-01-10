@@ -1,7 +1,3 @@
-provider "kubernetes" {}
-
-provider "k8s" {}
-
 resource "null_resource" "kind_greenlight" {
   provisioner "local-exec" {
     command = "kind create cluster --name greenlight --config manifests/kind-config.yaml"

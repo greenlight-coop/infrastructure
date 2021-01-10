@@ -14,12 +14,6 @@ Global for all instructions that follow
 
 ## One Time Configuration
 
-Prepare an SSH key pair for automated GitHub access, etc. Note that these files are .gitignored and should be protected
-for future reference. After generation, add the public key to the bot@greenlight.coop GitHub account. Store the generated
-keys in a `./.ssh` directory relative to this `terraform` directory.
-
-    ssh-keygen -t ed25519 -C "bot@greenlight.coop"
-
 Run the following commands (once only for the Green Light organization)
     
     gcloud projects create $SEED_GCP_PROJECT_ID --name=$SEED_GCP_PROJECT_NAME --organization=$GCP_ORGANIZATION_ID --set-as-default
@@ -45,32 +39,29 @@ To create the GCP project, cluster and resources
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
     export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
-    <!-- terraform init \
-        && terraform apply -auto-approve -target=google_container_cluster.development \
-            -target=google_dns_record_set.apps_name_servers -->
-
     terraform init \
-        && terraform apply -auto-approve -target=null_resource.kind_greenlight
+        && terraform apply -auto-approve -target=google_container_cluster.development \
+            -target=google_dns_record_set.apps_name_servers
 
-<!-- Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
-servers in the Google Domains managed greenlightcoop.dev domain. -->
+Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
+servers in the Google Domains managed greenlightcoop.dev domain.
 
-Ensure that current `home` DNS records reflect the current IP address.
+Add the newly created Kubernetes cluster to your local configuration run:
 
-<!-- Add the newly created Kubernetes cluster to your local configuration run:
-
-    $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//') -->
+    $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//')
 
 Install Argo CD and wait for all the services and pods to become available.
 
-    terraform apply -auto-approve -target=null_resource.argocd
+    terraform apply -auto-approve -target=module.greenlight.null_resource.argocd
     kubectl -n argocd get all
 
-Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as configured (green) in the Argo CD UI. The following command installs Argo CD and the infrastructure application:
+Add the Argo CD Green Light infrastructure application and wait until all the infrastructure applications are configured. 
+They are complete when all the applications show as configured (green) in the Argo CD UI. The following command 
+installs Argo CD and the infrastructure application:
 
-    terraform apply -auto-approve -target=k8s_manifest.argocd-greenlight-infrastructure-application
+    terraform apply -auto-approve -target=module.greenlight.k8s_manifest.argocd-greenlight-infrastructure-application
 
-Check that the various ingress certificates were correctly configured and if not (due to timeout) delete the affected ingress (or the certificate) and it will be automatically recreated.
+Check that the Istio gateway certificate was correctly configured and if not (due to timeout) delete the certificate and it will be automatically recreated.
 
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
