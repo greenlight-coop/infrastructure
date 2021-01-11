@@ -55,6 +55,7 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
     * helloworld
 * Repositories that require https://tekton.apps-home.greenlightcoop.dev/webhook/image-pipeline webhook:
     * greenlight-api-tests
+    * helloworld-ui
     * node-utils
     * serenity-js-runner
     * template-processor
