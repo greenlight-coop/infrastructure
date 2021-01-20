@@ -96,6 +96,9 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
     * template-processor
 * Repositories that require https://tekton.apps.greenlightcoop.dev/webhook/test-stage-pipeline webhook:
     * greenlight-stage-test
+* Repositories that require https://tekton.apps.greenlightcoop.dev/webhook/deploy-stage-pipeline webhook:
+    * greenlight-stage-staging
+    * greenlight-stage-production
 
 
 ## Update Configuration
