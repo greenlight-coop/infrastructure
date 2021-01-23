@@ -142,9 +142,9 @@ resource "kubernetes_secret" "greenlight-pipelines-buildkit-client-certs" {
   }
 
   data = {
-    "ca.pem" = "${file("${path.module}/.certs/client/ca.pem")}"
-    "cert.pem" = "${file("${path.module}/.certs/client/cert.pem")}"
-    "key.pem" = "${file("${path.module}/.certs/client/key.pem")}"
+    "ca.pem" = file("${path.module}/.certs/client/ca.pem")
+    "cert.pem" = file("${path.module}/.certs/client/cert.pem")
+    "key.pem" = file("${path.module}/.certs/client/key.pem")
   }
 
   depends_on = [
@@ -159,9 +159,9 @@ resource "kubernetes_secret" "greenlight-pipelines-buildkit-daemon-certs" {
   }
 
   data = {
-    "ca.pem" = "${file("${path.module}/.certs/daemon/ca.pem")}"
-    "cert.pem" = "${file("${path.module}/.certs/daemon/cert.pem")}"
-    "key.pem" = "${file("${path.module}/.certs/daemon/key.pem")}"
+    "ca.pem" = file("${path.module}/.certs/daemon/ca.pem")
+    "cert.pem" = file("${path.module}/.certs/daemon/cert.pem")
+    "key.pem" = file("${path.module}/.certs/daemon/key.pem")
   }
 
   depends_on = [
