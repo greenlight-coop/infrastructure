@@ -124,3 +124,48 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
     kubernetes_namespace.greenlight-pipelines
   ]
 }
+
+resource "null_resource" "buildkit-certs" {
+  provisioner "local-exec" {
+    command = "./create-buildkit-certs.sh buildkit"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm -rf .certs"
+  }
+}
+
+resource "kubernetes_secret" "greenlight-pipelines-buildkit-client-certs" {
+  metadata {
+    name = "buildkit-client-certs"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    "ca.pem" = "${file("${path.module}/.certs/client/ca.pem")}"
+    "cert.pem" = "${file("${path.module}/.certs/client/cert.pem")}"
+    "key.pem" = "${file("${path.module}/.certs/client/key.pem")}"
+  }
+
+  depends_on = [
+    null_resource.buildkit-certs
+  ]
+}
+
+resource "kubernetes_secret" "greenlight-pipelines-buildkit-daemon-certs" {
+  metadata {
+    name = "buildkit-client-certs"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    "ca.pem" = "${file("${path.module}/.certs/daemon/ca.pem")}"
+    "cert.pem" = "${file("${path.module}/.certs/daemon/cert.pem")}"
+    "key.pem" = "${file("${path.module}/.certs/daemon/key.pem")}"
+  }
+
+  depends_on = [
+    null_resource.buildkit-certs
+  ]
+}
+
