@@ -59,6 +59,7 @@ Add the Argo CD Green Light infrastructure application and wait until all the in
 They are complete when all the applications show as configured (green) in the Argo CD UI. The following command 
 installs Argo CD and the infrastructure application:
 
+    terraform apply -auto-approve -target=module.greenlight.null_resource.buildkit-certs
     terraform apply -auto-approve -target=module.greenlight.k8s_manifest.argocd-greenlight-infrastructure-application
 
 Check that the Istio gateway certificate was correctly configured and if not (due to timeout) delete the certificate and it will be automatically recreated.
