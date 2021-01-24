@@ -40,6 +40,7 @@ Set environment variables and directories for command line installation
     brew install jq
     brew install python
     brew install go
+    brew install mkcert
 
 ### zsh / oh-my-zsh
     
