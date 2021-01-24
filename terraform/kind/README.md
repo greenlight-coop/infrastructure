@@ -29,6 +29,7 @@ Install Argo CD and wait for all the services and pods to become available.
 
 Add Argo CD and wait until all the infrasturce applications are configured. It's complete when all the applications show as configured (green) in the Argo CD UI. The following command installs Argo CD and the infrastructure application:
 
+    terraform apply -auto-approve -target=module.greenlight.null_resource.buildkit-certs
     terraform apply -auto-approve -target=module.greenlight.k8s_manifest.argocd-greenlight-infrastructure-application
 
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
