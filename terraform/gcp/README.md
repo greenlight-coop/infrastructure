@@ -67,10 +67,6 @@ Check that the Istio gateway certificate was correctly configured and if not (du
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
 
-Build the remainder of the Terraform resources:
-
-    terraform apply -auto-approve
-
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Create the new GitHub webhook at the greenlight-coop organization level with the following settings:
     * Payload URL: https://argocd.apps.greenlightcoop.dev/api/webhook
