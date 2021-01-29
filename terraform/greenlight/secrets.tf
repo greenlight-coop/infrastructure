@@ -134,7 +134,6 @@ resource "null_resource" "buildkit-certs" {
       && cp -f ${path.module}/.certs/rootCA.pem ${path.module}/.certs/daemon/ca.pem \
       && cp -f ${path.module}/.certs/rootCA.pem ${path.module}/.certs/client/ca.pem
     EOF
-    # command = "${path.module}/create-buildkit-certs.sh buildkit"
   }
   provisioner "local-exec" {
     when    = destroy
