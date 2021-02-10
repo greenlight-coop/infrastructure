@@ -22,6 +22,10 @@ Create the cluster and resources
     terraform init \
         && terraform apply -auto-approve -target=null_resource.kind_greenlight
 
+Install metrics-server
+
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
 Install Argo CD and wait for all the services and pods to become available.
 
     terraform apply -auto-approve -target=module.greenlight.null_resource.argocd
