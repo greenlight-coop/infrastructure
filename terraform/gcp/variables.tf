@@ -56,7 +56,7 @@ variable "billing_account_id" {
 # List available versions:  gcloud container get-server-config --zone us-east4-a
 variable "k8s_version" {
   type = string
-  default = "1.18.12-gke.1206"
+  default = "1.18.15-gke.1102"
 }
 
 variable "admin_password" {
