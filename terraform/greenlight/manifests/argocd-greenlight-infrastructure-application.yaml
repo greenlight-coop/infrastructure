@@ -19,6 +19,7 @@ spec:
           adminEmail: ${admin_email}
           targetRevision: ${target_revision}
           isKindCluster: ${is_kind_cluster}
+          lightweight: ${lightweight}
         googleProjectId: ${google_project_id}
   destination:
     server: https://kubernetes.default.svc

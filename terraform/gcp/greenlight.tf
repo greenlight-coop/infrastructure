@@ -7,6 +7,7 @@ module "greenlight" {
   use_staging_certs = var.use_staging_certs
   bot_password      = var.bot_password
   bot_github_token  = var.bot_github_token
+  lightweight       = false
   apps_domain_name  = local.apps_domain_name
   is_kind_cluster   = false
   project_id        = local.project_id

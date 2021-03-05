@@ -55,3 +55,8 @@ variable "kind_tls_key" {
     error_message = "Value for kind_tls_key must be set."
   }
 }
+
+variable "lightweight" {
+  type    = bool
+  default = true
+}
