@@ -32,6 +32,9 @@ Add Argo CD and wait until all the infrasturce applications are configured. It's
     terraform apply -auto-approve -target=module.greenlight.null_resource.buildkit-certs
     terraform apply -auto-approve -target=module.greenlight.k8s_manifest.argocd-greenlight-infrastructure-application
 
+If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything
+should stabilize.
+
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
 
@@ -62,6 +65,12 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
 * Repositories that require https://tekton.apps-home.greenlightcoop.dev/webhook/deploy-stage-pipeline webhook:
     * greenlight-stage-staging
     * greenlight-stage-production
+
+## k8ssandra
+
+    kubectl -n k8ssandra-dev get secrets k8ssandra-dev-superuser -o jsonpath="{.data.password}" | base64 --decode ; echo
+
+    k exec -n k8ssandra-dev -it k8ssandra-dev-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-dev-superuser -p <lookup password>
 
 ## Update Configuration
 

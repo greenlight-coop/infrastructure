@@ -25,6 +25,11 @@ variable "is_kind_cluster" {
   default = false
 }
 
+variable "lightweight" {
+  type    = bool
+  default = false
+}
+
 variable "bot_password" {
   type      = string
   sensitive = true
