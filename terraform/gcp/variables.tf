@@ -40,7 +40,7 @@ variable "max_node_count" {
 
 variable "machine_type" {
   type    = string
-  default = "e2-medium"
+  default = "e2-standard-2"
 }
 
 variable "preemptible" {
@@ -56,7 +56,7 @@ variable "billing_account_id" {
 # List available versions:  gcloud container get-server-config --zone us-east4-a
 variable "k8s_version" {
   type = string
-  default = "1.18.15-gke.1102"
+  default = "1.18.16-gke.300"
 }
 
 variable "admin_password" {
