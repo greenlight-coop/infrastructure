@@ -30,7 +30,7 @@ variable "project_name" {
 
 variable "min_node_count" {
   type    = number
-  default = 2
+  default = 3
 }
 
 variable "max_node_count" {
