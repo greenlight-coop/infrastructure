@@ -42,6 +42,7 @@ resource "k8s_manifest" "argocd-greenlight-infrastructure-application" {
       apps_domain_name    = var.apps_domain_name
       google_project_id   = var.project_id
       is_kind_cluster     = var.is_kind_cluster
+      lightweight         = var.lightweight
     }
   )
   depends_on = [

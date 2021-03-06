@@ -32,6 +32,9 @@ Add Argo CD and wait until all the infrasturce applications are configured. It's
     terraform apply -auto-approve -target=module.greenlight.null_resource.buildkit-certs
     terraform apply -auto-approve -target=module.greenlight.k8s_manifest.argocd-greenlight-infrastructure-application
 
+If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything
+should stabilize.
+
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
 
