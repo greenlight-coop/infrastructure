@@ -97,6 +97,11 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
     * greenlight-stage-staging
     * greenlight-stage-production
 
+## k8ssandra
+
+    kubectl -n k8ssandra-dev get secrets k8ssandra-dev-superuser -o jsonpath="{.data.password}" | base64 --decode ; echo
+
+    k exec -n k8ssandra-dev -it k8ssandra-dev-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-dev-superuser -p <lookup password>
 
 ## Update Configuration
 

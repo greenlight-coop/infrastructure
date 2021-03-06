@@ -30,7 +30,7 @@ variable "project_name" {
 
 variable "min_node_count" {
   type    = number
-  default = 3
+  default = 2
 }
 
 variable "max_node_count" {
@@ -40,7 +40,7 @@ variable "max_node_count" {
 
 variable "machine_type" {
   type    = string
-  default = "e2-medium"
+  default = "e2-standard-2"
 }
 
 variable "preemptible" {
