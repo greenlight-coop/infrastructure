@@ -32,3 +32,8 @@ variable "project_name" {
   type = string
   default = ""
 }
+
+variable "admin_email" {
+  type    = string
+  default = "admin@greenlight.coop"
+}
