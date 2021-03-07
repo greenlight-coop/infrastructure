@@ -24,5 +24,5 @@ locals {
   workspace_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   project_id                    = var.project_id == "" ? "gl-dev${local.workspace_suffix}-${local.development_project_id_suffix}" : var.project_id
   subdomain_suffix              = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  domain_name                   = "apps${local.domain_name_suffix}.greenlightcoop.dev"
+  domain_name                   = "apps${local.subdomain_suffix}.greenlightcoop.dev"
 }
