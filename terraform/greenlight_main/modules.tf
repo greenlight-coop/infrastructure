@@ -13,6 +13,8 @@ module "google_project" {
 }
 
 module "standard_cluster_configuration" {
+  source = "../modules/standard_cluster_configuration"
+  
   cluster_endpoint        = module.google_project.cluster_endpoint
   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
 }
