@@ -20,17 +20,13 @@ variable "zone" {
 
 variable "existing_project" {
   type = bool
-  # default = true
-  default = false
+  default = true
 }
 
 variable "project_id" {
   type = string
-  # default = "greenlight-coop-development"
-  default = ""
 }
 
 variable "project_name" {
   type = string
-  default = "greenlight-coop-development"
 }

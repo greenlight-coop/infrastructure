@@ -6,7 +6,7 @@ module "greenlight_development_cluster_google_project" {
   region              = var.region
   zone                = var.zone
   project_id          = local.project_id
-  project_name        = var.project_name
+  project_name        = local.project_name
   existing_project    = var.existing_project
   cluster_name        = "greenlight-development-cluster"
   domain_name         = local.domain_name
