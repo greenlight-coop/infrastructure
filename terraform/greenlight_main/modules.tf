@@ -1,7 +1,7 @@
 module "greenlight_development_cluster_google_project" {
   source = "../modules/gl_cluster_google_project"
 
-  org_id              = var.webhook_secret
+  org_id              = var.org_id
   billing_account_id  = var.billing_account_id
   region              = var.region
   zone                = var.zone
