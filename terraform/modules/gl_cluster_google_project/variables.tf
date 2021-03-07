@@ -56,3 +56,6 @@ variable "k8s_version" {
   default = "1.18.16-gke.300"
 }
 
+variable "domain_name" {
+  type = string
+}
