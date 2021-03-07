@@ -13,3 +13,8 @@ output "kubeconfig_command" {
 output "name_servers" {
   value = google_dns_managed_zone.domain.name_servers
 }
+
+output "cluster_ca_certificate" {
+  value = base64decode(google_container_cluster.development.master_auth[0].cluster_ca_certificate)
+  sensitive = true
+}

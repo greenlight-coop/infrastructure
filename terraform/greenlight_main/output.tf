@@ -13,3 +13,8 @@ output "kubeconfig_command" {
 output "name_servers" {
   value = module.greenlight_development_cluster_google_project.name_servers
 }
+
+output "cluster_ca_certificate" {
+  value = module.greenlight_development_cluster_google_project.cluster_ca_certificate
+  sensitive = true
+}
