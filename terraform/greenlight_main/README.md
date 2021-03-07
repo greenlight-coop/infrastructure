@@ -5,6 +5,10 @@
     terraform init \
       && terraform apply -auto-approve 
 
+## Remove Green Light Development Platform
+
+    terraform destroy -auto-approve 
+
 
 ## Terraform Workspace
 
