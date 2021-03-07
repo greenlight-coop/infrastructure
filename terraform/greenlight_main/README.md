@@ -5,11 +5,6 @@
     terraform init \
       && terraform apply -auto-approve 
 
-## Remove Green Light Development Platform
-
-    terraform destroy -auto-approve 
-
-
 ## Terraform Workspace
 
 To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
@@ -37,3 +32,25 @@ after the modifications have been vetted and merged to master.
       meta git push origin --delete feature/<n>
       terraform workspace select default
       terraform workspace delete -force feature-<n>
+      
+## Remove Green Light Development Platform
+
+    terraform destroy -auto-approve 
+
+## Manual Removal
+
+In GCP Console
+* Delete cluster (wait for completion)
+* Delete Record Sets and Zones in Cloud DNS
+* Delete Load Balancers
+* Check that all External IP Addresses are deleted (delete if necessary)
+* Delete k8s_* Firewall Rules
+* Delete Service Accounts
+* Delete all Compute Engine Disks
+* Delete all Compute Engine Instance Group Health Checks
+
+If using a Terraform workspace for isolated cluster testing
+* Delete Terraform workspace
+
+        terraform workspace select default
+        terraform workspace delete -force feature-<n>
