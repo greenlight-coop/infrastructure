@@ -1,5 +1,5 @@
 module "greenlight_development_cluster_google_project" {
-  source = "../modules/gl_cluster_google_project"
+  source = "../modules/google_project"
 
   org_id              = var.org_id
   billing_account_id  = var.billing_account_id

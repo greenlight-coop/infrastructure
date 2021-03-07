@@ -52,9 +52,9 @@ resource "google_dns_managed_zone" "domain" {
 resource "google_dns_record_set" "domain_name_servers" {
   name         = local.domain_name_terminated
   project      = var.project_id
-  managed_zone = google_dns_managed_zone.apps.name
+  managed_zone = google_dns_managed_zone.domain.name
   type         = "NS"
   ttl          = 300
 
-  rrdatas = google_dns_managed_zone.apps.name_servers
+  rrdatas = google_dns_managed_zone.domain.name_servers
 }
