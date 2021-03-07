@@ -15,6 +15,6 @@ output "name_servers" {
 }
 
 output "cluster_ca_certificate" {
-  value = base64decode(google_container_cluster.development.master_auth[0].cluster_ca_certificate)
+  value = base64decode(google_container_cluster.cluster.master_auth[0].cluster_ca_certificate)
   sensitive = true
 }
