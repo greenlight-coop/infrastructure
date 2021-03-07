@@ -25,8 +25,10 @@ variable "existing_project" {
 
 variable "project_id" {
   type = string
+  default = ""
 }
 
 variable "project_name" {
   type = string
+  default = ""
 }
