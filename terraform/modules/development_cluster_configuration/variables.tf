@@ -1,12 +1,3 @@
-variable "cluster_endpoint" {
-  type      = string
-}
-
-variable "cluster_ca_certificate" {
-  type      = string
-  sensitive = true
-}
-
 # variable "admin_password" {
 #   type      = string
 #   default   = ""

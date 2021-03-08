@@ -1,34 +1,5 @@
 terraform {
   required_version = ">= 0.14.7"
-
-  required_providers {
-    google = {
-      source =  "hashicorp/google"
-      version = "~> 3.58.0"
-    }
-    null = {
-      source =  "hashicorp/null"
-      version = "~> 3.1.0"
-    }
-  }
-}
-
-data "google_client_config" "provider" {}
-
-provider "kubernetes" {
-  load_config_file = false
-
-  host  = "https://${var.cluster_endpoint}"
-  token = data.google_client_config.provider.access_token
-  cluster_ca_certificate = var.cluster_ca_certificate
-}
-
-provider "k8s" {
-  load_config_file = false
-
-  host  = "https://${var.cluster_endpoint}"
-  token = data.google_client_config.provider.access_token
-  cluster_ca_certificate = var.cluster_ca_certificate
 }
 
 resource "null_resource" "print-configuration" {
