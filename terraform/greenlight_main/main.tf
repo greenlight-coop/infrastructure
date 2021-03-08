@@ -5,11 +5,11 @@ terraform {
     kubernetes = {
       source =  "hashicorp/kubernetes"
       version = "~> 2.0.2"
-    },
+    }
     k8s = {
       source  = "banzaicloud/k8s"
       version = ">= 0.9.0"
-    },
+    }
     null = {
       source =  "hashicorp/null"
       version = "~> 3.1.0"
