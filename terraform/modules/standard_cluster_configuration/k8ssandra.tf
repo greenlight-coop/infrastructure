@@ -6,7 +6,7 @@ resource "helm_release" "k8ssandra" {
 
   values = [
     templatefile(
-      "k8ssandra.yaml",
+      "${path.module}/k8ssandra.yaml",
       {
         admin_password = var.admin_password
       }
