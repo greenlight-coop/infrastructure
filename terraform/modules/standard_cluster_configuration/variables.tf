@@ -1,8 +1,3 @@
-variable "cluster_endpoint" {
+variable "config_context" {
   type      = string
-}
-
-variable "cluster_ca_certificate" {
-  type      = string
-  sensitive = true
 }

@@ -12,9 +12,18 @@ module "google_project" {
   domain_name         = local.domain_name
 }
 
+resource "null_resource" "update-kubeconfig" {
+  provisioner "local-exec" {
+    command = module.google_project.kubeconfig_command
+  }
+}
+
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
-  
-  cluster_endpoint        = module.google_project.cluster_endpoint
-  cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+
+  config_context = module.google_project.config_context
+
+  depends_on = [
+    null_resource.update-kubeconfig
+  ]
 }
