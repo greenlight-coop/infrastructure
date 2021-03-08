@@ -8,7 +8,7 @@ resource "helm_release" "k8ssandra" {
     templatefile(
       "k8ssandra.yaml",
       {
-        admin_password = local.admin_password
+        admin_password = var.admin_password
       }
     )
   ]
