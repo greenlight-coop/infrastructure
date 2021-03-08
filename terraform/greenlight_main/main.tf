@@ -2,6 +2,10 @@ terraform {
   required_version = ">= 0.14.7"
 
   required_providers {
+    kubernetes = {
+      source =  "hashicorp/kubernetes"
+      version = "~> 2.0.2"
+    }
     null = {
       source =  "hashicorp/null"
       version = "~> 3.1.0"
@@ -15,11 +19,7 @@ terraform {
   }
 }
 
-locals {
-  default_project_id    = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
-  default_project_name  = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"
-  project_id            = var.project_id == "" ? local.default_project_id : var.project_id
-  project_name          = var.project_name == "" ? local.default_project_name : var.project_name
-  subdomain_suffix      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  domain_name           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
+provider "kubernetes" { 
+  alias = "greenlight_development_kubernetes"
+  config_context = "gke_gl-development-feature-current_us-east4-a_greenlight-development-cluster"
 }

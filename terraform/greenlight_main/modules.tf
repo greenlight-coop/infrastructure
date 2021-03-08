@@ -8,7 +8,7 @@ module "google_project" {
   project_id          = local.project_id
   project_name        = local.project_name
   existing_project    = var.existing_project
-  cluster_name        = "greenlight-development-cluster"
+  cluster_name        = local.cluster_name
   domain_name         = local.domain_name
 }
 
@@ -20,8 +20,10 @@ resource "null_resource" "update-kubeconfig" {
 
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
-
-  config_context = module.google_project.config_context
+  
+  providers = {
+    kubernetes = kubernetes.greenlight_development_kubernetes
+  }
 
   depends_on = [
     null_resource.update-kubeconfig
