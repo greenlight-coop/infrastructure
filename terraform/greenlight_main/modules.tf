@@ -20,7 +20,7 @@ resource "null_resource" "update-kubeconfig" {
 
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
-  
+
   providers = {
     kubernetes = kubernetes.greenlight_development_kubernetes
   }

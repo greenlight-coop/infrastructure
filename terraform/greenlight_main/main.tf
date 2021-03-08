@@ -21,5 +21,5 @@ terraform {
 
 provider "kubernetes" { 
   alias = "greenlight_development_kubernetes"
-  config_context = "gke_gl-development-feature-current_us-east4-a_greenlight-development-cluster"
+  config_context = local.cluster_context
 }
