@@ -6,6 +6,10 @@ output "kubeconfig_command" {
   value = "gcloud container clusters get-credentials ${google_container_cluster.cluster.name} --project ${var.project_id} --zone ${var.zone}"
 }
 
+output "dns_zone_name" {
+  value = local.dns_managed_zone_name
+}
+
 output "name_servers" {
   value = google_dns_managed_zone.domain.name_servers
 }

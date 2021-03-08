@@ -34,6 +34,7 @@ module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
 
   depends_on = [
-    null_resource.update-kubeconfig
+    null_resource.update-kubeconfig,
+    module.standard_cluster_configuration
   ]
 }

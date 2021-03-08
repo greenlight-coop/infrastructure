@@ -2,6 +2,10 @@ output "project_id" {
   value = local.project_id
 }
 
+output "dns_zone_name" {
+  value = module.google_project.dns_zone_name
+}
+
 output "cluster_endpoint" {
   value = module.google_project.cluster_endpoint
 }
