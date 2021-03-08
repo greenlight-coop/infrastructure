@@ -18,6 +18,10 @@ terraform {
       source =  "hashicorp/null"
       version = "~> 3.1.0"
     }
+    random = {
+      source =  "hashicorp/random"
+      version = "~> 3.1.0"
+    }
   }
 
   backend "gcs" {
@@ -33,8 +37,10 @@ provider "kubernetes" {
 }
 
 provider "helm" { 
-  config_path = "~/.kube/config"
-  config_context = local.cluster_context
+  kubernetes {
+    config_path = "~/.kube/config"
+    config_context = local.cluster_context
+  }
 }
 
 provider "k8s" {

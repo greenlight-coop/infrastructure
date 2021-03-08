@@ -43,6 +43,11 @@ variable "admin_password" {
   default = ""
 }
 
+resource "random_password" "admin" {
+  length  = 12
+  special = false
+}
+
 locals {
   default_project_id    = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
   default_project_name  = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"

@@ -23,10 +23,6 @@ module "standard_cluster_configuration" {
 
   admin_password  = local.admin_password
 
-  providers = {
-    kubernetes = kubernetes.greenlight_development_kubernetes
-  }
-
   depends_on = [
     null_resource.update-kubeconfig
   ]
