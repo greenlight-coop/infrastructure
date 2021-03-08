@@ -24,6 +24,7 @@ terraform {
 }
 
 provider "kubernetes" { 
+  alias = "greenlight_development_kubernetes"
   config_path = "~/.kube/config"
   config_context = local.cluster_context
 }
