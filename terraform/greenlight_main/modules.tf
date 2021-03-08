@@ -21,6 +21,8 @@ resource "null_resource" "update-kubeconfig" {
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
 
+  admin_password  = local.admin_password
+
   providers = {
     kubernetes = kubernetes.greenlight_development_kubernetes
   }
@@ -32,6 +34,8 @@ module "standard_cluster_configuration" {
 
 module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
+
+  admin_password  = local.admin_password
 
   depends_on = [
     null_resource.update-kubeconfig,

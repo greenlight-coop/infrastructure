@@ -18,3 +18,8 @@ output "cluster_ca_certificate" {
   value = module.google_project.cluster_ca_certificate
   sensitive = true
 }
+
+output "admin_password" {
+  value = local.admin_password
+  sensitive = true
+}

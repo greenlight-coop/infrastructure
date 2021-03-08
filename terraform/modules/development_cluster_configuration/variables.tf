@@ -1,8 +1,7 @@
-# variable "admin_password" {
-#   type      = string
-#   default   = ""
-#   sensitive = true
-# }
+variable "admin_password" {
+  type      = string
+  sensitive = true
+}
 
 # variable "admin_email" {
 #   type    = string
