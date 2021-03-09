@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
 data:
-  url: https://argocd.${apps_domain_name}
+  url: https://argocd.${domain_name}
   repositories: |
     - url: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
       type: git
