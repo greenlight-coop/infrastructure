@@ -18,13 +18,6 @@ resource "null_resource" "update-kubeconfig" {
   }
 }
 
-resource "null_resource" "update-kubeconfig" {
-  provisioner "local-exec" {
-    when = destroy
-    command = "kubectl config delete-context ${module.google_project.config_context}"
-  }
-}
-
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
 
