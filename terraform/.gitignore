@@ -6,6 +6,3 @@ credentials.json
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate*
-
-## SSH key pair
-.ssh

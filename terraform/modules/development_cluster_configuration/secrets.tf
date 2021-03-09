@@ -107,22 +107,6 @@ resource "kubernetes_secret" "greenlight-pipelines-webhook-secret" {
   ]
 }
 
-resource "null_resource" "buildkit-certs" {
-  provisioner "local-exec" {
-    command = <<EOF
-    mkdir -p ${path.module}/.certs/client ${path.module}/.certs/daemon \
-      && CAROOT=${path.module}/.certs mkcert -cert-file ${path.module}/.certs/daemon/cert.pem -key-file ${path.module}/.certs/daemon/key.pem buildkitd >/dev/null 2>&1 \
-      && CAROOT=${path.module}/.certs mkcert -client -cert-file ${path.module}/.certs/client/cert.pem -key-file ${path.module}/.certs/client/key.pem client >/dev/null 2>&1 \
-      && cp -f ${path.module}/.certs/rootCA.pem ${path.module}/.certs/daemon/ca.pem \
-      && cp -f ${path.module}/.certs/rootCA.pem ${path.module}/.certs/client/ca.pem
-    EOF
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -rf ${path.module}/.certs"
-  }
-}
-
 resource "kubernetes_secret" "greenlight-pipelines-buildkit-client-certs" {
   metadata {
     name = "buildkit-client-certs"
@@ -134,10 +118,6 @@ resource "kubernetes_secret" "greenlight-pipelines-buildkit-client-certs" {
     "cert.pem" = file("${path.module}/.certs/client/cert.pem")
     "key.pem" = file("${path.module}/.certs/client/key.pem")
   }
-
-  depends_on = [
-    null_resource.buildkit-certs
-  ]
 }
 
 resource "kubernetes_secret" "greenlight-pipelines-buildkit-daemon-certs" {
