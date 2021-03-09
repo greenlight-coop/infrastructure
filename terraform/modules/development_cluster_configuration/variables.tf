@@ -53,6 +53,6 @@ locals {
   argocd_source_target_revision = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
   admin_password_hash           = bcrypt(var.admin_password)
   admin_password_mtime          = timestamp()
-  bot_private_key_file          = "./.ssh/id_ed25519"
+  bot_private_key_file          = "${path.module}/.ssh/id_ed25519"
   bot_private_key               = file(local.bot_private_key_file)
 }
