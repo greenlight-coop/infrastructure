@@ -10,10 +10,6 @@ terraform {
       source  = "hashicorp/helm"
       version = ">= 2.0.2"
     }
-    k8s = {
-      source  = "banzaicloud/k8s"
-      version = ">= 0.9.0"
-    }
     null = {
       source =  "hashicorp/null"
       version = "~> 3.1.0"
@@ -41,11 +37,6 @@ provider "helm" {
     config_path = "~/.kube/config"
     config_context = local.cluster_context
   }
-}
-
-provider "k8s" {
-  config_path = "~/.kube/config"
-  config_context = local.cluster_context
 }
 
 resource "null_resource" "initialize-resources" {
