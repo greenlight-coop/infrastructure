@@ -47,3 +47,14 @@ provider "k8s" {
   config_path = "~/.kube/config"
   config_context = local.cluster_context
 }
+
+resource "null_resource" "initialize-resources" {
+  provisioner "local-exec" {
+    command = "echo Initialized GCP project, DNS and cluster"
+  }
+  depends_on = [
+    module.google_project.google_container_cluster.cluster,
+    module.google_project.google_dns_record_set.domain_name_servers,
+    null_resource.update-kubeconfig
+  ]
+}

@@ -15,7 +15,8 @@ Another option is to supply the values when prompted
 ### Configure GCP Project and GKE Cluster
 
     terraform init \
-      && terraform apply -auto-approve 
+      && terraform apply -auto-approve null_resource.initialize-resources \
+      && terraform apply -auto-approve
 
 ## Terraform Workspace
 
