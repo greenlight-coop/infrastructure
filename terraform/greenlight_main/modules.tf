@@ -24,6 +24,7 @@ module "standard_cluster_configuration" {
   admin_password  = local.admin_password
 
   depends_on = [
+    module.google_project,
     null_resource.update-kubeconfig
   ]
 }
