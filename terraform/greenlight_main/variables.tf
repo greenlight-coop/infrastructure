@@ -43,6 +43,33 @@ variable "admin_password" {
   default = ""
 }
 
+variable "webhook_secret" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.webhook_secret) > 0
+    error_message = "Value for webhook_secret must be set."
+  }
+}
+
+variable "bot_password" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_password) > 0
+    error_message = "Value for bot_password must be set."
+  }
+}
+
+variable "bot_github_token" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_github_token) > 0
+    error_message = "Value for bot_github_token must be set."
+  }
+}
+
 resource "random_password" "admin" {
   length  = 12
   special = false
@@ -58,6 +85,4 @@ locals {
   cluster_name          = "greenlight-development-cluster"
   cluster_context       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
   admin_password        = var.admin_password == "" ? random_password.admin.result : var.admin_password
-  admin_password_hash   = bcrypt(local.admin_password)
-  admin_password_mtime  = timestamp()
 }

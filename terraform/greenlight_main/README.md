@@ -2,6 +2,18 @@
 
 ## Deploy Green Light Development Platform
 
+### Preparation
+
+Steps below are temporary and should be used with caution - delete the environment variables after use 
+Another option is to supply the values when prompted
+
+    export TF_VAR_bot_password=(Green Light bot password value)
+    export TF_VAR_bot_github_token=(Green Light GitHub access token)
+    export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
+
+
+### Configure GCP Project and GKE Cluster
+
     terraform init \
       && terraform apply -auto-approve 
 

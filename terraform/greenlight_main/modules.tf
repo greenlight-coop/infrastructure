@@ -18,6 +18,13 @@ resource "null_resource" "update-kubeconfig" {
   }
 }
 
+resource "null_resource" "update-kubeconfig" {
+  provisioner "local-exec" {
+    when = destroy
+    command = "kubectl config delete-context ${module.google_project.config_context}"
+  }
+}
+
 module "standard_cluster_configuration" {
   source = "../modules/standard_cluster_configuration"
 
@@ -31,7 +38,13 @@ module "standard_cluster_configuration" {
 module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
 
-  admin_password  = local.admin_password
+  admin_email       = var.admin_email
+  admin_password    = local.admin_password
+  webhook_secret    = var.webhook_secret
+  bot_password      = var.bot_password
+  bot_github_token  = var.bot_github_token
+  domain_name       = local.domain_name
+  project_id        = local.project_id
 
   depends_on = [
     null_resource.update-kubeconfig,

@@ -14,7 +14,7 @@ spec:
     helm:
       values: |
         global:
-          appsDomainName: ${apps_domain_name}
+          appsDomainName: ${domain_name}
           useStagingCertificates: ${use_staging_certs}
           adminEmail: ${admin_email}
           targetRevision: ${target_revision}
