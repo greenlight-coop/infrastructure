@@ -39,13 +39,13 @@ provider "helm" {
   }
 }
 
-resource "null_resource" "initialize-resources" {
-  provisioner "local-exec" {
-    command = "echo Initialized GCP project, DNS and cluster"
-  }
-  depends_on = [
-    module.google_project.google_container_cluster,
-    module.google_project.google_dns_record_set,
-    null_resource.update-kubeconfig
-  ]
-}
+# resource "null_resource" "initialize-resources" {
+#   provisioner "local-exec" {
+#     command = "echo Initialized GCP project, DNS and cluster"
+#   }
+#   depends_on = [
+#     module.google_project.google_container_cluster,
+#     output.name_servers,
+#     null_resource.update-kubeconfig
+#   ]
+# }

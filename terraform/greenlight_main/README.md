@@ -11,12 +11,20 @@ Another option is to supply the values when prompted
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
     export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
-
 ### Configure GCP Project and GKE Cluster
 
+Configure the GCP project and install the GKE cluster with the following command:
+
     terraform init \
-      && terraform apply -auto-approve null_resource.initialize-resources \
-      && terraform apply -auto-approve
+      && terraform apply -auto-approve \
+        -target=module.google_project.google_container_cluster.cluster \
+        -target=module.google_project.google_dns_record_set.domain_name_servers \
+        -target=null_resource.update-kubeconfig
+
+Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
+servers in the Google Domains managed greenlightcoop.dev domain.
+
+    terraform apply -auto-approve
 
 ## Terraform Workspace
 
@@ -29,6 +37,7 @@ after the modifications have been vetted and merged to master.
 
       meta git checkout -b feature/<n>
       meta git push origin --set-upstream feature/<n>
+      terraform init
       terraform workspace new feature-<n> 
 
 * Follow the Deploy Green Light Development Platform instructions given earlier in this README.
