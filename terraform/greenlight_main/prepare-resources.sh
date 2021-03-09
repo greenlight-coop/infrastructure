@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -ex
+
 CWD=$(pwd)
 DEVELOPMENT_CLUSTER_MODULE_DIRECTORY=$(cd ../modules/development_cluster_configuration; pwd)
 
