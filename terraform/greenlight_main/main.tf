@@ -53,8 +53,8 @@ resource "null_resource" "initialize-resources" {
     command = "echo Initialized GCP project, DNS and cluster"
   }
   depends_on = [
-    module.google_project.google_container_cluster.cluster,
-    module.google_project.google_dns_record_set.domain_name_servers,
+    module.google_project.google_container_cluster,
+    module.google_project.google_dns_record_set,
     null_resource.update-kubeconfig
   ]
 }

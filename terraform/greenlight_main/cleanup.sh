@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -x
 
 TF_WORKSPACE=$(terraform workspace show)
 GCP_PROJECT_ID=$(terraform output project_id | sed -e 's/^"//' -e 's/"$//')
