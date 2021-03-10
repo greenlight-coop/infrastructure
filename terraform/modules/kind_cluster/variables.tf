@@ -21,6 +21,6 @@ variable "kind_tls_key" {
 }
 
 locals {
-  http_node_port  = http_port + 30000
-  https_node_port = https_port + 30000
+  http_node_port  = var.http_port + 30000
+  https_node_port = var.https_port + 30000
 }
