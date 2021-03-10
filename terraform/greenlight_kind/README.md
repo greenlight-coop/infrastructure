@@ -26,7 +26,7 @@ Another option is to supply the values when prompted
 ### Create Kind Cluster
 
     terraform init \
-        && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight
+        && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
         && terraform apply -auto-approve -target=module.kind_cluster
 
 Install Argo CD and wait for all the services and pods to become available.
