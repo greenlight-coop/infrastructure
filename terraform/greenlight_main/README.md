@@ -24,7 +24,9 @@ Configure the GCP project and install the GKE cluster with the following command
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
-    terraform apply -auto-approve
+Install Argo CD into the Green Light development cluster
+
+    terraform apply -auto-approve -target=module.argo_cd
 
 ## Terraform Workspace
 
