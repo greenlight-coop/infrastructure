@@ -13,7 +13,6 @@ module "argo_cd" {
   domain_name     = local.domain_name
 
   depends_on = [
-    null_resource.update-kubeconfig,
-    module.google_project,
+    module.kind_cluster
   ]
 }
