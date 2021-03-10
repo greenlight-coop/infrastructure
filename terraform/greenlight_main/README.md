@@ -17,8 +17,7 @@ Configure the GCP project and install the GKE cluster with the following command
 
     terraform init \
       && terraform apply -auto-approve \
-        -target=module.google_project.google_container_cluster.cluster \
-        -target=module.google_project.google_dns_record_set.domain_name_servers \
+        -target=module.google_project \
         -target=null_resource.update-kubeconfig
 
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
