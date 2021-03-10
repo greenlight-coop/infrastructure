@@ -23,12 +23,12 @@ terraform {
 
 provider "kubernetes" { 
   config_path = "~/.kube/config"
-  config_context = local.cluster_context
+  config_context = "kind-greenlight"
 }
 
 provider "helm" { 
   kubernetes {
     config_path = "~/.kube/config"
-    config_context = local.cluster_context
+    config_context = "kind-greenlight"
   }
 }
