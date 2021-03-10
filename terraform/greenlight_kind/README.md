@@ -31,5 +31,5 @@ Another option is to supply the values when prompted
 
 Install Argo CD and wait for all the services and pods to become available.
 
-    terraform apply -auto-approve -target=module.argo_cd
-    kubectl -n argocd get all
+    terraform apply -auto-approve -target=module.argo_cd \
+      && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
