@@ -1,4 +1,4 @@
-resource "local_file" "argocd_kustomization_manifests" {
+resource "local_file" "kind-config" {
     content  = templatefile("${path.module}/manifests/templates/kind-config.yaml", {
       http_port       = var.http_port,
       https_port      = var.https_port,
@@ -16,4 +16,8 @@ resource "null_resource" "kind_greenlight" {
     when    = destroy
     command = "kind delete cluster --name greenlight"
   }
+
+  depends_on = [
+    local_file.kind-config
+  ]
 }

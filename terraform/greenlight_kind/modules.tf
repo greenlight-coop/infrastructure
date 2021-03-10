@@ -1,6 +1,9 @@
 module "kind_cluster" {
   source = "../modules/kind_cluster"
 
+  cluster_name  = "greenlight"
+  http_port     = 80
+  https_port    = 443
   kind_tls_crt  = var.kind_tls_crt
   kind_tls_key  = var.kind_tls_key
 }
