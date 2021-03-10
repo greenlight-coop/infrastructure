@@ -5,12 +5,12 @@ resource "local_file" "kind-config" {
       http_node_port  = local.http_node_port,
       https_node_port = local.https_node_port,
     })
-    filename = "${path.module}/manifests/generated/kind-config.yaml"
+    filename = "${path.module}/manifests/generated/${var.cluster_name}-kind-config.yaml"
 }
 
 resource "null_resource" "kind_greenlight" {
   provisioner "local-exec" {
-    command = "kind create cluster --name ${var.cluster_name} --config ${path.module}/manifests/generated/kind-config.yaml"
+    command = "kind create cluster --name ${var.cluster_name} --config ${path.module}/manifests/generated/${var.cluster_name}-kind-config.yaml"
   }
   provisioner "local-exec" {
     when    = destroy
