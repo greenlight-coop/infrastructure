@@ -1,7 +1,8 @@
 module "kind_cluster" {
   source = "../modules/kind_cluster"
 
-  domain_name         = local.domain_name
+  kind_tls_crt         = var.kind_tls_crt
+  kind_tls_key         = var.kind_tls_key
 }
 
 module "argo_cd" {

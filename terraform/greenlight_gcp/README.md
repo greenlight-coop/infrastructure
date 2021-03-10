@@ -23,38 +23,10 @@ Configure the GCP project and install the GKE cluster with the following command
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
-Install Argo CD into the Green Light development cluster
+Install Argo CD and wait for all the services and pods to become available.
 
     terraform apply -auto-approve -target=module.argo_cd
-
-## Terraform Workspace
-
-To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
-for deployment of the infrastructure to a temporary environment (GCP project and cluster) that can then be destroyed
-after the modifications have been vetted and merged to master.
-
-* Create a new Terraform workspace, checkout a branch of all repositories based on the current GitHub issue number 
-  and push to GitHub.
-
-      meta git checkout -b feature/<n>
-      meta git push origin --set-upstream feature/<n>
-      terraform init
-      terraform workspace new feature-<n> 
-
-* Follow the Deploy Green Light Development Platform instructions given earlier in this README.
-
-* Iterate between deploying the resources in the new workspace and making changes to the configuration
-
-* When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
-  default workspace from master
-
-      meta git fetch --all
-      meta git checkout master
-      meta git pull
-      meta git branch -D feature/<n>
-      meta git push origin --delete feature/<n>
-      terraform workspace select default
-      terraform workspace delete -force feature-<n>
+    kubectl -n argocd get all
       
 ## Remove Green Light Development Platform
 

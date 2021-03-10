@@ -40,6 +40,24 @@ resource "random_password" "admin" {
   special = false
 }
 
+variable "kind_tls_crt" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.kind_tls_crt) > 0
+    error_message = "Value for kind_tls_crt must be set."
+  }
+}
+
+variable "kind_tls_key" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.kind_tls_key) > 0
+    error_message = "Value for kind_tls_key must be set."
+  }
+}
+
 locals {
   domain_name           = "apps-home.greenlightcoop.dev"
   admin_password        = var.admin_password == "" ? random_password.admin.result : var.admin_password
