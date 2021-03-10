@@ -3,7 +3,7 @@
 set -ex
 
 CWD=$(pwd)
-DEVELOPMENT_CLUSTER_MODULE_DIRECTORY=$(cd ../modules/development_cluster_configuration; pwd)
+DEVELOPMENT_CLUSTER_MODULE_DIRECTORY=$(cd modules/development_cluster_configuration; pwd)
 
 # Prepare buildkit certificates
 CERTS_DIRECTORY=$DEVELOPMENT_CLUSTER_MODULE_DIRECTORY/.certs

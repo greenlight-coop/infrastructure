@@ -38,14 +38,3 @@ provider "helm" {
     config_context = local.cluster_context
   }
 }
-
-# resource "null_resource" "initialize-resources" {
-#   provisioner "local-exec" {
-#     command = "echo Initialized GCP project, DNS and cluster"
-#   }
-#   depends_on = [
-#     module.google_project.google_container_cluster,
-#     output.name_servers,
-#     null_resource.update-kubeconfig
-#   ]
-# }
