@@ -1,4 +1,4 @@
-# Green Light Development Platform - Local Kind Cluster Configuration
+# Green Light Development Platform - Local kind Cluster Configuration
 
 This configuration is intended for local testing of configuration changes.
 
@@ -23,7 +23,9 @@ Another option is to supply the values when prompted
     export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/fullchain.pem)
     export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/privkey.pem)
 
-### Create Kind Cluster
+### Configure kind Cluster
+
+Install the kind cluster
 
     terraform init \
         && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
@@ -38,4 +40,22 @@ Install k8ssandra and wait for configuration to complete.
 
     terraform apply -auto-approve -target=module.k8ssandra 
 
-    ???  && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
+      ??? && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
+
+Install base cluster configuration resources
+
+    terraform apply -auto-approve -target=module.base_cluster_configuration 
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://monitoring-loki:3100
+        isDefault: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://monitoring-prometheus-server
