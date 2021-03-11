@@ -67,6 +67,7 @@ Concatenated version of the commands above
       && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
       && terraform apply -auto-approve -target=module.standard_cluster_configuration \
       && terraform apply -auto-approve -target=module.development_cluster_configuration \
+      && terraform output admin_password
 
   datasources:
     datasources.yaml:
