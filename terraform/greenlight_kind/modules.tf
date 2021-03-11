@@ -38,6 +38,9 @@ module "base_cluster_configuration" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = false
+  istio_jwt_policy        = "first-party-jwt"
+  istio_http_node_port    = 30080
+  istio_https_node_port   = 30443
   metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision

@@ -20,6 +20,10 @@ spec:
         externalDns:
           enabled: ${external_dns_enabled}
         googleProjectId: ${google_project_id}
+        istio:
+          jwtPolicy: ${istio_jwt_policy}
+          httpNodePort: ${istio_http_node_port}
+          httpsNodePort: ${istio_https_node_port}
         metricsServer:
           enabled: ${metrics_server_enabled}
         spec:
