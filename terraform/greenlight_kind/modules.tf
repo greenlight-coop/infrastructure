@@ -66,6 +66,7 @@ module "development_cluster_configuration" {
 
   depends_on = [
     module.kind_cluster,
-    module.standard_cluster_configuration
+    module.argo_cd,
+    module.base_cluster_configuration
   ]
 }
