@@ -17,7 +17,7 @@ spec:
         certManager:
           enabled: ${cert_manager_enabled}
         domainName: ${domain_name}
-        externalDns
+        externalDns:
           enabled: ${external_dns_enabled}
         googleProjectId: ${google_project_id}
         metricsServer:
