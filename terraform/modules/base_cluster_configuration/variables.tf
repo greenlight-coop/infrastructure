@@ -7,7 +7,7 @@ variable "destination_server" {
 }
 
 variable "cert_manager_enabled" {
-  type    = boolean
+  type    = bool
 }
 
 variable "domain_name" {
@@ -15,7 +15,7 @@ variable "domain_name" {
 }
 
 variable "external_dns_enabled" {
-  type    = boolean
+  type    = bool
 }
 
 variable "google_project_id" {
@@ -24,7 +24,7 @@ variable "google_project_id" {
 }
 
 variable "metrics_server_enabled" {
-  type    = boolean
+  type    = bool
 }
 
 variable "repo_url" {
@@ -36,6 +36,6 @@ variable "target_revision" {
 }
 
 variable "use_staging_certs" {
-  type    = boolean
+  type    = bool
   default = false
 }
