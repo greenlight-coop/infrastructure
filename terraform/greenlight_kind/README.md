@@ -28,8 +28,8 @@ Another option is to supply the values when prompted
 Install the kind cluster
 
     terraform init \
-        && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
-        && terraform apply -auto-approve -target=module.kind_cluster
+      && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
+      && terraform apply -auto-approve -target=module.kind_cluster
 
 Install Argo CD and wait for all the services and pods to become available.
 
@@ -43,7 +43,30 @@ Install k8ssandra and wait for configuration to complete.
 
 Install base cluster configuration resources
 
-    terraform apply -auto-approve -target=module.base_cluster_configuration 
+    terraform apply -auto-approve -target=module.base_cluster_configuration \
+      && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s
+
+Install standard cluster configuration resources
+
+    terraform apply -auto-approve -target=module.standard_cluster_configuration \
+
+Install development cluster configuration resources
+
+    terraform apply -auto-approve -target=module.development_cluster_configuration \
+
+Concatenated version of the commands above
+
+    terraform init \
+      && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
+      && terraform apply -auto-approve -target=module.kind_cluster \
+      && terraform apply -auto-approve -target=module.argo_cd \
+      && kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s \
+      && echo terraform apply -auto-approve -target=module.k8ssandra \
+      && echo kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s \
+      && terraform apply -auto-approve -target=module.base_cluster_configuration \
+      && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
+      && terraform apply -auto-approve -target=module.standard_cluster_configuration \
+      && terraform apply -auto-approve -target=module.development_cluster_configuration \
 
   datasources:
     datasources.yaml:

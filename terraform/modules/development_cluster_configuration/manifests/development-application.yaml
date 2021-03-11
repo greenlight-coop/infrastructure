@@ -1,26 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-greenlight-infrastructure
+  name: development
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: greenlight-project
   source:
-    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
+    repoURL: ${repo_url}
     targetRevision: ${target_revision}
-    path: apps
+    path: development
     helm:
       values: |
-        global:
-          appsDomainName: ${domain_name}
-          useStagingCertificates: ${use_staging_certs}
-          adminEmail: ${admin_email}
-          targetRevision: ${target_revision}
-          isKindCluster: ${is_kind_cluster}
-          lightweight: ${lightweight}
-        googleProjectId: ${google_project_id}
+        domainName: ${domain_name}
+        spec:
+          destination:
+            server: ${destination_server}
+          source:
+            repoURL: ${repo_url}
+            targetRevision: ${target_revision}
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

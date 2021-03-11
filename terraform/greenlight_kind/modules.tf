@@ -50,3 +50,29 @@ module "base_cluster_configuration" {
     module.argo_cd
   ]
 }
+
+module "standard_cluster_configuration" {
+  source = "../modules/standard_cluster_configuration"
+
+  depends_on = [
+    module.kind_cluster,
+    module.base_cluster_configuration
+  ]
+}
+
+module "development_cluster_configuration" {
+  source = "../modules/development_cluster_configuration"
+
+  bot_github_token    = var.bot_github_token
+  bot_password        = var.bot_password
+  destination_server  = local.greenlight_development_cluster_server
+  domain_name         = local.domain_name
+  repo_url            = local.repo_url
+  target_revision     = local.target_revision
+  webhook_secret      = var.webhook_secret
+
+  depends_on = [
+    module.kind_cluster,
+    module.standard_cluster_configuration
+  ]
+}
