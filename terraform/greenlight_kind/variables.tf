@@ -8,12 +8,12 @@ variable "admin_password" {
   default = ""
 }
 
-variable "webhook_secret" {
+variable "bot_github_token" {
   type      = string
   sensitive = true
   validation {
-    condition     = length(var.webhook_secret) > 0
-    error_message = "Value for webhook_secret must be set."
+    condition     = length(var.bot_github_token) > 0
+    error_message = "Value for bot_github_token must be set."
   }
 }
 
@@ -24,20 +24,6 @@ variable "bot_password" {
     condition     = length(var.bot_password) > 0
     error_message = "Value for bot_password must be set."
   }
-}
-
-variable "bot_github_token" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.bot_github_token) > 0
-    error_message = "Value for bot_github_token must be set."
-  }
-}
-
-resource "random_password" "admin" {
-  length  = 12
-  special = false
 }
 
 variable "kind_tls_crt" {
@@ -58,7 +44,24 @@ variable "kind_tls_key" {
   }
 }
 
+variable "webhook_secret" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.webhook_secret) > 0
+    error_message = "Value for webhook_secret must be set."
+  }
+}
+
+resource "random_password" "admin" {
+  length  = 12
+  special = false
+}
+
 locals {
-  domain_name           = "apps-home.greenlightcoop.dev"
-  admin_password        = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  domain_name                           = "apps-home.greenlightcoop.dev"
+  greenlight_development_cluster_server = "https://kubernetes.default.svc"
+  repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
+  target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
 }
