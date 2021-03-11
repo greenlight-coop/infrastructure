@@ -52,15 +52,6 @@ module "base_cluster_configuration" {
   ]
 }
 
-module "standard_cluster_configuration" {
-  source = "../modules/standard_cluster_configuration"
-
-  depends_on = [
-    module.kind_cluster,
-    module.base_cluster_configuration
-  ]
-}
-
 module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
 

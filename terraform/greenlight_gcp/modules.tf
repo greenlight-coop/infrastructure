@@ -42,17 +42,6 @@ module "argo_cd" {
   ]
 }
 
-module "standard_cluster_configuration" {
-  source = "../modules/standard_cluster_configuration"
-
-  admin_password  = local.admin_password
-
-  depends_on = [
-    module.google_project,
-    null_resource.update-kubeconfig
-  ]
-}
-
 module "base_cluster_configuration" {
   source = "../modules/base_cluster_configuration"
 
