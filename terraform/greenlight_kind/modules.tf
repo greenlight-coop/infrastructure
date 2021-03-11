@@ -44,7 +44,6 @@ module "base_cluster_configuration" {
 
   depends_on = [
     module.kind_cluster,
-    module.argo_cd,
-    module.k8ssandra
+    module.argo_cd
   ]
 }
