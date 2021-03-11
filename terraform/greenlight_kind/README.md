@@ -61,8 +61,8 @@ Concatenated version of the commands above
       && echo terraform apply -auto-approve -target=module.k8ssandra \
       && echo kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s \
       && terraform apply -auto-approve -target=module.base_cluster_configuration \
-      && sleep 30 && kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s \
-      && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
+      && sleep 60 && kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s \
+      && sleep 30 && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
       && terraform apply -auto-approve -target=module.development_cluster_configuration \
       && terraform output admin_password
 
