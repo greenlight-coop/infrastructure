@@ -34,7 +34,7 @@ Install the kind cluster
 Install Argo CD and wait for all the services and pods to become available.
 
     terraform apply -auto-approve -target=module.argo_cd \
-      && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
+      && kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
 
 Install k8ssandra and wait for configuration to complete.
 
