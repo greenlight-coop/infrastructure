@@ -41,7 +41,6 @@ module "base_cluster_configuration" {
   metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision
-  use_staging_certs       = var.use_staging_certs
 
   depends_on = [
     module.kind_cluster,
