@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: ${repo_url}
     targetRevision: ${target_revision}
-    path: development
+    path: development/apps
     helm:
       values: |
         domainName: ${domain_name}
