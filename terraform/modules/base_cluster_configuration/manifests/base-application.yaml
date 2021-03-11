@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: ${repo_url}
     targetRevision: ${target_revision}
-    path: apps
+    path: base/apps
     helm:
       values: |
         adminEmail: ${admin_email}
