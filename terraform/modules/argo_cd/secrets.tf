@@ -6,7 +6,7 @@ resource "kubernetes_secret" "argocd-github-ssh-key-secret" {
 
   data = {
     sshPrivateKey = <<SSH
-${local.bot_private_key}
+${var.bot_private_key}
     SSH
   }
 

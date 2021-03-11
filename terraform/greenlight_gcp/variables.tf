@@ -82,6 +82,8 @@ resource "random_password" "admin" {
 
 locals {
   admin_password        = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  bot_private_key_file  = "../.ssh/id_ed25519"
+  bot_private_key       = file(local.bot_private_key_file)
   cluster_name          = "greenlight-development-cluster"
   cluster_context       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
   default_project_id    = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
