@@ -21,7 +21,7 @@ spec:
             repoURL: ${repo_url}
             targetRevision: ${target_revision}
   destination:
-    server: https://kubernetes.default.svc
+    server: ${destination_server}
     namespace: argocd
   syncPolicy:
     automated:
