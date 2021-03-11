@@ -38,9 +38,8 @@ Install Argo CD and wait for all the services and pods to become available.
 
 Install k8ssandra and wait for configuration to complete.
 
-    terraform apply -auto-approve -target=module.k8ssandra 
-
-      ??? && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
+    terraform apply -auto-approve -target=module.k8ssandra \
+      && kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s
 
 Install base cluster configuration resources
 
