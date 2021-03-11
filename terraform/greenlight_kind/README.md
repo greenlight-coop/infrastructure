@@ -46,10 +46,6 @@ Install base cluster configuration resources
     terraform apply -auto-approve -target=module.base_cluster_configuration \
       && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s
 
-Install standard cluster configuration resources
-
-    terraform apply -auto-approve -target=module.standard_cluster_configuration \
-
 Install development cluster configuration resources
 
     terraform apply -auto-approve -target=module.development_cluster_configuration \
@@ -65,7 +61,6 @@ Concatenated version of the commands above
       && echo kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s \
       && terraform apply -auto-approve -target=module.base_cluster_configuration \
       && sleep 30 && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
-      && terraform apply -auto-approve -target=module.standard_cluster_configuration \
       && terraform apply -auto-approve -target=module.development_cluster_configuration \
       && terraform output admin_password
 
