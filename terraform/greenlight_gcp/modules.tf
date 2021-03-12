@@ -32,9 +32,10 @@ module "k8ssandra" {
 module "argo_cd" {
   source = "../modules/argo_cd"
 
-  admin_password    = local.admin_password
-  webhook_secret    = var.webhook_secret
-  domain_name       = local.domain_name
+  admin_password  = local.admin_password
+  bot_private_key = local.bot_private_key
+  domain_name     = local.domain_name
+  webhook_secret  = var.webhook_secret
 
   depends_on = [
     null_resource.update-kubeconfig,
@@ -61,5 +62,25 @@ module "base_cluster_configuration" {
     module.google_project,
     module.argo_cd,
     module.k8ssandra
+  ]
+}
+
+module "development_cluster_configuration" {
+  source = "../modules/development_cluster_configuration"
+
+  bot_github_token    = var.bot_github_token
+  bot_password        = var.bot_password
+  bot_private_key     = local.bot_private_key
+  destination_server  = local.greenlight_development_cluster_server
+  domain_name         = local.domain_name
+  repo_url            = local.repo_url
+  target_revision     = local.target_revision
+  webhook_secret      = var.webhook_secret
+
+  depends_on = [
+    null_resource.update-kubeconfig,
+    module.google_project,
+    module.argo_cd,
+    module.base_cluster_configuration
   ]
 }

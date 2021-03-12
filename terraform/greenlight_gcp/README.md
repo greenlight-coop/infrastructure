@@ -1,17 +1,6 @@
-# Green Light Development Platform
+# Green Light GCP Project
 
-## Deploy Green Light Development Platform
-
-### Preparation
-
-Steps below are temporary and should be used with caution - delete the environment variables after use 
-Another option is to supply the values when prompted
-
-    export TF_VAR_bot_password=(Green Light bot password value)
-    export TF_VAR_bot_github_token=(Green Light GitHub access token)
-    export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
-
-### Configure GCP Project and GKE Cluster
+## Configure GCP Project and GKE Cluster
 
 Configure the GCP project and install the GKE cluster with the following command:
 
@@ -23,16 +12,13 @@ Configure the GCP project and install the GKE cluster with the following command
 Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
-Install Argo CD and wait for all the services and pods to become available.
+## Removal
 
-    terraform apply -auto-approve -target=module.argo_cd \
-      && kubectl -n argocd wait deployments  -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
-      
-## Remove Green Light Development Platform
+### Scripted
 
-    terraform destroy -auto-approve 
+Run `./cleanup.sh`
 
-## Manual Removal
+### Manual
 
 In GCP Console
 * Delete cluster (wait for completion)
