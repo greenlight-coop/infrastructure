@@ -34,7 +34,7 @@ module "base_cluster_configuration" {
 
   admin_email             = var.admin_email
   cert_manager_enabled    = true
-  destination_server      = local.greenlight_development_cluster_server
+  # destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
   google_project_id       = var.project_id

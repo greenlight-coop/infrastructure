@@ -86,4 +86,5 @@ locals {
   cluster_context                       = "gke_${var.project_id}_${var.zone}_${local.cluster_name}"
   domain_name                           = "app.jus-cogens.com"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
+  target_revision                       = "HEAD"
 }
