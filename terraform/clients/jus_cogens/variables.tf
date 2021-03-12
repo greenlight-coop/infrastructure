@@ -84,6 +84,6 @@ locals {
   admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
   cluster_name                          = "jus-cogens-prod-cluster"
   cluster_context                       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
-  domain_name                           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
+  domain_name                           = "app.jus-cogens.com"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
 }

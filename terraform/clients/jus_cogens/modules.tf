@@ -5,8 +5,8 @@ module "google_project" {
   billing_account_id  = var.billing_account_id
   region              = var.region
   zone                = var.zone
-  project_id          = local.project_id
-  project_name        = local.project_name
+  project_id          = var.project_id
+  project_name        = var.project_name
   existing_project    = var.existing_project
   cluster_name        = local.cluster_name
   domain_name         = local.domain_name
@@ -51,7 +51,7 @@ module "base_cluster_configuration" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
-  google_project_id       = local.project_id
+  google_project_id       = var.project_id
   metrics_server_enabled  = false
   repo_url                = local.repo_url
   target_revision         = local.target_revision
