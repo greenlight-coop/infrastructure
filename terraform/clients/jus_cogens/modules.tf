@@ -29,20 +29,6 @@ module "k8ssandra" {
   ]
 }
 
-module "argo_cd" {
-  source = "../../modules/argo_cd"
-
-  admin_password  = local.admin_password
-  bot_private_key = local.bot_private_key
-  domain_name     = local.domain_name
-  webhook_secret  = var.webhook_secret
-
-  depends_on = [
-    null_resource.update-kubeconfig,
-    module.google_project
-  ]
-}
-
 module "base_cluster_configuration" {
   source = "../../modules/base_cluster_configuration"
 
