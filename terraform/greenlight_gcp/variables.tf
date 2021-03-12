@@ -81,16 +81,18 @@ resource "random_password" "admin" {
 }
 
 locals {
-  admin_password        = var.admin_password == "" ? random_password.admin.result : var.admin_password
-  bot_private_key_file  = "../.ssh/id_ed25519"
-  bot_private_key       = file(local.bot_private_key_file)
-  cluster_name          = "greenlight-development-cluster"
-  cluster_context       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
-  default_project_id    = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
-  default_project_name  = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"
-  domain_name           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
-  project_id            = var.project_id == "" ? local.default_project_id : var.project_id
-  project_name          = var.project_name == "" ? local.default_project_name : var.project_name
-  subdomain_suffix      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  target_revision       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  bot_private_key_file                  = "../.ssh/id_ed25519"
+  bot_private_key                       = file(local.bot_private_key_file)
+  cluster_name                          = "greenlight-development-cluster"
+  cluster_context                       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
+  default_project_id                    = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
+  default_project_name                  = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"
+  domain_name                           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
+  greenlight_development_cluster_server = "https://kubernetes.default.svc"
+  project_id                            = var.project_id == "" ? local.default_project_id : var.project_id
+  project_name                          = var.project_name == "" ? local.default_project_name : var.project_name
+  repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
+  subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
 }
