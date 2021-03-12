@@ -1,5 +1,5 @@
 module "google_project" {
-  source = "../modules/google_project"
+  source = "../../modules/google_project"
 
   org_id              = var.org_id
   billing_account_id  = var.billing_account_id
@@ -19,7 +19,7 @@ resource "null_resource" "update-kubeconfig" {
 }
 
 module "k8ssandra" {
-  source = "../modules/k8ssandra"
+  source = "../../modules/k8ssandra"
 
   admin_password  = local.admin_password
 
@@ -30,7 +30,7 @@ module "k8ssandra" {
 }
 
 module "argo_cd" {
-  source = "../modules/argo_cd"
+  source = "../../modules/argo_cd"
 
   admin_password  = local.admin_password
   bot_private_key = local.bot_private_key
@@ -44,7 +44,7 @@ module "argo_cd" {
 }
 
 module "base_cluster_configuration" {
-  source = "../modules/base_cluster_configuration"
+  source = "../../modules/base_cluster_configuration"
 
   admin_email             = var.admin_email
   cert_manager_enabled    = true
