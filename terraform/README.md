@@ -63,6 +63,9 @@ Concatenated version of the commands above
       && terraform apply -auto-approve -target=module.development_cluster_configuration \
       && terraform output admin_password
 
+### Configure Loki Grafana Datasource
+
+Log in to Grafana. Add a Loki Datasource with URL http://monitoring-loki:3100
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -118,7 +121,7 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
 * Repositories that require .../deploy-stage-pipeline webhook:
     * greenlight-stage-staging
     * greenlight-stage-production
-    
+
 ## Terraform Workspace
 
 To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
