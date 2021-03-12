@@ -46,7 +46,6 @@ module "base_cluster_configuration" {
   depends_on = [
     null_resource.update-kubeconfig,
     module.google_project,
-    module.argo_cd,
     module.k8ssandra
   ]
 }
