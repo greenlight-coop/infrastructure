@@ -77,6 +77,48 @@ Concatenated version of the commands above
         access: proxy
         url: http://monitoring-prometheus-server
 
+If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything
+should stabilize.
+
+Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
+prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
+
+### Configure GitHub Webooks
+
+Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
+* Create the new GitHub webhook at the greenlight-coop organization level with the following settings:
+    * Payload URL:
+        * Main: https://argocd.apps-home.greenlightcoop.dev/api/webhook
+        * GCP workspace: https://argocd.apps-feature-nnn.greenlightcoop.dev/api/webhook
+        * kind cluster: https://argocd.apps-home.greenlightcoop.dev/api/webhook
+    * Content type: application/json
+    * Secret: the generated webhook_secret value from Terraform output
+    * Which events...: Just the push event
+
+Create Tekton webhooks for repositories as needed. Example for Node.js Knative Service webhook:
+* Create new GitHub webhook in the target project
+    * Payload URL:
+        * Main: https://argocd.apps-home.greenlightcoop.dev/webhook/service-pipeline
+        * GCP workspace: https://argocd.apps-feature-nnn.greenlightcoop.dev/webhook/service-pipeline
+        * kind cluster: https://argocd.apps-home.greenlightcoop.dev/webhook/service-pipeline
+    * Content type: application/json
+    * Secret: the generated webhook_secret value from Terraform output
+    * Which events...: Send me everything
+* Repositories that require .../service-pipeline webhook:
+    * helloworld
+* Repositories that require .../image-pipeline webhook:
+    * greenlight-api-tests
+    * greenlight-ui-tests
+    * helloworld-ui
+    * node-utils
+    * serenity-js-runner
+    * template-processor
+* Repositories that require .../test-stage-pipeline webhook:
+    * greenlight-stage-test
+* Repositories that require .../deploy-stage-pipeline webhook:
+    * greenlight-stage-staging
+    * greenlight-stage-production
+    
 ## Terraform Workspace
 
 To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
