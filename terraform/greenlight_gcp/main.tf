@@ -32,13 +32,15 @@ terraform {
 }
 
 provider "kubernetes" { 
-  config_path = "~/.kube/config"
-  config_context = local.cluster_context
+  host                    = "https://${module.google_project.cluster_endpoint}"
+  token                   = module.google_project.access_token
+  cluster_ca_certificate  = module.google_project.cluster_ca_certificate
 }
 
 provider "helm" { 
   kubernetes {
-    config_path = "~/.kube/config"
-    config_context = local.cluster_context
+    host                    = "https://${module.google_project.cluster_endpoint}"
+    token                   = module.google_project.access_token
+    cluster_ca_certificate  = module.google_project.cluster_ca_certificate
   }
 }
