@@ -24,6 +24,9 @@ Another option is to supply the values when prompted
 Alternate to running the set up steps that follow manually, invoke the `setup.sh` script in either the `greenlight_gcp` or
 `greenlight_kind` directory.
 
+Note that if setting up via `greenlight_gcp` it's important to update the domain NS records while the script is running so 
+that DNS configuration works correctly in later steps.
+
 ### Install GCP Project and GKE Cluster
 
 See the README.md in the `greenlight_gcp` directory. Instructions that follow below should be run in the `greenlight_gcp`
