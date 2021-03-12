@@ -19,6 +19,11 @@ Another option is to supply the values when prompted
     export TF_VAR_bot_github_token=(Green Light GitHub access token)
     export TF_VAR_webhook_secret=(Green Light GitHub webhook HMAC token value)
 
+### Quick Setup
+
+Alternate to running the set up steps that follow manually, invoke the `setup.sh` script in either the `greenlight_gcp` or
+`greenlight_kind` directory.
+
 ### Install GCP Project and GKE Cluster
 
 See the README.md in the `greenlight_gcp` directory. Instructions that follow below should be run in the `greenlight_gcp`
@@ -44,47 +49,22 @@ Install k8ssandra and wait for configuration to complete.
 Install base cluster configuration resources
 
     terraform apply -auto-approve -target=module.base_cluster_configuration \
-      && kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s \
-      && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s
+      && sleep 120 && kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s \
+      && sleep 30 kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s
 
 Install development cluster configuration resources
 
     terraform apply -auto-approve -target=module.development_cluster_configuration
-
-Concatenated version of the commands above
-
-    terraform apply -auto-approve -target=module.argo_cd \
-      && kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s \
-      && terraform apply -auto-approve -target=module.k8ssandra \
-      && kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s \
-      && terraform apply -auto-approve -target=module.base_cluster_configuration \
-      && sleep 120 && kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s \
-      && sleep 30 && kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s \
-      && terraform apply -auto-approve -target=module.development_cluster_configuration \
-      && terraform output admin_password
-
-### Configure Loki Grafana Datasource
-
-Log in to Grafana. Add a Loki Datasource with URL http://monitoring-loki:3100
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-      - name: Loki
-        type: loki
-        access: proxy
-        url: http://monitoring-loki:3100
-        isDefault: true
-      - name: Prometheus
-        type: prometheus
-        access: proxy
-        url: http://monitoring-prometheus-server
 
 If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything
 should stabilize.
 
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
+
+### Configure Loki Grafana Datasource
+
+Log in to Grafana. Add a Loki Datasource with URL http://monitoring-loki:3100
 
 ### Configure GitHub Webooks
 
