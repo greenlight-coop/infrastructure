@@ -4,8 +4,9 @@ set -ex
 
 terraform init
 
-# Configure GCP project and install GKE cluster
-terraform apply -auto-approve -target=module.google_project -target=null_resource.update-kubeconfig
+# Create kind cluster
+terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight
+terraform apply -auto-approve -target=module.kind_cluster
 
 # Install Argo CD
 terraform apply -auto-approve -target=module.argo_cd

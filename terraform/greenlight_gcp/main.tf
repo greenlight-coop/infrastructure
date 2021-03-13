@@ -6,6 +6,10 @@ terraform {
       source =  "hashicorp/kubernetes"
       version = "~> 2.0.2"
     }
+    k8s = {
+      version = ">= 0.9.0"
+      source  = "banzaicloud/k8s"
+    }
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.0.2"
@@ -32,6 +36,12 @@ terraform {
 }
 
 provider "kubernetes" { 
+  host                    = "https://${module.google_project.cluster_endpoint}"
+  token                   = module.google_project.access_token
+  cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+}
+
+provider "k8s" { 
   host                    = "https://${module.google_project.cluster_endpoint}"
   token                   = module.google_project.access_token
   cluster_ca_certificate  = module.google_project.cluster_ca_certificate

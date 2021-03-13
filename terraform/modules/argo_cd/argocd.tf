@@ -24,14 +24,8 @@ resource "null_resource" "argocd" {
   ]
 }
 
-resource "null_resource" "argocd-project" {
-  provisioner "local-exec" {
-    command = "kubectl apply -n argocd -f -<<EOF\n${file("${path.module}/manifests/argocd-project.yaml")}\nEOF"
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl delete -n argocd -f -<<EOF\n${file("${path.module}/manifests/argocd-project.yaml")}\nEOF"
-  }
+resource "k8s_manifest" "argocd-project" {
+  content = file("${path.module}/manifests/argocd-project.yaml")
   depends_on = [
     null_resource.argocd
   ]

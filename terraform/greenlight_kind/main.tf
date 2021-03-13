@@ -6,6 +6,10 @@ terraform {
       source =  "hashicorp/kubernetes"
       version = "~> 2.0.2"
     }
+    k8s = {
+      version = ">= 0.9.0"
+      source  = "banzaicloud/k8s"
+    }
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.0.2"
@@ -26,6 +30,11 @@ terraform {
 }
 
 provider "kubernetes" { 
+  config_path = "~/.kube/config"
+  config_context = "kind-greenlight"
+}
+
+provider "k8s" { 
   config_path = "~/.kube/config"
   config_context = "kind-greenlight"
 }
