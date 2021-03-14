@@ -1,0 +1,7 @@
+{
+  "bearerToken": "${token}",
+  "tlsClientConfig": {
+    "insecure": false,
+    "caData": "${certificate}"
+  }
+}
