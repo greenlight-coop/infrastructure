@@ -59,8 +59,7 @@ Install development cluster configuration resources
 
     terraform apply -auto-approve -target=module.development_cluster_configuration
 
-If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything
-should stabilize.
+If there are conflicts between the cluster-local-gateway and istio-ingressgateway in istio-system, delete the cluster-local-gateway and everything should stabilize.
 
 Check that the default Kafka Knative Eventing broker was created successfully. It may be in a failed state due to being created
 prior to full configuration of Eventing resources. If this is the case, delete the project and the broker will be recreated.
