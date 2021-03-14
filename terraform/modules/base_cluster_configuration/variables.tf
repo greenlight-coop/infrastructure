@@ -2,12 +2,12 @@ variable "admin_email" {
   type    = string
 }
 
-variable "destination_server" {
-  type    = string
-}
-
 variable "cert_manager_enabled" {
   type    = bool
+}
+
+variable "destination_server" {
+  type    = string
 }
 
 variable "domain_name" {

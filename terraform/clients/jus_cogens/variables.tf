@@ -71,5 +71,5 @@ locals {
   project_id                  = "jus-cogens-prod"
   project_name                = "jus-cogens-prod"
   repo_url                    = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
-  target_revision             = "HEAD"
+  target_revision             = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
 }

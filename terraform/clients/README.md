@@ -13,3 +13,9 @@ Create a new directory in the `clients` directory for the client Terraform proje
   * Grant Service Account Token role
 
 ## Configure GCP Project and Cluster
+
+    ./setup-project.sh
+
+    terraform output argocd_cluster_add_command
+
+    ./setup-cluster.sh

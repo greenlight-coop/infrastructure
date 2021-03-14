@@ -1,3 +1,12 @@
+output "access_token" {
+  value = module.google_project.access_token
+  sensitive = true
+}
+
+output "argocd_cluster_add_command" {
+  value = "argocd cluster add ${module.google_project.config_context}"
+}
+
 output "admin_password" {
   value = local.admin_password
   sensitive = true
