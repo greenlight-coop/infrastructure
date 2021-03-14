@@ -1,12 +1,6 @@
-data "google_client_config" "provider" {}
-
 resource "google_project_service" "container-development" {
   project = var.project_id
-  service = "container.googleapis.com"
-
-  depends_on = [
-    google_project.project
-  ]
+  service = "container.googleapis.com"  
 }
 
 resource "google_container_cluster" "cluster" {

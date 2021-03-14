@@ -8,7 +8,7 @@ resource "local_file" "kind-config" {
     filename = "${path.module}/manifests/generated/${var.cluster_name}-kind-config.yaml"
 }
 
-resource "null_resource" "kind_greenlight" {
+resource "null_resource" "kind" {
   provisioner "local-exec" {
     command = "kind create cluster --name ${var.cluster_name} --config ${path.module}/manifests/generated/${var.cluster_name}-kind-config.yaml"
   }

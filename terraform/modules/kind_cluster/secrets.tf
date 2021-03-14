@@ -1,4 +1,3 @@
-
 resource "kubernetes_secret" "istio-letsencrypt" {
   metadata {
     name = "istio-letsencrypt"

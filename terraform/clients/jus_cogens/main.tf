@@ -29,27 +29,36 @@ terraform {
   }
 
   backend "gcs" {
-    bucket      = "tfstate-jus-cogens"
-    prefix      = "terraform/state"
-    credentials = "credentials.json"
+    bucket      = "tfstate-greenlight"
+    prefix      = "terraform/jus_cogens/state"
+    credentials = "../../credentials.json"
   }
 }
 
 provider "google" {
-  alias       = client_gcp
-  credentials = "credentials.json"
+  credentials = "../../credentials.json"
 }
 
-provider "google" {
-  alias       = greenlight_gcp
-  credentials = "../../greenlight_gcp/credentials.json"
+data "google_client_config" "current" {}
+
+data "google_container_cluster" "greenlight_cluster" {
+  name     = local.greenlight_cluster_name
+  location = local.greenlight_cluster_location
+  project  = local.greelight_gcp_project_id
 }
 
 provider "kubernetes" { 
-  alias                   = client_kubernetes
+  alias                   = client
   host                    = "https://${module.google_project.cluster_endpoint}"
   token                   = module.google_project.access_token
   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+}
+
+provider "kubernetes" { 
+  alias                   = greenlight
+  host                    = "https://${module.google_project.cluster_endpoint}"
+  token                   = data.google_client_config.current.access_token
+  cluster_ca_certificate  = base64decode(google_container_cluster.greenlight_cluster.master_auth[0].cluster_ca_certificate)
 }
 
 provider "helm" { 

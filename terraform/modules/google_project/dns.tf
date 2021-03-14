@@ -1,19 +1,11 @@
 resource "google_project_service" "dns-development" {
   project = var.project_id
   service = "dns.googleapis.com"
-
-  depends_on = [
-    google_project.project
-  ]
 }
 
 resource "google_service_account" "dns-admin" {
   project = var.project_id
   account_id   = "dns-admin"
-
-  depends_on = [
-    google_project.project
-  ]
 }
 
 resource "google_project_iam_binding" "project-iam-binding-dns-admin" {

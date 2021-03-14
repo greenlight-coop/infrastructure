@@ -2,25 +2,29 @@ terraform {
   required_version = ">= 0.14.8"
 
   required_providers {
-    kubernetes = {
-      source =  "hashicorp/kubernetes"
-      version = "~> 2.0.2"
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0.2"
+    }
+    google = {
+      source =  "hashicorp/google"
+      version = "~> 3.58.0"
     }
     k8s = {
       version = ">= 0.9.0"
       source  = "banzaicloud/k8s"
     }
-    helm = {
-      source  = "hashicorp/helm"
-      version = ">= 2.0.2"
-    }
-    null = {
-      source =  "hashicorp/null"
-      version = "~> 3.1.0"
+    kubernetes = {
+      source =  "hashicorp/kubernetes"
+      version = "~> 2.0.2"
     }
     local = {
       source =  "hashicorp/local"
       version = "~> 2.1.0"
+    }
+    null = {
+      source =  "hashicorp/null"
+      version = "~> 3.1.0"
     }
     random = {
       source =  "hashicorp/random"
@@ -31,8 +35,12 @@ terraform {
   backend "gcs" {
     bucket      = "tfstate-greenlight"
     prefix      = "terraform/state"
-    credentials = "credentials.json"
+    credentials = "../credentials.json"
   }
+}
+
+provider "google" {
+  credentials = "../credentials.json"
 }
 
 provider "kubernetes" { 

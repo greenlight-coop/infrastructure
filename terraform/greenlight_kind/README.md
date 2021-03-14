@@ -25,7 +25,7 @@ Another option is to supply the values when prompted
 Install the kind cluster
 
     terraform init \
-      && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight \
+      && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind \
       && terraform apply -auto-approve -target=module.kind_cluster
 
 ## Removal

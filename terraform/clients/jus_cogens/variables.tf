@@ -8,11 +8,6 @@ variable "admin_password" {
   default = ""
 }
 
-variable "billing_account_id" {
-  type    = string
-  default = "017EE3-ECBE23-13F65B"
-}
-
 variable "bot_github_token" {
   type      = string
   sensitive = true
@@ -34,21 +29,6 @@ variable "bot_password" {
 variable "existing_project" {
   type = bool
   default = true
-}
-
-variable "org_id" {
-  type = string
-  default = "1061192061015"
-}
-
-variable "project_id" {
-  type = string
-  default = "jus-cogens-prod"
-}
-
-variable "project_name" {
-  type = string
-  default = "jus-cogens-prod"
 }
 
 variable "region" {
@@ -81,10 +61,16 @@ resource "random_password" "admin" {
 }
 
 locals {
-  admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
-  cluster_name                          = "jus-cogens-prod-cluster"
-  cluster_context                       = "gke_${var.project_id}_${var.zone}_${local.cluster_name}"
-  domain_name                           = "app.jus-cogens.com"
-  repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
-  target_revision                       = "HEAD"
+  admin_password              = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  client_name                 = "jus-cogens"
+  cluster_name                = "jus-cogens-prod-cluster"
+  cluster_context             = "gke_${var.project_id}_${var.zone}_${local.cluster_name}"
+  domain_name                 = "app.jus-cogens.com"
+  greenlight_project_id       = "gl-development-feature-current" # Change to main cluster: greenlight-coop-development
+  greenlight_cluster_name     = "greenlight-development-cluster"
+  greenlight_cluster_location = "us-east4-a"
+  project_id                  = "jus-cogens-prod"
+  project_name                = "jus-cogens-prod"
+  repo_url                    = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
+  target_revision             = "HEAD"
 }

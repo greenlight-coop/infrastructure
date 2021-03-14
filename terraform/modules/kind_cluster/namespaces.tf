@@ -4,6 +4,6 @@ resource "kubernetes_namespace" "istio-system" {
   }
 
   depends_on = [
-    null_resource.kind_greenlight
+    null_resource.kind
   ]
 }

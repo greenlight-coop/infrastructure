@@ -5,7 +5,7 @@ set -ex
 terraform init
 
 # Create kind cluster
-terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind_greenlight
+terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind
 terraform apply -auto-approve -target=module.kind_cluster
 
 # Install Argo CD
@@ -14,7 +14,6 @@ kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=con
 
 # Install k8ssandra
 terraform apply -auto-approve -target=module.k8ssandra
-kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s
 
 # Install base cluster infrastructure
 terraform apply -auto-approve -target=module.base_cluster_configuration

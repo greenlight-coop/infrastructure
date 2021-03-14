@@ -25,6 +25,7 @@ module "k8ssandra" {
   source = "../modules/k8ssandra"
 
   admin_password  = local.admin_password
+  enabled         = var.cassandra_enabled
 
   depends_on = [
     module.kind_cluster

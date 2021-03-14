@@ -6,18 +6,6 @@ variable "zone" {
   type    = string
 }
 
-variable "org_id" {
-  type = string
-}
-
-variable "billing_account_id" {
-  type    = string
-}
-
-variable "existing_project" {
-  type = bool
-}
-
 variable "project_id" {
   type = string
 }

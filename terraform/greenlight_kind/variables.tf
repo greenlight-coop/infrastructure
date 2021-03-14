@@ -8,6 +8,11 @@ variable "admin_password" {
   default = ""
 }
 
+variable "cassandra_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "bot_github_token" {
   type      = string
   sensitive = true
