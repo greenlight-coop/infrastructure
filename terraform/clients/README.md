@@ -12,6 +12,4 @@ Create a new directory in the `clients` directory for the client Terraform proje
   * Grant Owner role
   * Grant Service Account Token role
 
-
 ## Configure GCP Project and Cluster
-
