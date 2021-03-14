@@ -48,14 +48,14 @@ data "google_container_cluster" "greenlight_cluster" {
 }
 
 provider "kubernetes" { 
-  alias                   = client
+  alias                   = "client"
   host                    = "https://${module.google_project.cluster_endpoint}"
   token                   = module.google_project.access_token
   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
 }
 
 provider "kubernetes" { 
-  alias                   = greenlight
+  alias                   = "greenlight"
   host                    = "https://${module.google_project.cluster_endpoint}"
   token                   = data.google_client_config.current.access_token
   cluster_ca_certificate  = base64decode(google_container_cluster.greenlight_cluster.master_auth[0].cluster_ca_certificate)
