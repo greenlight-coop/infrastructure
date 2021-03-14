@@ -19,6 +19,8 @@ spec:
         domainName: ${domain_name}
         externalDns:
           enabled: ${external_dns_enabled}
+        kafka:
+          enabled: ${kafka_enabled}
         googleProjectId: ${google_project_id}
         istio:
           jwtPolicy: ${istio_jwt_policy}

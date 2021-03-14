@@ -31,6 +31,11 @@ variable "bot_password" {
   }
 }
 
+variable "kafka_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "kind_tls_crt" {
   type      = string
   sensitive = true

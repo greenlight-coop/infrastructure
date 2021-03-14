@@ -38,6 +38,11 @@ variable "istio_https_node_port" {
   default = 0
 }
 
+variable "kafka_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "metrics_server_enabled" {
   type    = bool
 }

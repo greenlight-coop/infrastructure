@@ -7,6 +7,7 @@ resource "k8s_manifest" "argocd-project" {
       domain_name             = var.domain_name,
       external_dns_enabled    = var.external_dns_enabled,
       google_project_id       = var.google_project_id,
+      kafka_enabled           = var.kafka_enabled,
       istio_jwt_policy        = var.istio_jwt_policy
       istio_http_node_port    = var.istio_http_node_port
       istio_https_node_port   = var.istio_https_node_port

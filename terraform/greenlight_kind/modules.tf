@@ -40,6 +40,7 @@ module "base_cluster_configuration" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = false
+  kafka_enabled           = var.kafka_enabled
   istio_jwt_policy        = "first-party-jwt"
   istio_http_node_port    = 30080
   istio_https_node_port   = 30443
