@@ -64,7 +64,6 @@ locals {
   admin_password              = var.admin_password == "" ? random_password.admin.result : var.admin_password
   client_name                 = "jus-cogens"
   cluster_name                = "jus-cogens-prod-cluster"
-  cluster_context             = "gke_${var.project_id}_${var.zone}_${local.cluster_name}"
   domain_name                 = "app.jus-cogens.com"
   greenlight_project_id       = "gl-development-feature-current" # Change to main cluster: greenlight-coop-development
   greenlight_cluster_name     = "greenlight-development-cluster"

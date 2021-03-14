@@ -1,7 +1,3 @@
-output "project_id" {
-  value = var.project_id
-}
-
 output "dns_zone_name" {
   value = module.google_project.dns_zone_name
 }

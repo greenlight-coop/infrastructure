@@ -44,7 +44,7 @@ data "google_client_config" "current" {}
 data "google_container_cluster" "greenlight_cluster" {
   name     = local.greenlight_cluster_name
   location = local.greenlight_cluster_location
-  project  = local.greelight_gcp_project_id
+  project  = local.greenlight_project_id
 }
 
 provider "kubernetes" { 

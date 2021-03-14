@@ -4,8 +4,8 @@ module "google_project" {
 
   region              = var.region
   zone                = var.zone
-  project_id          = var.project_id
-  project_name        = var.project_name
+  project_id          = local.project_id
+  project_name        = local.project_name
   cluster_name        = local.cluster_name
   domain_name         = local.domain_name
 }
