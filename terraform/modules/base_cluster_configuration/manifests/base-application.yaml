@@ -31,6 +31,7 @@ spec:
         spec:
           destination:
             server: ${destination_server}
+          project: ${base_name}-project
           source:
             repoURL: ${repo_url}
             targetRevision: ${target_revision}
