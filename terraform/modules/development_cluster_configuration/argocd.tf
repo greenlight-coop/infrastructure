@@ -1,4 +1,4 @@
-resource "null_resource" "base-application" {
+resource "null_resource" "development-application" {
   provisioner "local-exec" {
     command = "kubectl apply -n argocd -f -<<EOF\n${templatefile(
       "${path.module}/manifests/development-application.yaml", {
