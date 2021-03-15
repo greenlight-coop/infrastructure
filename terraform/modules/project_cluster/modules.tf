@@ -15,7 +15,7 @@ module "base_cluster_configuration" {
 }
 
 module "k8ssandra" {
-  source = "../modules/k8ssandra"
+  source = "../k8ssandra"
 
   admin_password  = var.admin_password
   enabled         = var.cassandra_enabled
