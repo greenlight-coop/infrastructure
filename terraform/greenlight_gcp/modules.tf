@@ -34,6 +34,7 @@ module "project_cluster" {
 
   admin_email             = var.admin_email
   admin_password          = var.admin_password
+  base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = true
   destination_server      = local.greenlight_development_cluster_server
