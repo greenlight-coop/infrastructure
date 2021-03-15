@@ -23,10 +23,3 @@ resource "null_resource" "argocd" {
     kubernetes_namespace.argocd
   ]
 }
-
-resource "k8s_manifest" "argocd-project" {
-  content = file("${path.module}/manifests/argocd-project.yaml")
-  depends_on = [
-    null_resource.argocd
-  ]
-}

@@ -62,7 +62,7 @@ resource "random_password" "admin" {
 
 locals {
   admin_password              = var.admin_password == "" ? random_password.admin.result : var.admin_password
-  client_name                 = "jus-cogens"
+  base_name                   = "jus-cogens"
   cluster_name                = "jus-cogens-prod-cluster"
   domain_name                 = "app.jus-cogens.com"
   greenlight_project_id       = "gl-development-feature-current" # Change to main cluster: greenlight-coop-development

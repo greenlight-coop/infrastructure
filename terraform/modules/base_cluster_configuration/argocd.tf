@@ -1,7 +1,16 @@
 resource "k8s_manifest" "argocd-project" {
   content = templatefile(
+    "${path.module}/manifests/argocd-project.yaml", {
+      base_name = var.base_name
+    }
+  )
+}
+
+resource "k8s_manifest" "argocd-project" {
+  content = templatefile(
     "${path.module}/manifests/base-application.yaml", {
       admin_email             = var.admin_email,
+      base_name               = var.base_name,
       cert_manager_enabled    = var.cert_manager_enabled,
       destination_server      = var.destination_server,
       domain_name             = var.domain_name,
@@ -17,4 +26,8 @@ resource "k8s_manifest" "argocd-project" {
       use_staging_certs       = var.use_staging_certs
     }
   )
+
+  depends_on = [
+    k8s_manifest.argocd-project
+  ]
 }

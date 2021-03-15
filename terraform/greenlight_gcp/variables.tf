@@ -4,8 +4,9 @@ variable "admin_email" {
 }
 
 variable "admin_password" {
-  type = string
-  default = ""
+  type      = string
+  sensitive = true
+  default    = ""
 }
 
 variable "cassandra_enabled" {

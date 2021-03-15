@@ -15,18 +15,6 @@ resource "null_resource" "update-kubeconfig" {
   }
 }
 
-module "k8ssandra" {
-  source = "../modules/k8ssandra"
-
-  admin_password  = local.admin_password
-  enabled         = var.cassandra_enabled
-
-  depends_on = [
-    null_resource.update-kubeconfig,
-    module.google_project
-  ]
-}
-
 module "argo_cd" {
   source = "../modules/argo_cd"
 
@@ -41,10 +29,12 @@ module "argo_cd" {
   ]
 }
 
-module "base_cluster_configuration" {
-  source = "../modules/base_cluster_configuration"
+module "project_cluster" {
+  source = "../modules/project_cluster"
 
   admin_email             = var.admin_email
+  admin_password          = var.admin_password
+  cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = true
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
@@ -58,8 +48,7 @@ module "base_cluster_configuration" {
   depends_on = [
     null_resource.update-kubeconfig,
     module.google_project,
-    module.argo_cd,
-    module.k8ssandra
+    module.argo_cd
   ]
 }
 
@@ -79,6 +68,6 @@ module "development_cluster_configuration" {
     null_resource.update-kubeconfig,
     module.google_project,
     module.argo_cd,
-    module.base_cluster_configuration
+    module.project_cluster
   ]
 }

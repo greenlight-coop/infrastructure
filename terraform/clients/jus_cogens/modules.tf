@@ -19,6 +19,7 @@ module "project_cluster" {
   source = "../../modules/project_cluster"
 
   admin_email             = var.admin_email
+  base_name               = local.base_name
   cert_manager_enabled    = true
   destination_server      = "https://${module.google_project.cluster_endpoint}"
   domain_name             = local.domain_name

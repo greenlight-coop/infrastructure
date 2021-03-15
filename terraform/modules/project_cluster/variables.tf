@@ -2,6 +2,15 @@ variable "admin_email" {
   type    = string
 }
 
+variable "admin_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "base_name" {
+  type    = string
+}
+
 variable "cert_manager_enabled" {
   type    = bool
 }

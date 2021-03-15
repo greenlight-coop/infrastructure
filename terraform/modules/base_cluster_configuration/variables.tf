@@ -2,6 +2,10 @@ variable "admin_email" {
   type    = string
 }
 
+variable "base_name" {
+  type    = string
+}
+
 variable "cert_manager_enabled" {
   type    = bool
 }

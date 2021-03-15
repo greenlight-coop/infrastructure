@@ -21,21 +21,12 @@ module "argo_cd" {
   ]
 }
 
-module "k8ssandra" {
-  source = "../modules/k8ssandra"
-
-  admin_password  = local.admin_password
-  enabled         = var.cassandra_enabled
-
-  depends_on = [
-    module.kind_cluster
-  ]
-}
-
-module "base_cluster_configuration" {
-  source = "../modules/base_cluster_configuration"
+module "project_cluster" {
+  source = "../modules/project_cluster"
 
   admin_email             = var.admin_email
+  admin_password          = local.admin_password
+  cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = false
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
@@ -69,6 +60,6 @@ module "development_cluster_configuration" {
   depends_on = [
     module.kind_cluster,
     module.argo_cd,
-    module.base_cluster_configuration
+    module.project_cluster
   ]
 }

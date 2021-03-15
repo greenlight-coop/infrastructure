@@ -24,3 +24,4 @@ kubectl wait pods/monitoring-loki-0 --for=condition=Ready --timeout=600s
 
 # Install development cluster infrastructure
 terraform apply -auto-approve -target=module.development_cluster_configuration
+terraform apply -auto-approve
