@@ -6,7 +6,7 @@ resource "k8s_manifest" "argocd-project" {
   )
 }
 
-resource "k8s_manifest" "argocd-project" {
+resource "k8s_manifest" "base-application" {
   content = templatefile(
     "${path.module}/manifests/base-application.yaml", {
       admin_email             = var.admin_email,
