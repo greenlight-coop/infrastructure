@@ -33,7 +33,7 @@ module "project_cluster" {
   source = "../modules/project_cluster"
 
   providers = {
-    k8s.argocd        = k8s
+    k8s.greenlight    = k8s
     k8s.target        = k8s
     kubernetes.argocd = kubernetes
     kubernetes.target = kubernetes

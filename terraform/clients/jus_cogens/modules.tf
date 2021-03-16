@@ -14,7 +14,7 @@ module "project_cluster" {
 
   providers = {
     helm              = helm
-    k8s.argocd        = k8s.greenlight
+    k8s.greenlight    = k8s.greenlight
     k8s.target        = k8s.client
     kubernetes.argocd = kubernetes.greenlight
     kubernetes.target = kubernetes.client

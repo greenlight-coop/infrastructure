@@ -2,8 +2,8 @@ module "base_cluster_configuration" {
   source = "../base_cluster_configuration"
 
   providers = {
-    k8s.argocd        = k8s.greenlight
-    k8s.target        = k8s.client
+    k8s.greenlight    = k8s.greenlight
+    k8s.target        = k8s.target
     kubernetes.argocd = kubernetes.greenlight
     kubernetes.target = kubernetes.client
   }
