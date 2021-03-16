@@ -23,10 +23,8 @@ Create a new directory in the `clients` directory for the client Terraform proje
 * Update local kubeconfig
 
       gcloud config configurations activate <client profile name> 
-      gcloud auth application-default login   # login as client project user
       $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//')
       gcloud config configurations activate default 
-      gcloud auth application-default login   # login as Green Light project user
       kubectl config use-context <greenlight cluster context name>
 
 * Add new cluster to Green Light Argo CD
