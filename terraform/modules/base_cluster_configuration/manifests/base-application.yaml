@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${base_name}-base
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  project: ${base_name}-project
+  source:
+    repoURL: ${repo_url}
+    targetRevision: ${target_revision}
+    path: base/apps
+    helm:
+      values: |
+        adminEmail: ${admin_email}
+        baseName: ${base_name}
+        certManager:
+          enabled: ${cert_manager_enabled}
+        domainName: ${domain_name}
+        externalDns:
+          enabled: ${external_dns_enabled}
+        kafka:
+          enabled: ${kafka_enabled}
+        googleProjectId: ${google_project_id}
+        istio:
+          jwtPolicy: ${istio_jwt_policy}
+          httpNodePort: ${istio_http_node_port}
+          httpsNodePort: ${istio_https_node_port}
+        metricsServer:
+          enabled: ${metrics_server_enabled}
+        spec:
+          destination:
+            server: ${destination_server}
+          project: ${base_name}-project
+          source:
+            repoURL: ${repo_url}
+            targetRevision: ${target_revision}
+        useStagingCertificates: ${use_staging_certs}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+

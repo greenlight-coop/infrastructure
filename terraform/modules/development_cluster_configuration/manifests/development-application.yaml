@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: development
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  project: greenlight-project
+  source:
+    repoURL: ${repo_url}
+    targetRevision: ${target_revision}
+    path: development/apps
+    helm:
+      values: |
+        domainName: ${domain_name}
+        spec:
+          project: greenlight-project
+          source:
+            repoURL: ${repo_url}
+            targetRevision: ${target_revision}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+

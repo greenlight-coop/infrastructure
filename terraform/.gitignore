@@ -1,11 +1,11 @@
 ## Google Cloud Platform
 kubeconfig
-credentials.json
+credentials*.json
 
 ## Terraform
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate*
 
-## SSH key pair
-.ssh
+## Sensitive data
+.ssh/
