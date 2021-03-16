@@ -16,6 +16,6 @@ Create a new directory in the `clients` directory for the client Terraform proje
 
     ./setup-project.sh
 
-    terraform output argocd_cluster_add_command
+    $(echo `terraform output argocd_cluster_add_command` | sed -e 's/^"//' -e 's/"$//')
 
     ./setup-cluster.sh

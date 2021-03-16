@@ -8,22 +8,9 @@ variable "admin_password" {
   default = ""
 }
 
-variable "bot_github_token" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.bot_github_token) > 0
-    error_message = "Value for bot_github_token must be set."
-  }
-}
-
-variable "bot_password" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.bot_password) > 0
-    error_message = "Value for bot_password must be set."
-  }
+variable "cassandra_enabled" {
+  type    = bool
+  default = true
 }
 
 variable "existing_project" {

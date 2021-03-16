@@ -33,7 +33,7 @@ module "project_cluster" {
   source = "../modules/project_cluster"
 
   admin_email             = var.admin_email
-  admin_password          = var.admin_password
+  admin_password          = local.admin_password
   base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = true
@@ -47,7 +47,6 @@ module "project_cluster" {
   use_staging_certs       = var.use_staging_certs
 
   depends_on = [
-    null_resource.update-kubeconfig,
     module.google_project,
     module.argo_cd
   ]
@@ -66,7 +65,6 @@ module "development_cluster_configuration" {
   webhook_secret      = var.webhook_secret
 
   depends_on = [
-    null_resource.update-kubeconfig,
     module.google_project,
     module.argo_cd,
     module.project_cluster
