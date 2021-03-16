@@ -33,10 +33,10 @@ module "project_cluster" {
   source = "../modules/project_cluster"
 
   providers = {
-    k8s.greenlight    = k8s
-    k8s.target        = k8s
-    kubernetes.argocd = kubernetes
-    kubernetes.target = kubernetes
+    k8s.greenlight        = k8s
+    k8s.target            = k8s
+    kubernetes.greenlight = kubernetes
+    kubernetes.target     = kubernetes
   }
 
   admin_email             = var.admin_email
