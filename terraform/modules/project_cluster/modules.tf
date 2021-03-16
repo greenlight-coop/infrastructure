@@ -1,6 +1,13 @@
 module "base_cluster_configuration" {
   source = "../base_cluster_configuration"
 
+  providers = {
+    k8s.argocd        = k8s.greenlight
+    k8s.target        = k8s.client
+    kubernetes.argocd = kubernetes.greenlight
+    kubernetes.target = kubernetes.client
+  }
+
   admin_email             = var.admin_email
   base_name               = var.base_name
   cert_manager_enabled    = var.cert_manager_enabled

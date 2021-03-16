@@ -32,6 +32,13 @@ module "argo_cd" {
 module "project_cluster" {
   source = "../modules/project_cluster"
 
+  providers = {
+    k8s.argocd        = k8s
+    k8s.target        = k8s
+    kubernetes.argocd = kubernetes
+    kubernetes.target = kubernetes
+  }
+
   admin_email             = var.admin_email
   admin_password          = local.admin_password
   base_name               = local.base_name
