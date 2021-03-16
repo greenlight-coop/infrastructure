@@ -1,5 +1,7 @@
 ### Configure kind Cluster
 
+Note: this is a work in progress, known issue currently in creating the client cluster.
+
 Install the kind cluster
 
     terraform init \
