@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   # Project description
-  description: Project for Green Light Kubernetes applications
+  description: Project for ${base_name} infrastructure and applications
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:

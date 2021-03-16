@@ -32,3 +32,7 @@ output "kubeconfig_command" {
 output "name_servers" {
   value = module.google_project.name_servers
 }
+
+output "project_id" {
+  value = local.project_id
+}

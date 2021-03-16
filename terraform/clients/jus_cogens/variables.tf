@@ -28,15 +28,6 @@ variable "use_staging_certs" {
   default = false
 }
 
-variable "webhook_secret" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.webhook_secret) > 0
-    error_message = "Value for webhook_secret must be set."
-  }
-}
-
 variable "zone" {
   type    = string
   default = "us-east4-a"

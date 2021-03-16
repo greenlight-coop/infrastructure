@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: base
+  name: ${base_name}-base
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -14,6 +14,7 @@ spec:
     helm:
       values: |
         adminEmail: ${admin_email}
+        baseName: ${base_name}
         certManager:
           enabled: ${cert_manager_enabled}
         domainName: ${domain_name}
