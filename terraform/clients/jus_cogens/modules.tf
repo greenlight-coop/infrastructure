@@ -11,14 +11,6 @@ module "google_project" {
 
 module "project_cluster" {
   source = "../../modules/project_cluster"
-
-  providers = {
-    helm                  = helm
-    k8s.greenlight        = k8s.greenlight
-    k8s.target            = k8s.target
-    kubernetes.greenlight = kubernetes.greenlight
-    kubernetes.target     = kubernetes.target
-  }
   
   admin_password          = local.admin_password
   admin_email             = var.admin_email
