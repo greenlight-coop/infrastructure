@@ -9,12 +9,6 @@ module "google_project" {
   domain_name         = local.domain_name
 }
 
-resource "null_resource" "update-kubeconfig" {
-  provisioner "local-exec" {
-    command = module.google_project.kubeconfig_command
-  }
-}
-
 module "project_cluster" {
   source = "../../modules/project_cluster"
 
