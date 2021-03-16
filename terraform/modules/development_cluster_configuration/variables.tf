@@ -13,10 +13,6 @@ variable "bot_private_key" {
   sensitive = true
 }
 
-variable "destination_server" {
-  type    = string
-}
-
 variable "domain_name" {
   type = string
 }
