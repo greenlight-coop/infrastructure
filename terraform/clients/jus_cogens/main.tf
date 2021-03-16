@@ -6,6 +6,10 @@ terraform {
       source =  "hashicorp/google"
       version = "~> 3.58.0"
     }
+    k8s = {
+      version = ">= 0.9.0"
+      source  = "banzaicloud/k8s"
+    }
     kubernetes = {
       source =  "hashicorp/kubernetes"
       version = "~> 2.0.2"
