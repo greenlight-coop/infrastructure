@@ -9,7 +9,7 @@ DNS_ZONE_NAME=$(terraform output dns_zone_name | sed -e 's/^"//' -e 's/"$//')
 gcloud --project=$GCP_PROJECT_ID --quiet dns record-sets import -z $DNS_ZONE_NAME --delete-all-existing /dev/null
 gcloud --project=$GCP_PROJECT_ID --quiet dns managed-zones delete $DNS_ZONE_NAME
 gcloud --project=$GCP_PROJECT_ID --quiet iam service-accounts delete dns-admin@$GCP_PROJECT_ID.iam.gserviceaccount.com
-gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete greenlight-development-cluster
+gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete jus-cogens-prod-cluster
 
 # TBD
 # See https://github.com/pantheon-systems/kube-gce-cleanup
