@@ -41,3 +41,11 @@ Create a new directory in the `clients` directory for the client Terraform proje
 * Complete cluster set up
 
       ./setup-cluster.sh
+
+## Clean Up
+
+* Switch to client GCP project context, cleanup and switch back to default context
+
+      gcloud config configurations activate default 
+      ./cleanup.sh
+      gcloud config configurations activate <client profile name>  
