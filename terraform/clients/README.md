@@ -42,6 +42,16 @@ Create a new directory in the `clients` directory for the client Terraform proje
 
       ./setup-cluster.sh
 
+## Configure GitHub
+
+Grant `Owner` access to the organization and its repositories to the `greenlight-coop-bot` account.
+
+Set up repository webhooks as described in the root README.md.
+
+## Configure Docker Hub
+
+Grant `owners` access to the `greenlightcoopbot` Docker Hub account.
+
 ## Clean Up
 
 * Switch to client GCP project context, cleanup and switch back to default context
