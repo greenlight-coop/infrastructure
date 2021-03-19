@@ -58,7 +58,5 @@ resource "google_dns_record_set" "cluster_endpoint_a_record" {
   type         = "A"
   ttl          = var.dns_ttl
 
-  managed_zone = google_dns_managed_zone.prod.name
-
   rrdatas = [google_container_cluster.cluster.endpoint]
 }
