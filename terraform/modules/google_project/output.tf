@@ -9,7 +9,7 @@ output "cluster_ca_certificate" {
 }
 
 output "cluster_endpoint" {
-  value = google_container_cluster.cluster.endpoint
+  value = google_dns_record_set.cluster_endpoint_a_record
 }
 
 output "config_context" {
