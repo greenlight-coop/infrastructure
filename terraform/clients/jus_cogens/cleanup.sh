@@ -6,18 +6,25 @@ TF_WORKSPACE=$(terraform workspace show)
 GCP_PROJECT_ID=$(terraform output project_id | sed -e 's/^"//' -e 's/"$//')
 DNS_ZONE_NAME=$(terraform output dns_zone_name | sed -e 's/^"//' -e 's/"$//')
 
+# Delete DNS records and zones
 gcloud --project=$GCP_PROJECT_ID --quiet dns record-sets import -z $DNS_ZONE_NAME --delete-all-existing /dev/null
 gcloud --project=$GCP_PROJECT_ID --quiet dns managed-zones delete $DNS_ZONE_NAME
-gcloud --project=$GCP_PROJECT_ID --quiet iam service-accounts delete dns-admin@$GCP_PROJECT_ID.iam.gserviceaccount.com
-gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete jus-cogens-prod-cluster
 
-# TBD
-# See https://github.com/pantheon-systems/kube-gce-cleanup
-# * Delete Load Balancers
-# * Check that all External IP Addresses are deleted (delete if necessary)
-# * Delete k8s_* Firewall Rules
-# * Delete Service Accounts
-# * Delete all Compute Engine Instance Group Health Checks
+# Delete service accounts
+gcloud --project=$GCP_PROJECT_ID --quiet iam service-accounts delete dns-admin@$GCP_PROJECT_ID.iam.gserviceaccount.com
+
+# Delete Cluster
+gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete greenlight-development-cluster
+
+# * Delete firewall rules and external IP addresses
+firewalls=$(gcloud "--project=$GCP_PROJECT_ID" compute firewall-rules list \
+        --format='value(name)' \
+        --filter="name ~ ^k8s-fw- AND -tags gke-greenlight-development-cluster-")
+for firewall in $firewalls; do
+  id=$(sed 's/.*k8s-fw-\([a-z0-9]\{32\}\).*/\1/' <<<"${firewall}")
+  gcloud compute "--project=$GCP_PROJECT_ID" -q firewall-rules   delete "k8s-fw-${id}"
+  gcloud compute "--project=$GCP_PROJECT_ID" -q addresses delete "${id}"
+done
 
 # * Delete all unused Compute Engine Disks
 for orphaned_disk_uri in $(gcloud --project=$GCP_PROJECT_ID compute disks list --uri --filter="-users:*" 2> /dev/null); do
