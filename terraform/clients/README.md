@@ -56,6 +56,6 @@ Grant `owners` access to the `greenlightcoopbot` Docker Hub account.
 
 * Switch to client GCP project context, cleanup and switch back to default context
 
-      gcloud config configurations activate default 
+      gcloud config configurations activate <client profile name>   
       ./cleanup.sh
-      gcloud config configurations activate <client profile name>  
+      gcloud config configurations activate default
