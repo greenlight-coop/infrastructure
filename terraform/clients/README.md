@@ -24,10 +24,8 @@ Create a new directory in the `clients` directory for the client Terraform proje
 
       gcloud config configurations activate <client profile name> 
       $(echo `terraform output kubeconfig_command` | sed -e 's/^"//' -e 's/"$//')
-      gcloud config configurations activate default 
-      kubectl config use-context <greenlight cluster context name>
 
-* Add new cluster to Green Light Argo CD
+* Add new cluster to Green Light Argo CD (note: some auth and GCP configuration steps may be missing to correctly add cluster)
 
       argocd login \                                                           
         --username admin \
@@ -37,6 +35,27 @@ Create a new directory in the `clients` directory for the client Terraform proje
 
       argocd cluster add <new cluster context name>
 
+      kubectl config use-context <greenlight cluster context name>
+      gcloud config configurations activate default 
+
 * Complete cluster set up
 
       ./setup-cluster.sh
+
+## Configure GitHub
+
+Grant `Owner` access to the organization and its repositories to the `greenlight-coop-bot` account.
+
+Set up repository webhooks as described in the root README.md.
+
+## Configure Docker Hub
+
+Grant `owners` access to the `greenlightcoopbot` Docker Hub account.
+
+## Clean Up
+
+* Switch to client GCP project context, cleanup and switch back to default context
+
+      gcloud config configurations activate <client profile name>   
+      ./cleanup.sh
+      gcloud config configurations activate default
