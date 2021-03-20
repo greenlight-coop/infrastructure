@@ -23,6 +23,8 @@ firewalls=$(gcloud "--project=$GCP_PROJECT_ID" compute firewall-rules list \
 for firewall in $firewalls; do
   id=$(sed 's/.*k8s-fw-\([a-z0-9]\{32\}\).*/\1/' <<<"${firewall}")
   gcloud compute "--project=$GCP_PROJECT_ID" -q firewall-rules   delete "k8s-fw-${id}"
+  gcloud compute "--project=$GCP_PROJECT_ID" -q forwarding-rules delete "${id}"
+  gcloud compute "--project=$GCP_PROJECT_ID" -q target-pools delete "${id}"
   gcloud compute "--project=$GCP_PROJECT_ID" -q addresses delete "${id}"
 done
 
