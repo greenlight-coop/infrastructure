@@ -14,12 +14,12 @@ gcloud --project=$GCP_PROJECT_ID --quiet dns managed-zones delete $DNS_ZONE_NAME
 gcloud --project=$GCP_PROJECT_ID --quiet iam service-accounts delete dns-admin@$GCP_PROJECT_ID.iam.gserviceaccount.com
 
 # Delete Cluster
-gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete greenlight-development-cluster
+gcloud --project=$GCP_PROJECT_ID --quiet container clusters delete jus-cogens-prod-cluster
 
 # * Delete firewall rules and external IP addresses
 firewalls=$(gcloud "--project=$GCP_PROJECT_ID" compute firewall-rules list \
         --format='value(name)' \
-        --filter="name ~ ^k8s-fw- AND -tags gke-greenlight-development-cluster-")
+        --filter="name ~ ^k8s-fw- AND -tags gke-jus-cogens-prod-cluster-")
 for firewall in $firewalls; do
   id=$(sed 's/.*k8s-fw-\([a-z0-9]\{32\}\).*/\1/' <<<"${firewall}")
   gcloud compute "--project=$GCP_PROJECT_ID" -q firewall-rules   delete "k8s-fw-${id}"
