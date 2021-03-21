@@ -1,5 +1,11 @@
 # Green Light GCP Project
 
+## Intial Preparation
+
+* Add terraform@greenlight-root.iam.gserviceaccount.com to IAM
+  * Grant Owner role
+  * Grant Service Account Token role
+
 ## Configure GCP Project and GKE Cluster
 
 Configure the GCP project and install the GKE cluster with the following command:
