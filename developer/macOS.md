@@ -115,12 +115,14 @@ Update .zshrc per directions at start of install
     brew install octant
     go get -u github.com/tektoncd/triggers/cmd/binding-eval
 
-### Istio
+### PATH settings
 
-    cd ~/dev/tools
-    curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.7.4 sh -
+Add the following lines to ~/.zshrc
 
-Add $HOME/dev/tools/istio-1.7.4/bin to PATH in ~/.zshrc and source it (`. ~/.zshrc`)
+    export ISTIO_ROOT=$HOME/dev/git/greenlight-platform/devops/argocd-greenlight-infrastructure/base/istio
+    export ISTIO_VERSION=1.9.1
+    export ISTIO_HOME=$ISTIO_ROOT/istio-$ISTIO_VERSION
+    export PATH=$ISTIO_HOME/bin:$HOME/bin:$HOME/.krew/bin:$PATH
 
 ### NodeJS
 
