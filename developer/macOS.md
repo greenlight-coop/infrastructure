@@ -101,6 +101,8 @@ Update .zshrc per directions at start of install
 ### Kubernetes Tools
 
     brew install kubectl
+    brew install krew
+    kubectl krew install neat
     brew install helm
     brew install terraform
     brew tap knative/client
