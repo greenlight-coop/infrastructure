@@ -53,7 +53,6 @@ module "development_cluster_configuration" {
   bot_github_token    = var.bot_github_token
   bot_password        = var.bot_password
   bot_private_key     = local.bot_private_key
-  destination_server  = local.greenlight_development_cluster_server
   domain_name         = local.domain_name
   repo_url            = local.repo_url
   target_revision     = local.target_revision
