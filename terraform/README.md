@@ -142,3 +142,17 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
     * Give Service Account Token Creator role in `greenlight-root`, `greenlight-coop-development` and all feature and client 
       GCP projects in order to allow use in Terraform.
     * Generated a JSON key and saved to the root of `terraform` as `credentials.json`
+
+## Resources
+
+### PostgreSQL Cluster
+
+* Port forward to allow cluster access
+
+      kubectl port-forward greenlight-cluster-1 6432:5432 -n default
+
+* Get postgres user password
+
+      export PGPASSWORD=$(kubectl get secret postgres.greenlight-cluster.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.password}' | base64 -d)
+      export PGSSLMODE=require
+      psql -U postgres -h localhost -p 6432
