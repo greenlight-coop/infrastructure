@@ -26,6 +26,7 @@ module "project_cluster" {
 
   admin_email             = var.admin_email
   admin_password          = local.admin_password
+  base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = false
   destination_server      = local.greenlight_development_cluster_server
@@ -38,6 +39,7 @@ module "project_cluster" {
   metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision
+  use_staging_certs       = false
 
   depends_on = [
     module.kind_cluster,
