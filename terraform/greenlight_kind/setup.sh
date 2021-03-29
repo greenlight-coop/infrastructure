@@ -16,7 +16,7 @@ kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=con
 terraform apply -auto-approve -target=module.k8ssandra
 
 # Install base cluster infrastructure
-terraform apply -auto-approve -target=module.base_cluster_configuration
+terraform apply -auto-approve -target=module.project_cluster
 sleep 120
 kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s
 sleep 30
