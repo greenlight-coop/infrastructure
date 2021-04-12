@@ -96,6 +96,7 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
     * node-utils
     * serenity-js-runner
     * template-processor
+    * worker-ui
 * Repositories that require .../test-stage-pipeline webhook:
     * greenlight-stage-test
 * Repositories that require .../deploy-stage-pipeline webhook:
