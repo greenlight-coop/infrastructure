@@ -152,15 +152,3 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 
       export KEYCLOAK_PASSWORD=$(kubectl get secret -n keycloak credential-keycloak -o 'jsonpath={.data.ADMIN_PASSWORD}' | base64 -d)
       echo $KEYCLOAK_PASSWORD
-
-### PostgreSQL Cluster
-
-* Port forward to allow cluster access
-
-      kubectl port-forward greenlight-cluster-1 6432:5432 -n default
-
-* Get postgres user password
-
-      export PGPASSWORD=$(kubectl get secret postgres.greenlight-cluster.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.password}' | base64 -d)
-      export PGSSLMODE=require
-      psql -U postgres -h localhost -p 6432
