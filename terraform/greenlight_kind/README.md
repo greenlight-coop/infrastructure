@@ -22,7 +22,12 @@ Another option is to supply the values when prompted
 
 ### Configure kind Cluster
 
-Install the kind cluster
+To run the automated set up script run:
+
+    ./setup.sh
+
+To manually install the kind cluster, run the steps below and then continue with configuration steps in the
+main README.
 
     terraform init \
       && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind \
