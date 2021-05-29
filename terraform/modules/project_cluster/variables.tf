@@ -36,6 +36,26 @@ variable "google_project_id" {
   default = ""
 }
 
+variable "istio_jwt_policy" {
+  type    = string
+  default = "third-party-jwt"
+}
+
+variable "istio_http_node_port" {
+  type    = number
+  default = 0
+}
+
+variable "istio_https_node_port" {
+  type    = number
+  default = 0
+}
+
+variable "kafka_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "metrics_server_enabled" {
   type    = bool
 }

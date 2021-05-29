@@ -7,6 +7,7 @@ resource "google_container_cluster" "cluster" {
   name                     = var.cluster_name
   project                  = var.project_id
   location                 = var.zone
+  logging_service          = "none"
   min_master_version       = var.k8s_version
   remove_default_node_pool = true
   initial_node_count       = 1

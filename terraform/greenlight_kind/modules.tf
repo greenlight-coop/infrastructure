@@ -26,6 +26,7 @@ module "project_cluster" {
 
   admin_email             = var.admin_email
   admin_password          = local.admin_password
+  base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = false
   destination_server      = local.greenlight_development_cluster_server
@@ -38,6 +39,7 @@ module "project_cluster" {
   metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision
+  use_staging_certs       = false
 
   depends_on = [
     module.kind_cluster,
@@ -51,7 +53,6 @@ module "development_cluster_configuration" {
   bot_github_token    = var.bot_github_token
   bot_password        = var.bot_password
   bot_private_key     = local.bot_private_key
-  destination_server  = local.greenlight_development_cluster_server
   domain_name         = local.domain_name
   repo_url            = local.repo_url
   target_revision     = local.target_revision

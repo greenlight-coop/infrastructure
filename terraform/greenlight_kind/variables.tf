@@ -70,6 +70,7 @@ resource "random_password" "admin" {
 
 locals {
   admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
+  base_name                             = "greenlight"
   bot_private_key_file                  = "../.ssh/id_ed25519"
   bot_private_key                       = file(local.bot_private_key_file)
   domain_name                           = "apps-home.greenlightcoop.dev"

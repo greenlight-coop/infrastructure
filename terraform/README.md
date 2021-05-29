@@ -96,6 +96,7 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
     * node-utils
     * serenity-js-runner
     * template-processor
+    * worker-ui
 * Repositories that require .../test-stage-pipeline webhook:
     * greenlight-stage-test
 * Repositories that require .../deploy-stage-pipeline webhook:
@@ -142,3 +143,12 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
     * Give Service Account Token Creator role in `greenlight-root`, `greenlight-coop-development` and all feature and client 
       GCP projects in order to allow use in Terraform.
     * Generated a JSON key and saved to the root of `terraform` as `credentials.json`
+
+## Resources
+
+### Keycloak
+
+* Get Keycloak admin password
+
+      export KEYCLOAK_PASSWORD=$(kubectl get secret -n keycloak credential-keycloak -o 'jsonpath={.data.ADMIN_PASSWORD}' | base64 -d)
+      echo $KEYCLOAK_PASSWORD
