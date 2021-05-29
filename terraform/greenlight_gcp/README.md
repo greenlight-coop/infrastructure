@@ -1,6 +1,6 @@
 # Green Light GCP Project
 
-## Intial Preparation
+## Initial Preparation
 
 * Add terraform@greenlight-root.iam.gserviceaccount.com to IAM
   * Grant Owner role
