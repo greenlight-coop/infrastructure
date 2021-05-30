@@ -41,16 +41,6 @@ resource "google_dns_managed_zone" "domain" {
   ]
 }
 
-resource "google_dns_record_set" "domain_name_servers" {
-  name         = local.domain_name_terminated
-  project      = var.project_id
-  managed_zone = google_dns_managed_zone.domain.name
-  type         = "NS"
-  ttl          = var.dns_ttl
-
-  rrdatas = google_dns_managed_zone.domain.name_servers
-}
-
 resource "google_dns_record_set" "cluster_endpoint_a_record" {
   name         = "k8s.${local.domain_name_terminated}"
   project      = var.project_id
