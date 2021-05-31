@@ -18,6 +18,8 @@ spec:
       values: |
         adminEmail: ${admin_email}
         baseName: ${base_name}
+        cassandraEnabled:
+          enabled: ${cassandra_enabled}
         certManager:
           enabled: ${cert_manager_enabled}
         domainName: ${domain_name}

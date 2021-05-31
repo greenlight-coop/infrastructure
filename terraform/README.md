@@ -44,11 +44,6 @@ Install Argo CD and wait for all the services and pods to become available.
     terraform apply -auto-approve -target=module.argo_cd \
       && kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
 
-Install k8ssandra and wait for configuration to complete.
-
-    terraform apply -auto-approve -target=module.k8ssandra \
-      && kubectl wait pods/k8ssandra-dc1-default-sts-0 --for=condition=Ready --timeout=600s
-
 Install base cluster configuration resources
 
     terraform apply -auto-approve -target=module.base_cluster_configuration \
@@ -152,3 +147,14 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 
       export KEYCLOAK_PASSWORD=$(kubectl get secret -n keycloak credential-keycloak -o 'jsonpath={.data.ADMIN_PASSWORD}' | base64 -d)
       echo $KEYCLOAK_PASSWORD
+
+### k8ssandra
+
+* Get k8ssandra superuser and password
+
+      kubectl get secret k8ssandra-superuser -o json | jq -r '.data.username' | base64 --decode
+      kubkubectl get secret k8ssandra-superuser -o json | jq -r '.data.password' | base64 --decode
+
+* Connect to cqlsh as superuser
+
+      k exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-superuser -p D3kc4dhHWw7IYlcAeVDL
