@@ -10,7 +10,7 @@ variable "admin_password" {
 
 variable "cassandra_enabled" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "bot_github_token" {
