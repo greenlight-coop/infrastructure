@@ -12,9 +12,6 @@ terraform apply -auto-approve -target=module.kind_cluster
 terraform apply -auto-approve -target=module.argo_cd
 kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
 
-# Install k8ssandra
-terraform apply -auto-approve -target=module.k8ssandra
-
 # Install base cluster infrastructure
 terraform apply -auto-approve -target=module.project_cluster
 sleep 120

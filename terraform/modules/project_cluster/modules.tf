@@ -18,10 +18,3 @@ module "base_cluster_configuration" {
   target_revision         = var.target_revision
   use_staging_certs       = var.use_staging_certs
 }
-
-module "k8ssandra" {
-  source = "../k8ssandra"
-
-  admin_password  = var.admin_password
-  enabled         = var.cassandra_enabled
-}

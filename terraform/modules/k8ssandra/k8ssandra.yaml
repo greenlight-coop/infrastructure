@@ -1,4 +1,0 @@
-kube-prometheus-stack:
-  grafana:
-    adminUser: admin
-    adminPassword: ${admin_password}
