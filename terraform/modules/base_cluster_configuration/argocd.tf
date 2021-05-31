@@ -11,6 +11,7 @@ resource "k8s_manifest" "base-application" {
     "${path.module}/manifests/base-application.yaml", {
       admin_email             = var.admin_email,
       base_name               = var.base_name,
+      cassandra_enabled       = var.cassandra_enabled,
       cert_manager_enabled    = var.cert_manager_enabled,
       destination_server      = var.destination_server,
       domain_name             = var.domain_name,
