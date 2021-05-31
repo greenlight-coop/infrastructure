@@ -13,6 +13,7 @@ variable "base_name" {
 
 variable "cassandra_enabled" {
   type    = bool
+  default = true
 }
 
 variable "cert_manager_enabled" {
