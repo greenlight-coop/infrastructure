@@ -59,7 +59,7 @@ prior to full configuration of Eventing resources. If this is the case, delete t
 
 ### Configure Loki Grafana Datasource
 
-Log in to Grafana. Add a Loki Datasource with URL http://monitoring-loki:3100
+Log in to Grafana. Add a Loki Datasource with URL http://loki:3100
 
 ### Configure GitHub Webooks
 
@@ -157,4 +157,4 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 
 * Connect to cqlsh as superuser
 
-      k exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-superuser -p D3kc4dhHWw7IYlcAeVDL
+      k exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-superuser -p <password>
