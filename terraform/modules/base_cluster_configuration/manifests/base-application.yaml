@@ -18,7 +18,7 @@ spec:
       values: |
         adminEmail: ${admin_email}
         baseName: ${base_name}
-        cassandraEnabled:
+        cassandra:
           enabled: ${cassandra_enabled}
         certManager:
           enabled: ${cert_manager_enabled}
@@ -27,6 +27,8 @@ spec:
           enabled: ${external_dns_enabled}
         kafka:
           enabled: ${kafka_enabled}
+        kubePrometheusStack:
+          enabled: ${!cassandra_enabled}
         googleProjectId: ${google_project_id}
         istio:
           jwtPolicy: ${istio_jwt_policy}
