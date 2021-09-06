@@ -9,4 +9,4 @@ metadata:
 stringData:
   url: git@github.com
   sshPrivateKey: |
-    ${var.bot_private_key}
+    ${bot_private_key}
