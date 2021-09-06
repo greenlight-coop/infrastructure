@@ -19,7 +19,6 @@ resource "null_resource" "argocd" {
   }
   depends_on = [
     local_file.argocd_kustomization_manifests,  
-    kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_namespace.argocd
   ]
 }
