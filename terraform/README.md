@@ -102,7 +102,7 @@ Create Tekton webhooks for repositories as needed. Example for Node.js Knative S
 
 To test non-trivial infrastructure configuration changes, it's recommended to use a Terraform workspace. This allows
 for deployment of the infrastructure to a temporary environment that can then be destroyed after the modifications 
-have been vetted and merged to master. This may be done in either a GCP or Kind cluster environment.
+have been vetted and merged to main. This may be done in either a GCP or Kind cluster environment.
 
 * Create a new Terraform workspace, checkout a branch of all repositories based on the current GitHub issue number 
   and push to GitHub. Commands should be run in either the `greenlight_gcp` or `greenlight_kind` subdirectory.
@@ -116,11 +116,11 @@ have been vetted and merged to master. This may be done in either a GCP or Kind 
 
 * Iterate between deploying the resources in the new workspace and making changes to the configuration
 
-* When all changes have been merged to master, dispose of the temporary workspace and apply changes to the 
-  default workspace from master
+* When all changes have been merged to main, dispose of the temporary workspace and apply changes to the 
+  default workspace from main
 
       meta git fetch --all
-      meta git checkout master
+      meta git checkout main
       meta git pull
       meta git branch -D feature/<n>
       meta git push origin --delete feature/<n>

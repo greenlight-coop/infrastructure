@@ -1,6 +1,7 @@
 resource "local_file" "argocd_kustomization_manifests" {
     for_each = fileset("${path.module}/manifests/argocd/install_templates", "*.yaml")
     content  = templatefile("${path.module}/manifests/argocd/install_templates/${each.key}", {
+      bot_private_key       = var.bot_private_key,
       domain_name           = var.domain_name,
       webhook_secret        = var.webhook_secret,
       admin_password_hash   = local.admin_password_hash,
@@ -19,7 +20,6 @@ resource "null_resource" "argocd" {
   }
   depends_on = [
     local_file.argocd_kustomization_manifests,  
-    kubernetes_secret.argocd-github-ssh-key-secret,
     kubernetes_namespace.argocd
   ]
 }

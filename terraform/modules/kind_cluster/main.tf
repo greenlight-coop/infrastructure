@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 0.15.4"
+  required_version = ">= 1.0.5"
 
   required_providers {
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.2.0"
+      version = "~> 2.4.1"
     }
     null = {
       source =  "hashicorp/null"

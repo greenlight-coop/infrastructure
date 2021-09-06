@@ -4,11 +4,6 @@ metadata:
   name: argocd-cm
 data:
   url: https://argocd.${domain_name}
-  repository.credentials: |
-    - url: git@github.com
-      sshPrivateKeySecret:
-        name: github-ssh-key
-        key: sshPrivateKey
   resource.customizations: |
     admissionregistration.k8s.io/MutatingWebhookConfiguration:
       ignoreDifferences: |
