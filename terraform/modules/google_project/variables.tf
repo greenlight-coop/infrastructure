@@ -46,7 +46,7 @@ variable "zone" {
 # List available versions:  gcloud container get-server-config --zone us-east4-a
 variable "k8s_version" {
   type = string
-  default = "1.20.8-gke.2100"
+  default = "1.20.9-gke.700"
 }
 
 variable "domain_name" {
