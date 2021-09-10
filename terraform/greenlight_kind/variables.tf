@@ -64,7 +64,7 @@ variable "webhook_secret" {
 }
 
 resource "random_password" "admin" {
-  length  = 12
+  length  = 16
   special = false
 }
 
