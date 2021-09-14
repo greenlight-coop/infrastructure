@@ -153,7 +153,7 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 * Get k8ssandra superuser and password
 
       kubectl get secret k8ssandra-superuser -o json | jq -r '.data.username' | base64 --decode
-      kubkubectl get secret k8ssandra-superuser -o json | jq -r '.data.password' | base64 --decode
+      kubectl get secret k8ssandra-superuser -o json | jq -r '.data.password' | base64 --decode
 
 * Connect to cqlsh as superuser
 
