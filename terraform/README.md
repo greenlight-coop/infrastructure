@@ -122,6 +122,7 @@ have been vetted and merged to main. This may be done in either a GCP or Kind cl
       meta git fetch --all
       meta git checkout main
       meta git pull
+      meta git diff feature/<n>     # Check that all changes have been merged
       meta git branch -D feature/<n>
       meta git push origin --delete feature/<n>
       terraform workspace select default
@@ -146,7 +147,7 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 * Get Keycloak admin password
 
       export KEYCLOAK_PASSWORD=$(kubectl get secret -n keycloak credential-keycloak -o 'jsonpath={.data.ADMIN_PASSWORD}' | base64 -d)
-      echo $KEYCLOAK_PASSWORD
+      echo $KEYCLOAK_PASSWORD | pbcopy
 
 ### k8ssandra
 
