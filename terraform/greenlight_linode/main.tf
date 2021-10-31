@@ -45,22 +45,16 @@ provider "linode" {
   token = var.terraform_token
 }
 
-# provider "kubernetes" { 
-#   host                    = "https://${module.google_project.cluster_endpoint}"
-#   token                   = module.google_project.access_token
-#   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-# }
+provider "kubernetes" { 
+  config_path = "~/.kube/config"
+}
 
-# provider "k8s" { 
-#   host                    = "https://${module.google_project.cluster_endpoint}"
-#   token                   = module.google_project.access_token
-#   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-# }
+provider "k8s" { 
+  config_path = "~/.kube/config"
+}
 
-# provider "helm" { 
-#   kubernetes {
-#     host                    = "https://${module.google_project.cluster_endpoint}"
-#     token                   = module.google_project.access_token
-#     cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-#   }
-# }
+provider "helm" { 
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
