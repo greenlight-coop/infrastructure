@@ -41,7 +41,6 @@ module "project_cluster" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
-  google_project_id       = local.project_id
   metrics_server_enabled  = false
   repo_url                = local.repo_url
   target_revision         = local.target_revision

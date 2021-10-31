@@ -86,9 +86,8 @@ locals {
   bot_private_key_file                  = "../.ssh/id_ed25519"
   bot_private_key                       = file(local.bot_private_key_file)
   cluster_name                          = terraform.workspace == "default" ? "development-cluster" : "development-cluster-${terraform.workspace}"
-  # cluster_context                       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
   domain_name                           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
-  # greenlight_development_cluster_server = "https://kubernetes.default.svc"
+  greenlight_development_cluster_server = "https://kubernetes.default.svc"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
