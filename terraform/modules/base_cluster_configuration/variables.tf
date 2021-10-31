@@ -20,6 +20,10 @@ variable "cert_manager_enabled" {
   type    = bool
 }
 
+variable "cluster_provider" {
+  type    = string
+}
+
 variable "destination_server" {
   type    = string
 }

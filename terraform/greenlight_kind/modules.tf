@@ -29,6 +29,7 @@ module "project_cluster" {
   base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = false
+  cluster_provider        = "kind"
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = false
