@@ -1,9 +1,10 @@
 module "linode" {
   source = "../modules/linode"
 
-  region              = var.region
+  admin_email         = var.admin_email
   cluster_name        = local.cluster_name
   domain_name         = local.domain_name
+  region              = var.region
 }
 
 resource "null_resource" "kubeconfig" {
@@ -42,7 +43,8 @@ module "project_cluster" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
-  metrics_server_enabled  = false
+  cassandra_enabled       = var.cassandra_enabled
+  linode_token            = var.linode_token
   repo_url                = local.repo_url
   target_revision         = local.target_revision
   use_staging_certs       = var.use_staging_certs

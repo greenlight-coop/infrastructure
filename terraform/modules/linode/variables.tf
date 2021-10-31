@@ -1,5 +1,23 @@
+variable "admin_email" {
+  type    = string
+}
+
 variable "cluster_name" {
   type = string
+}
+
+variable "domain_name" {
+  type = string
+}
+
+variable "k8s_version" {
+  type = string
+  default = "1.21"
+}
+
+variable "linode_token" {
+  type    = string
+  sensitive = true
 }
 
 variable "machine_type" {
@@ -19,13 +37,4 @@ variable "min_node_count" {
 
 variable "region" {
   type    = string
-}
-
-variable "k8s_version" {
-  type = string
-  default = "1.21"
-}
-
-variable "domain_name" {
-  type = string
 }

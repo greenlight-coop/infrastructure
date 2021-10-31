@@ -42,7 +42,7 @@ terraform {
 }
 
 provider "linode" {
-  token = var.terraform_token
+  token = var.linode_token
 }
 
 provider "kubernetes" { 

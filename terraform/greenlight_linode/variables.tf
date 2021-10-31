@@ -30,40 +30,21 @@ variable "bot_password" {
   }
 }
 
+variable "linode_token" {
+  type    = string
+  sensitive = true
+  validation {
+    condition     = length(var.linode_token) > 0
+    error_message = "Value for linode_token must be set."
+  }
+}
+
 variable "region" {
   type    = string
 }
 
 variable "use_staging_certs" {
   type    = bool
-}
-
-variable "terraform_token" {
-  type    = string
-  sensitive = true
-  validation {
-    condition     = length(var.terraform_token) > 0
-    error_message = "Value for terraform_token must be set."
-  }
-}
-
-variable "tfstate_access_key" {
-  type    = string
-  sensitive = true
-  validation {
-    condition     = length(var.tfstate_access_key) > 0
-    error_message = "Value for tfstate_access_key must be set."
-  }
-
-}
-
-variable "tfstate_secret_key" {
-  type    = string
-  sensitive = true
-  validation {
-    condition     = length(var.tfstate_secret_key) > 0
-    error_message = "Value for tfstate_secret_key must be set."
-  }
 }
 
 variable "webhook_secret" {
