@@ -5,7 +5,9 @@ set -ex
 terraform init
 
 # Install Linode cluster
-terraform apply -auto-approve -target=module.linode -target=null_resource.kubeconfig
+terraform apply -auto-approve \
+  -target=module.linode.linode_lke_cluster.greenlight-development-cluster \
+  -target=null_resource.kubeconfig
 
 # Install Argo CD
 terraform apply -auto-approve -target=module.argo_cd

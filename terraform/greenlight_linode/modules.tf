@@ -16,6 +16,10 @@ resource "null_resource" "kubeconfig" {
     when    = destroy
     command = "rm ~/.kube/config"
   }
+
+  depends_on = [
+    module.linode.linode_lke_cluster.greenlight-development-cluster
+  ]
 }
 
 module "argo_cd" {
