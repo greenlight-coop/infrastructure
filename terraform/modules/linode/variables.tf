@@ -1,3 +1,7 @@
+variable "cluster_name" {
+  type = string
+}
+
 variable "machine_type" {
   type    = string
   default = "g6-standard-2"
