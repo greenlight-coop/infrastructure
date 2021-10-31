@@ -6,11 +6,15 @@ module "linode" {
   domain_name         = local.domain_name
 }
 
-# resource "null_resource" "create-kubeconfig" {
-#   provisioner "local-exec" {
-#     command = "cat ${module.linode.kubeconfig)} > ~/.kube/config"
-#   }
-# }
+resource "null_resource" "kubeconfig" {
+  provisioner "local-exec" {
+    command = "cat ${module.linode.kubeconfig} > ~/.kube/config"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm ~/.kube/config"
+  }
+}
 
 # module "argo_cd" {
 #   source = "../modules/argo_cd"
