@@ -1,13 +1,10 @@
-# module "google_project" {
-#   source = "../modules/google_project"
+module "linode" {
+  source = "../modules/linode"
 
-#   region              = var.region
-#   zone                = var.zone
-#   project_id          = local.project_id
-#   project_name        = local.project_name
-#   cluster_name        = local.cluster_name
-#   domain_name         = local.domain_name
-# }
+  region              = var.region
+  cluster_name        = local.cluster_name
+  domain_name         = local.domain_name
+}
 
 # resource "null_resource" "update-kubeconfig" {
 #   provisioner "local-exec" {
