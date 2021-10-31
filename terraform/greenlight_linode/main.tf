@@ -34,12 +34,10 @@ terraform {
 
   backend "s3" {
     bucket = "tfstate-greenlight"
-    key    = "/tfstate"
-    region = var.region
-    endpoint = "${var.region}.linodeobjects.com"
+    key    = "tfstate"
+    region = "us-east-1"
+    endpoint = "us-east-1.linodeobjects.com"
     skip_credentials_validation = true
-    access_key = var.tfstate_access_key
-    secret_key = var.tfstate_secret_key
   }
 }
 
@@ -47,22 +45,22 @@ provider "linode" {
   token = var.terraform_token
 }
 
-provider "kubernetes" { 
-  host                    = "https://${module.google_project.cluster_endpoint}"
-  token                   = module.google_project.access_token
-  cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-}
+# provider "kubernetes" { 
+#   host                    = "https://${module.google_project.cluster_endpoint}"
+#   token                   = module.google_project.access_token
+#   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+# }
 
-provider "k8s" { 
-  host                    = "https://${module.google_project.cluster_endpoint}"
-  token                   = module.google_project.access_token
-  cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-}
+# provider "k8s" { 
+#   host                    = "https://${module.google_project.cluster_endpoint}"
+#   token                   = module.google_project.access_token
+#   cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+# }
 
-provider "helm" { 
-  kubernetes {
-    host                    = "https://${module.google_project.cluster_endpoint}"
-    token                   = module.google_project.access_token
-    cluster_ca_certificate  = module.google_project.cluster_ca_certificate
-  }
-}
+# provider "helm" { 
+#   kubernetes {
+#     host                    = "https://${module.google_project.cluster_endpoint}"
+#     token                   = module.google_project.access_token
+#     cluster_ca_certificate  = module.google_project.cluster_ca_certificate
+#   }
+# }

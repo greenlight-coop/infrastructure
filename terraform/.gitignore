@@ -9,4 +9,4 @@ terraform.tfstate*
 
 ## Sensitive data
 .ssh/
-secrets.tfvars
+secrets.auto.tfvars
