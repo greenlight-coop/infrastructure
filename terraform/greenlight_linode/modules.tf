@@ -4,6 +4,7 @@ module "linode" {
   admin_email         = var.admin_email
   cluster_name        = local.cluster_name
   domain_name         = local.domain_name
+  linode_token        = var.linode_token
   region              = var.region
 }
 
@@ -43,8 +44,7 @@ module "project_cluster" {
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
-  cassandra_enabled       = var.cassandra_enabled
-  linode_token            = var.linode_token
+  metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision
   use_staging_certs       = var.use_staging_certs
