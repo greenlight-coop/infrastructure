@@ -6,9 +6,9 @@ module "linode" {
   domain_name         = local.domain_name
 }
 
-# resource "null_resource" "update-kubeconfig" {
+# resource "null_resource" "create-kubeconfig" {
 #   provisioner "local-exec" {
-#     command = module.google_project.kubeconfig_command
+#     command = "cat ${module.linode.kubeconfig)} > ~/.kube/config"
 #   }
 # }
 
