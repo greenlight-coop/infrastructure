@@ -10,7 +10,7 @@ module "linode" {
 
 resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {
-    command = "cat <<EOT > ~/.kube/config ${module.linode.kubeconfig} && chmod 600 ~/.kube/config"
+    command = "cat <<EOT > ~/.kube/config ${module.linode.kubeconfig}"
   }
   provisioner "local-exec" {
     when    = destroy
