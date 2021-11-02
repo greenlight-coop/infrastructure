@@ -8,16 +8,6 @@ module "linode" {
   region              = var.region
 }
 
-resource "null_resource" "kubeconfig" {
-  provisioner "local-exec" {
-    command = "cat <<EOT > ~/.kube/config ${module.linode.kubeconfig}"
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm ~/.kube/config"
-  }
-}
-
 module "argo_cd" {
   source = "../modules/argo_cd"
 

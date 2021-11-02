@@ -72,4 +72,6 @@ locals {
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  ttl_sec                               = terraform.workspace == "default" ? 86400 : 300
+  kubeconfig_output_filename            = terraform.workspace == "default" ? "config-linode-default" : "config-linode-${terraform.workspace}"
 }
