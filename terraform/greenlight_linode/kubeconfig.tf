@@ -8,6 +8,10 @@ resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {
     command = "chmod 700 ~/.kube/${local.kubeconfig_output_filename} && ln -s ~/.kube/${local.kubeconfig_output_filename} ~/.kube/config"
   }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm ~/.kube/config"
+  }
 
   depends_on = [
     null_resource.kubeconfig_get_output
