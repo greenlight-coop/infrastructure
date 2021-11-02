@@ -9,10 +9,10 @@ resource "kubernetes_secret" "linode-token-default" {
   }
 }
 
-resource "kubernetes_secret" "linode-token-istio-letsencrypt" {
+resource "kubernetes_secret" "linode-token-cert-manager" {
   metadata {
     name = "linode-token"
-    namespace = "istio-system"
+    namespace = "cert-manager"
   }
 
   data = {
@@ -20,6 +20,6 @@ resource "kubernetes_secret" "linode-token-istio-letsencrypt" {
   }
 
   depends_on = [
-    kubernetes_namespace.istio-system
+    kubernetes_namespace.cert-manager
   ]
 }
