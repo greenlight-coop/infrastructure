@@ -38,3 +38,8 @@ variable "min_node_count" {
 variable "region" {
   type    = string
 }
+
+variable "ttl_sec" {
+  type    = number
+  default = 86400
+}

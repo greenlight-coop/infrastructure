@@ -6,6 +6,7 @@ module "linode" {
   domain_name         = local.domain_name
   linode_token        = var.linode_token
   region              = var.region
+  ttl_sec             = local.ttl_sec
 }
 
 module "argo_cd" {
