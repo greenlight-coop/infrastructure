@@ -8,6 +8,6 @@ terraform state rm module.development_cluster_configuration.k8s_manifest.develop
 terraform state rm module.argo_cd.null_resource.argocd
 terraform state rm module.argo_cd.kubernetes_namespace.argocd
 terraform state rm module.development_cluster_configuration.kubernetes_namespace.greenlight-pipelines
-terraform state rm module.linode.kubernetes_namespace.istio-system
+terraform state rm module.linode.kubernetes_namespace.cert-manager
 terraform state rm module.project_cluster.module.base_cluster_configuration.kubernetes_namespace.knative-serving
 terraform destroy -auto-approve
