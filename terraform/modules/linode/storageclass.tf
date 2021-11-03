@@ -13,8 +13,8 @@ resource "kubernetes_storage_class" "linode-block-storage-retain-waitforfirstcon
 resource "null_resource" "kubeconfig_get_output" {
   provisioner "local-exec" {
     command = <<EOT
-      kubectl patch storageclass linode-block-storage-retain -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'" && \
-      kubectl patch storageclass linode-block-storage -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'"
+      kubectl patch storageclass linode-block-storage-retain -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}' && \
+      kubectl patch storageclass linode-block-storage -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
     EOT
   }
 
