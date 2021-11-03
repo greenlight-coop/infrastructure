@@ -21,7 +21,7 @@ data:
       ignoreDifferences: |
         jsonPointers:
         - /spec/preserveUnknownFields
-    cert-manager.io/v1alpha2/Certificate:
+    cert-manager.io/Certificate:
       ignoreDifferences: |
         jsonPointers:
         - /spec/duration
