@@ -10,3 +10,6 @@ terraform.tfstate*
 ## Sensitive data
 .ssh/
 secrets.auto.tfvars
+
+## Temporary overrides
+overrides.auto.tfvars
