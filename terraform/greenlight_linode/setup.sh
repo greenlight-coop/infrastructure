@@ -2,6 +2,19 @@
 
 set -ex
 
+wait_for_resource () {
+  while : ; do
+    kubectl -n $1 get $2 && break
+    sleep 5
+  done
+  if [ -z $4 ]
+  then
+    kubectl -n $1 wait $2 --for=condition=$3 --timeout=600s
+  else
+    kubectl -n $1 wait $2 -l $4 --for=condition=$3 --timeout=600s
+  fi
+}
+
 terraform init
 
 # Install Linode cluster
@@ -13,20 +26,12 @@ terraform apply -auto-approve \
 
 # Install Argo CD
 terraform apply -auto-approve -target=module.argo_cd
-kubectl -n argocd wait deployments -l app.kubernetes.io/part-of=argocd --for=condition=Available --timeout=240s
+wait_for_resource argocd deployments Available app.kubernetes.io/part-of=argocd
 
 # Install base cluster infrastructure
 terraform apply -auto-approve -target=module.project_cluster
-while : ; do
-  kubectl get -n istio-system deployments/istiod && break
-  sleep 5
-done
-kubectl -n istio-system wait deployments/istiod --for=condition=Available --timeout=600s
-while : ; do
-  kubectl get pods/loki-0 && break
-  sleep 5
-done
-kubectl wait pods/loki-0 --for=condition=Ready --timeout=600s
+wait_for_resource istio-system deployments/istiod Available
+wait_for_resource default pods/loki-0 Ready
 
 # Install development cluster infrastructure
 terraform apply -auto-approve -target=module.development_cluster_configuration
