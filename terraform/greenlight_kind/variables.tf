@@ -73,7 +73,7 @@ locals {
   base_name                             = "greenlight"
   bot_private_key_file                  = "../.ssh/id_ed25519"
   bot_private_key                       = file(local.bot_private_key_file)
-  domain_name                           = "apps-home.greenlightcoop.dev"
+  domain_name                           = "app-home.greenlightcoop.dev"
   greenlight_development_cluster_server = "https://kubernetes.default.svc"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")

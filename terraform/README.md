@@ -66,9 +66,9 @@ Log in to Grafana. Add a Loki Datasource with URL http://loki:3100
 Configure a webhook for the [greenlight-coop GitHub organization](https://github.com/organizations/greenlight-coop/settings/hooks/new)
 * Create the new GitHub webhook at the greenlight-coop organization level with the following settings:
     * Payload URL:
-        * Main: https://argocd.apps-home.greenlightcoop.dev/api/webhook
-        * GCP workspace: https://argocd.apps-feature-nnn.greenlightcoop.dev/api/webhook
-        * kind cluster: https://argocd.apps-home.greenlightcoop.dev/api/webhook
+        * Main: https://argocd.app-home.greenlightcoop.dev/api/webhook
+        * GCP workspace: https://argocd.app-feature-nnn.greenlightcoop.dev/api/webhook
+        * kind cluster: https://argocd.app-home.greenlightcoop.dev/api/webhook
     * Content type: application/json
     * Secret: the generated webhook_secret value from Terraform output
     * Which events...: Just the push event
@@ -76,9 +76,9 @@ Configure a webhook for the [greenlight-coop GitHub organization](https://github
 Create Tekton webhooks for repositories as needed. Example for Node.js Knative Service webhook:
 * Create new GitHub webhook in the target project
     * Payload URL:
-        * Main: https://tekton.apps-home.greenlightcoop.dev/webhook/service-pipeline
-        * GCP workspace: https://tekton.apps-feature-nnn.greenlightcoop.dev/webhook/service-pipeline
-        * kind cluster: https://tekton.apps-home.greenlightcoop.dev/webhook/service-pipeline
+        * Main: https://tekton.app-home.greenlightcoop.dev/webhook/service-pipeline
+        * GCP workspace: https://tekton.app-feature-nnn.greenlightcoop.dev/webhook/service-pipeline
+        * kind cluster: https://tekton.app-home.greenlightcoop.dev/webhook/service-pipeline
     * Content type: application/json
     * Secret: the generated webhook_secret value from Terraform output
     * Which events...: Send me everything

@@ -10,7 +10,7 @@ Configure the Linode LKE cluster with the following command:
 
     ./setup.sh
 
-Look up the generated NS records for the apps subdomain and add NS records for these name 
+Look up the generated NS records for the app subdomain and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
 ## Removal

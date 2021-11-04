@@ -61,7 +61,7 @@ resource "random_password" "admin" {
 locals {
   admin_password              = var.admin_password == "" ? random_password.admin.result : var.admin_password
   client_name                 = "test"
-  domain_name                 = "test.apps-home.greenlightcoop.dev"
+  domain_name                 = "test.app-home.greenlightcoop.dev"
   repo_url                    = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   target_revision             = "HEAD"
 }

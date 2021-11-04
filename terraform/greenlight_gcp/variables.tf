@@ -68,7 +68,7 @@ locals {
   bot_private_key                       = file(local.bot_private_key_file)
   cluster_name                          = "greenlight-development-cluster"
   cluster_context                       = "gke_${local.project_id}_${var.zone}_${local.cluster_name}"
-  domain_name                           = "apps${local.subdomain_suffix}.greenlightcoop.dev"
+  domain_name                           = "app${local.subdomain_suffix}.greenlightcoop.dev"
   greenlight_development_cluster_server = "https://kubernetes.default.svc"
   project_id                            = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-feature-current"
   project_name                          = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"

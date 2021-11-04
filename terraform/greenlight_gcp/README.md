@@ -15,7 +15,7 @@ Configure the GCP project and install the GKE cluster with the following command
         -target=module.google_project \
         -target=null_resource.update-kubeconfig
 
-Look up the generated NS records for the apps and knative subdomains and add NS records for these name 
+Look up the generated NS records for the app subdomain and add NS records for these name 
 servers in the Google Domains managed greenlightcoop.dev domain.
 
 ## Removal
