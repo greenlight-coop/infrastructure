@@ -5,7 +5,9 @@ module "linode" {
   cluster_name        = local.cluster_name
   domain_name         = local.domain_name
   linode_token        = var.linode_token
-  machine_type        = "g6-dedicated-2"
+  machine_type        = var.machine_type
+  max_node_count      = var.max_node_count
+  min_node_count      = var.min_node_count
   region              = var.region
   ttl_sec             = local.ttl_sec
 }

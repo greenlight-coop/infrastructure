@@ -39,6 +39,18 @@ variable "linode_token" {
   }
 }
 
+variable "machine_type" {
+  type    = string
+}
+
+variable "max_node_count" {
+  type    = number
+}
+
+variable "min_node_count" {
+  type    = number
+}
+
 variable "region" {
   type    = string
 }
