@@ -31,7 +31,7 @@ Create a new directory in the `clients` directory for the client Terraform proje
         --username admin \
         --password <password> \
         --grpc-web \
-        argocd.<apps-subdomain>.greenlightcoop.dev
+        argocd.<app-subdomain>.greenlightcoop.dev
 
       argocd cluster add <new cluster context name>
 

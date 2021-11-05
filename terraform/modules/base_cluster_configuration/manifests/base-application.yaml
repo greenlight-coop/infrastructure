@@ -36,6 +36,7 @@ spec:
           httpsNodePort: ${istio_https_node_port}
         metricsServer:
           enabled: ${metrics_server_enabled}
+        provider: ${provider}
         spec:
           destination:
             server: ${destination_server}

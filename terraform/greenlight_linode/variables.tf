@@ -1,16 +1,15 @@
 variable "admin_email" {
   type    = string
-  default = "admin@greenlight.coop"
 }
 
 variable "admin_password" {
-  type = string
-  default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 
 variable "cassandra_enabled" {
   type    = bool
-  default = false
 }
 
 variable "bot_github_token" {
@@ -31,27 +30,33 @@ variable "bot_password" {
   }
 }
 
-variable "kafka_enabled" {
+variable "linode_token" {
+  type    = string
+  sensitive = true
+  validation {
+    condition     = length(var.linode_token) > 0
+    error_message = "Value for linode_token must be set."
+  }
+}
+
+variable "machine_type" {
+  type    = string
+}
+
+variable "max_node_count" {
+  type    = number
+}
+
+variable "min_node_count" {
+  type    = number
+}
+
+variable "region" {
+  type    = string
+}
+
+variable "use_staging_certs" {
   type    = bool
-  default = false
-}
-
-variable "kind_tls_crt" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.kind_tls_crt) > 0
-    error_message = "Value for kind_tls_crt must be set."
-  }
-}
-
-variable "kind_tls_key" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.kind_tls_key) > 0
-    error_message = "Value for kind_tls_key must be set."
-  }
 }
 
 variable "webhook_secret" {
@@ -73,8 +78,12 @@ locals {
   base_name                             = "greenlight"
   bot_private_key_file                  = "../.ssh/id_ed25519"
   bot_private_key                       = file(local.bot_private_key_file)
-  domain_name                           = "app-home.greenlightcoop.dev"
+  cluster_name                          = terraform.workspace == "default" ? "development-cluster" : "development-cluster-${terraform.workspace}"
+  domain_name                           = "app${local.subdomain_suffix}.greenlightcoop.dev"
   greenlight_development_cluster_server = "https://kubernetes.default.svc"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
+  subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
+  ttl_sec                               = terraform.workspace == "default" ? 86400 : 300
+  kubeconfig_output_filename            = terraform.workspace == "default" ? "config-linode-default" : "config-linode-${terraform.workspace}"
 }

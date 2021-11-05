@@ -1,11 +1,15 @@
-module "kind_cluster" {
-  source = "../modules/kind_cluster"
+module "linode" {
+  source = "../modules/linode"
 
-  cluster_name  = "greenlight"
-  http_port     = 80
-  https_port    = 443
-  kind_tls_crt  = var.kind_tls_crt
-  kind_tls_key  = var.kind_tls_key
+  admin_email         = var.admin_email
+  cluster_name        = local.cluster_name
+  domain_name         = local.domain_name
+  linode_token        = var.linode_token
+  machine_type        = var.machine_type
+  max_node_count      = var.max_node_count
+  min_node_count      = var.min_node_count
+  region              = var.region
+  ttl_sec             = local.ttl_sec
 }
 
 module "argo_cd" {
@@ -17,7 +21,8 @@ module "argo_cd" {
   webhook_secret  = var.webhook_secret
 
   depends_on = [
-    module.kind_cluster
+    null_resource.kubeconfig,
+    module.linode
   ]
 }
 
@@ -28,22 +33,18 @@ module "project_cluster" {
   admin_password          = local.admin_password
   base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
-  cert_manager_enabled    = false
-  cluster_provider        = "kind"
+  cert_manager_enabled    = true
+  cluster_provider        = "linode"
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
-  external_dns_enabled    = false
-  kafka_enabled           = var.kafka_enabled
-  istio_jwt_policy        = "first-party-jwt"
-  istio_http_node_port    = 30080
-  istio_https_node_port   = 30443
+  external_dns_enabled    = true
   metrics_server_enabled  = true
   repo_url                = local.repo_url
   target_revision         = local.target_revision
-  use_staging_certs       = false
+  use_staging_certs       = var.use_staging_certs
 
   depends_on = [
-    module.kind_cluster,
+    module.linode,
     module.argo_cd
   ]
 }
@@ -60,7 +61,7 @@ module "development_cluster_configuration" {
   webhook_secret      = var.webhook_secret
 
   depends_on = [
-    module.kind_cluster,
+    module.linode,
     module.argo_cd,
     module.project_cluster
   ]

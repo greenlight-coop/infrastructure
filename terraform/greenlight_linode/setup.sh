@@ -17,9 +17,12 @@ wait_for_resource () {
 
 terraform init
 
-# Create kind cluster
-terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind
-terraform apply -auto-approve -target=module.kind_cluster
+# Install Linode cluster
+terraform apply -auto-approve \
+  -target=module.linode.linode_lke_cluster.greenlight-development-cluster \
+  -target=null_resource.kubeconfig
+terraform apply -auto-approve \
+  -target=module.linode
 
 # Install Argo CD
 terraform apply -auto-approve -target=module.argo_cd
@@ -32,3 +35,4 @@ wait_for_resource default pods/loki-0 Ready
 
 # Install development cluster infrastructure
 terraform apply -auto-approve -target=module.development_cluster_configuration
+terraform apply -auto-approve

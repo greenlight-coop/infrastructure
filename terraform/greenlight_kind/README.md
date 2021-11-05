@@ -10,15 +10,15 @@ Ensure that current `home` DNS records reflect the current IP address.
 
 Manually generate the Let's Encrypt certificates and private key using the following command:
 
-    sudo certbot -d 'apps-home.greenlightcoop.dev' -d '*.apps-home.greenlightcoop.dev' certonly --manual
+    sudo certbot -d 'app-home.greenlightcoop.dev' -d '*.app-home.greenlightcoop.dev' certonly --manual
 
 ### Preparation
 
 Steps below are temporary and should be used with caution - delete the environment variables after use 
 Another option is to supply the values when prompted
 
-    export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/fullchain.pem)
-    export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/privkey.pem)
+    export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/fullchain.pem)
+    export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/privkey.pem)
 
 ### Configure kind Cluster
 
@@ -35,18 +35,18 @@ main README.
 
 ## Generating new certificates
 
-    sudo certbot -d 'apps-home.greenlightcoop.dev' -d '*.apps-home.greenlightcoop.dev' certonly --manual
+    sudo certbot -d 'app-home.greenlightcoop.dev' -d '*.app-home.greenlightcoop.dev' certonly --manual
 
 When prompted as below:
 
     Please deploy a DNS TXT record under the name
-    _acme-challenge.apps-home.greenlightcoop.dev with the following value:
+    _acme-challenge.app-home.greenlightcoop.dev with the following value:
 
     OZdKS2pomMFKHtBiNrmKr8WrrG3VVXie0_pCWYiDWX8
 
     Before continuing, verify the record is deployed.
 
-Add a DNS TXT record for _acme-challenge.apps-home with the given value to the greenlightcoop.dev DNS domain 
+Add a DNS TXT record for _acme-challenge.app-home with the given value to the greenlightcoop.dev DNS domain 
 in Google domains.
 
 When prompted as below:
@@ -57,7 +57,7 @@ When prompted as below:
 
     And make it available on your web server at this URL:
 
-    http://apps-home.greenlightcoop.dev/.well-known/acme-challenge/08mVPwxIndZaT9nV6Tv9RoHojBFDE5HEhT5TctzfuTc
+    http://app-home.greenlightcoop.dev/.well-known/acme-challenge/08mVPwxIndZaT9nV6Tv9RoHojBFDE5HEhT5TctzfuTc
 
     (This must be set up in addition to the previous challenges; do not remove,
     replace, or undo the previous challenge tasks yet.)
@@ -88,8 +88,8 @@ Remove nginx docker container
 
 Export updated keys:
 
-    export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/fullchain.pem)
-    export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/apps-home.greenlightcoop.dev/privkey.pem)
+    export TF_VAR_kind_tls_crt=$(sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/fullchain.pem)
+    export TF_VAR_kind_tls_key=$(sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/privkey.pem)
 
 ## Removal
 

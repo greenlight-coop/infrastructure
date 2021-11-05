@@ -21,6 +21,10 @@ data:
       ignoreDifferences: |
         jsonPointers:
         - /spec/preserveUnknownFields
+    cert-manager.io/Certificate:
+      ignoreDifferences: |
+        jsonPointers:
+        - /spec/duration
     v1/ConfigMap:
       ignoreDifferences: |
         namespace: knative-serving
