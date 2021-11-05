@@ -35,8 +35,8 @@ terraform {
   backend "s3" {
     bucket = "tfstate-greenlight"
     key    = "tfstate"
-    region = "us-east-1"
-    endpoint = "us-east-1.linodeobjects.com"
+    region = "nyc3"
+    endpoint = "nyc3.digitaloceanspaces.com"
     skip_credentials_validation = true
   }
 }

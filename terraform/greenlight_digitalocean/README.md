@@ -2,7 +2,9 @@
 
 ## Initial Preparation
 
-* Set up Object Storage Bucket and Access Keys for Terraform backend
+* Create `tfstate-project` project to maintain Terraform state
+* Set up Space `tfstate-greenlight` and access keys for Terraform backend in `tfstate-project` project
+* `brew install doctl`
 
 ## Configure Linode Cluster
 

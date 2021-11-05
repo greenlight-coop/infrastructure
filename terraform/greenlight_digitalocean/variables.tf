@@ -8,10 +8,6 @@ variable "admin_password" {
   default   = ""
 }
 
-variable "cassandra_enabled" {
-  type    = bool
-}
-
 variable "bot_github_token" {
   type      = string
   sensitive = true
@@ -30,13 +26,21 @@ variable "bot_password" {
   }
 }
 
-variable "linode_token" {
+variable "cassandra_enabled" {
+  type    = bool
+}
+
+variable "digitalocean_token" {
   type    = string
   sensitive = true
   validation {
-    condition     = length(var.linode_token) > 0
-    error_message = "Value for linode_token must be set."
+    condition     = length(var.digitalocean_token) > 0
+    error_message = "Value for digitalocean_token must be set."
   }
+}
+
+variable "k8s_version" {
+  type = string
 }
 
 variable "machine_type" {
@@ -84,6 +88,5 @@ locals {
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")
-  ttl_sec                               = terraform.workspace == "default" ? 86400 : 300
   kubeconfig_output_filename            = terraform.workspace == "default" ? "config-linode-default" : "config-linode-${terraform.workspace}"
 }

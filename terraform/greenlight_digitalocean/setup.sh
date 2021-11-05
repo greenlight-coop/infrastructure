@@ -19,7 +19,7 @@ terraform init
 
 # Install DigitalOcean cluster
 terraform apply -auto-approve \
-  -target=module.digitalocean.???cluster??? \
+  -target=module.digitalocean.digitalocean_kubernetes_cluster.greenlight-development-cluster \
   -target=null_resource.kubeconfig
 terraform apply -auto-approve \
   -target=module.digitalocean
