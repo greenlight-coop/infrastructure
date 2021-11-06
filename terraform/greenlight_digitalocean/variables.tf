@@ -85,6 +85,7 @@ locals {
   cluster_name                          = terraform.workspace == "default" ? "development-cluster" : "development-cluster-${terraform.workspace}"
   domain_name                           = "app${local.subdomain_suffix}.greenlightcoop.dev"
   greenlight_development_cluster_server = "https://kubernetes.default.svc"
+  project_name                          = terraform.workspace == "default" ? "greenlight-coop-development" : "gl-development-${terraform.workspace}"
   repo_url                              = "git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git"
   subdomain_suffix                      = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   target_revision                       = terraform.workspace == "default" ? "HEAD" : replace(terraform.workspace, "-", "/")

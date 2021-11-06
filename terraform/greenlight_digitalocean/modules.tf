@@ -8,6 +8,7 @@ module "digitalocean" {
   machine_type        = var.machine_type
   max_node_count      = var.max_node_count
   min_node_count      = var.min_node_count
+  project_name        = local.project_name
   region              = var.region
 }
 

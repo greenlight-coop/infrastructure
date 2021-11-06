@@ -4,6 +4,6 @@ resource "kubernetes_namespace" "cert-manager" {
   }
 
   depends_on = [
-    linode_lke_cluster.greenlight-development-cluster
+    digitalocean_kubernetes_cluster.greenlight-development-cluster
   ]
 }
