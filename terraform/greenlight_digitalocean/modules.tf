@@ -1,5 +1,5 @@
-module "linode" {
-  source = "../modules/linode"
+module "digitalocean" {
+  source = "../modules/digitalocean"
 
   admin_email         = var.admin_email
   cluster_name        = local.cluster_name
@@ -34,7 +34,7 @@ module "project_cluster" {
   base_name               = local.base_name
   cassandra_enabled       = var.cassandra_enabled
   cert_manager_enabled    = true
-  cluster_provider        = "linode"
+  cluster_provider        = "digitalocean"
   destination_server      = local.greenlight_development_cluster_server
   domain_name             = local.domain_name
   external_dns_enabled    = true
