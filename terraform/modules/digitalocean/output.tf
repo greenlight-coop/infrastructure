@@ -13,7 +13,7 @@ output "kubernetes_token" {
 }
 
 output "kubernetes_cluster_ca_certificate" {
-  value = = base64decode(
+  value = base64decode(
     digitalocean_kubernetes_cluster.greenlight-development-cluster.kube_config[0].cluster_ca_certificate
   )
   sensitive = true
