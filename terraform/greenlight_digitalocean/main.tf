@@ -49,19 +49,19 @@ provider "digitalocean" {
 provider "kubernetes" {
   host                    = module.digitalocean.kubernetes_host
   token                   = module.digitalocean.kubernetes_token
-  cluster_ca_certificate  = kubernetes_cluster_ca_certificate
+  cluster_ca_certificate  = module.digitalocean.kubernetes_cluster_ca_certificate
 }
 
 provider "k8s" { 
   host                    = module.digitalocean.kubernetes_host
   token                   = module.digitalocean.kubernetes_token
-  cluster_ca_certificate  = kubernetes_cluster_ca_certificate
+  cluster_ca_certificate  = module.digitalocean.kubernetes_cluster_ca_certificate
 }
 
 provider "helm" { 
   kubernetes {
     host                    = module.digitalocean.kubernetes_host
     token                   = module.digitalocean.kubernetes_token
-    cluster_ca_certificate  = kubernetes_cluster_ca_certificate
+    cluster_ca_certificate  = module.digitalocean.kubernetes_cluster_ca_certificate
   }
 }
