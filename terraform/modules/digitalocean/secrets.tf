@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "digitalocean_token-default" {
   metadata {
-    name = "digitalocean_token"
+    name = "digitalocean-token"
     namespace = "default"
   }
 
@@ -11,7 +11,7 @@ resource "kubernetes_secret" "digitalocean_token-default" {
 
 resource "kubernetes_secret" "digitalocean_token-cert-manager" {
   metadata {
-    name = "digitalocean_token"
+    name = "digitalocean-token"
     namespace = "cert-manager"
   }
 
