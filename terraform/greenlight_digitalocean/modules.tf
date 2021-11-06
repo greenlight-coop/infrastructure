@@ -1,7 +1,6 @@
 module "digitalocean" {
   source = "../modules/digitalocean"
 
-  admin_email         = var.admin_email
   cluster_name        = local.cluster_name
   digitalocean_token  = var.digitalocean_token
   domain_name         = local.domain_name
