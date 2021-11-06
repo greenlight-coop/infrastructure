@@ -9,7 +9,6 @@ module "digitalocean" {
   max_node_count      = var.max_node_count
   min_node_count      = var.min_node_count
   region              = var.region
-  ttl_sec             = local.ttl_sec
 }
 
 module "argo_cd" {
