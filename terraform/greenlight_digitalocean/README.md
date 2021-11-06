@@ -3,8 +3,11 @@
 ## Initial Preparation
 
 * Create `tfstate-project` project to maintain Terraform state
+* Create a token `digitalocean_token` and save the value
 * Set up Space `tfstate-greenlight` and access keys for Terraform backend in `tfstate-project` project
 * `brew install doctl`
+* `doctl auth init`
+    * Provide token created above when asked
 
 ## Configure Linode Cluster
 

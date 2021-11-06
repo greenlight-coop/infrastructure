@@ -45,16 +45,22 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
-provider "kubernetes" { 
-  config_path = "~/.kube/config"
+provider "kubernetes" {
+  host                    = module.digitalocean.kubernetes_host
+  token                   = module.digitalocean.kubernetes_token
+  cluster_ca_certificate  = kubernetes_cluster_ca_certificate
 }
 
 provider "k8s" { 
-  config_path = "~/.kube/config"
+  host                    = module.digitalocean.kubernetes_host
+  token                   = module.digitalocean.kubernetes_token
+  cluster_ca_certificate  = kubernetes_cluster_ca_certificate
 }
 
 provider "helm" { 
   kubernetes {
-    config_path = "~/.kube/config"
+    host                    = module.digitalocean.kubernetes_host
+    token                   = module.digitalocean.kubernetes_token
+    cluster_ca_certificate  = kubernetes_cluster_ca_certificate
   }
 }
