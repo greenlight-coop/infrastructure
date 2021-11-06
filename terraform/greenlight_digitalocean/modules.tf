@@ -3,8 +3,9 @@ module "digitalocean" {
 
   admin_email         = var.admin_email
   cluster_name        = local.cluster_name
+  digitalocean_token  = var.digitalocean_token
   domain_name         = local.domain_name
-  linode_token        = var.linode_token
+  k8s_version         = var.k8s_version
   machine_type        = var.machine_type
   max_node_count      = var.max_node_count
   min_node_count      = var.min_node_count
