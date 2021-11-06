@@ -22,7 +22,7 @@ module "argo_cd" {
 
   depends_on = [
     null_resource.kubeconfig,
-    module.linode
+    module.digitalocean
   ]
 }
 
@@ -44,7 +44,7 @@ module "project_cluster" {
   use_staging_certs       = var.use_staging_certs
 
   depends_on = [
-    module.linode,
+    module.digitalocean,
     module.argo_cd
   ]
 }
@@ -61,7 +61,7 @@ module "development_cluster_configuration" {
   webhook_secret      = var.webhook_secret
 
   depends_on = [
-    module.linode,
+    module.digitalocean,
     module.argo_cd,
     module.project_cluster
   ]

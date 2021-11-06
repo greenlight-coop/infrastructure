@@ -1,4 +1,4 @@
-# Green Light Linode Project
+# Green Light DigitalOcean Project
 
 ## Initial Preparation
 
@@ -9,9 +9,9 @@
 * `doctl auth init`
     * Provide token created above when asked
 
-## Configure Linode Cluster
+## Configure DigitalOcean Cluster
 
-Configure the Linode LKE cluster with the following command:
+Configure the DigitalOcean Kubernetes cluster with the following command:
 
     ./setup.sh
 
