@@ -9,10 +9,10 @@ resource "kubernetes_secret" "digitalocean_token-default" {
   }
 }
 
-resource "kubernetes_secret" "digitalocean_token-cert-manager" {
+resource "kubernetes_secret" "digitalocean-token-istio-system" {
   metadata {
     name = "digitalocean-token"
-    namespace = "cert-manager"
+    namespace = "istio-system"
   }
 
   data = {
@@ -20,6 +20,6 @@ resource "kubernetes_secret" "digitalocean_token-cert-manager" {
   }
 
   depends_on = [
-    kubernetes_namespace.cert-manager
+    kubernetes_namespace.istio-system
   ]
 }

@@ -1,6 +1,6 @@
-resource "kubernetes_namespace" "cert-manager" {
+resource "kubernetes_namespace" "istio-system" {
   metadata {
-    name = "cert-manager"
+    name = "istio-system"
   }
 
   depends_on = [
