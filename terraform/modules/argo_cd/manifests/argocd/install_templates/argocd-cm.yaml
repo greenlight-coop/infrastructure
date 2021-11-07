@@ -57,3 +57,10 @@ data:
         hs.status = "Progressing"
         hs.message = "Initializing issuer"
         return hs
+  resource.exclusions: |
+    - apiGroups:
+        - cilium.io
+      kinds:
+        - CiliumIdentity
+      clusters:
+        - "*"
