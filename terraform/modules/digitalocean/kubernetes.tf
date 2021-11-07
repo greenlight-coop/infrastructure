@@ -11,10 +11,26 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
   }
 
   node_pool {
-    name       = "primary-node-pool"
+    name       = "base-pool"
     size       = var.machine_type
-    auto_scale = true
+    auto_scale = false
     min_nodes  = var.min_node_count
-    max_nodes  = var.max_node_count
   }
+}
+
+resource "digitalocean_volume" "ceph_voume" {
+  count =                 var.min_node_count
+
+  region                  = var.region
+  name                    = "ceph_voume_${count.index}"
+  size                    = 50
+  initial_filesystem_type = "ext4"
+}
+
+
+resource "digitalocean_volume_attachment" "foobar" {
+  count =                 var.min_node_count
+
+  droplet_id = digitalocean_kubernetes_cluster.node_pool.nodes[count.index].greenlight-development-cluster.id
+  volume_id  = digitalocean_volume.ceph_voume[count.index].id
 }
