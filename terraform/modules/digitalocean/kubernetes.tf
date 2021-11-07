@@ -11,10 +11,10 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
   }
 
   node_pool {
-    name       = "base-pool"
-    size       = var.machine_type
-    auto_scale = false
-    min_nodes  = var.min_node_count
+    name        = "base-pool"
+    size        = var.machine_type
+    auto_scale  = false
+    node_count  = var.min_node_count
   }
 }
 
