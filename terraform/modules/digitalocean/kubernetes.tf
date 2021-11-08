@@ -28,6 +28,7 @@ resource "digitalocean_volume" "ceph_volume" {
   name                    = "ceph-volume-${count.index}"
   size                    = 50
   initial_filesystem_type = "ext4"
+  tags = []
 }
 
 
