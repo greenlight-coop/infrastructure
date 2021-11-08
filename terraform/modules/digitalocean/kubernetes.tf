@@ -34,6 +34,6 @@ resource "digitalocean_volume" "ceph_volume" {
 resource "digitalocean_volume_attachment" "ceph_volume_attachment" {
   count =                 var.min_node_count
 
-  droplet_id = digitalocean_kubernetes_cluster.greenlight-development-cluster.node_pool[0].nodes[count.index].greenlight-development-cluster.droplet_id
+  droplet_id = digitalocean_kubernetes_cluster.greenlight-development-cluster.node_pool[0].nodes[count.index].droplet_id
   volume_id  = digitalocean_volume.ceph_volume[count.index].id
 }
