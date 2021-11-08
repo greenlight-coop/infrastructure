@@ -25,7 +25,7 @@ resource "digitalocean_volume" "ceph_volume" {
   count =                 var.min_node_count
 
   region                  = var.region
-  name                    = "ceph_volume_${count.index}"
+  name                    = "ceph-volume-${count.index}"
   size                    = 50
   initial_filesystem_type = "ext4"
 }
