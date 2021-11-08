@@ -4,6 +4,7 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
   version       = var.k8s_version
   ha            = true
   auto_upgrade  = true
+  tags = []
 
   maintenance_policy {
     start_time  = "04:00"
@@ -15,22 +16,24 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
     size        = var.machine_type
     auto_scale  = false
     node_count  = var.min_node_count
+    tags = []
+    labels = {}
   }
 }
 
-resource "digitalocean_volume" "ceph_voume" {
+resource "digitalocean_volume" "ceph_volume" {
   count =                 var.min_node_count
 
   region                  = var.region
-  name                    = "ceph_voume_${count.index}"
+  name                    = "ceph_volume_${count.index}"
   size                    = 50
   initial_filesystem_type = "ext4"
 }
 
 
-resource "digitalocean_volume_attachment" "foobar" {
+resource "digitalocean_volume_attachment" "ceph_volume_attachment" {
   count =                 var.min_node_count
 
-  droplet_id = digitalocean_kubernetes_cluster.node_pool.nodes[count.index].greenlight-development-cluster.id
-  volume_id  = digitalocean_volume.ceph_voume[count.index].id
+  droplet_id = digitalocean_kubernetes_cluster.greenlight-development-cluster.node_pool[0].nodes[count.index].greenlight-development-cluster.droplet_id
+  volume_id  = digitalocean_volume.ceph_volume[count.index].id
 }
