@@ -27,7 +27,6 @@ resource "digitalocean_volume" "ceph_volume" {
   region                  = var.region
   name                    = "ceph-volume-${count.index}"
   size                    = 100
-  initial_filesystem_type = "ext4"
   tags = []
 }
 
