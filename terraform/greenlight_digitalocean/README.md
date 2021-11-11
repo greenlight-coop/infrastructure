@@ -20,7 +20,8 @@ servers in the Google Domains managed greenlightcoop.dev domain.
 
 ## Removal
 
-
 Run:
 
     ./cleanup.sh
+
+Ensure all Droplets, Volumes, Domains, Firewalls and Load Balances are removed
