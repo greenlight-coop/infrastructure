@@ -26,7 +26,7 @@ resource "digitalocean_volume" "ceph_volume" {
 
   region                  = var.region
   name                    = "ceph-volume-${count.index}"
-  size                    = 100
+  size                    = 32
   tags = []
 }
 
