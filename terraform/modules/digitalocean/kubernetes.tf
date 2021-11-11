@@ -4,7 +4,7 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
   version       = var.k8s_version
   ha            = true
   auto_upgrade  = true
-  tags = []
+  tags          = []
 
   maintenance_policy {
     start_time  = "04:00"
