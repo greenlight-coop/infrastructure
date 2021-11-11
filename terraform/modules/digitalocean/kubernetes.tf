@@ -12,28 +12,12 @@ resource "digitalocean_kubernetes_cluster" "greenlight-development-cluster" {
   }
 
   node_pool {
-    name        = "base-pool"
+    name        = "primary-node-pool"
     size        = var.machine_type
-    auto_scale  = false
-    node_count  = var.min_node_count
+    auto_scale = true
+    min_nodes  = var.min_node_count
+    max_nodes  = var.max_node_count
     tags = []
     labels = {}
   }
-}
-
-resource "digitalocean_volume" "ceph_volume" {
-  count =                 var.min_node_count
-
-  region                  = var.region
-  name                    = "ceph-volume-${count.index}"
-  size                    = 32
-  tags = []
-}
-
-
-resource "digitalocean_volume_attachment" "ceph_volume_attachment" {
-  count =                 var.min_node_count
-
-  droplet_id = digitalocean_kubernetes_cluster.greenlight-development-cluster.node_pool[0].nodes[count.index].droplet_id
-  volume_id  = digitalocean_volume.ceph_volume[count.index].id
 }
