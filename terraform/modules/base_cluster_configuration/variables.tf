@@ -69,6 +69,10 @@ variable "repo_url" {
   type    = string
 }
 
+variable "rook_enabled" {
+  type    = bool
+}
+
 variable "target_revision" {
   type    = string
 }

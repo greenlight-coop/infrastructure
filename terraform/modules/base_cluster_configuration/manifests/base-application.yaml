@@ -37,6 +37,8 @@ spec:
         metricsServer:
           enabled: ${metrics_server_enabled}
         provider: ${provider}
+        rook:
+          enabled: ${rook_enabled}
         spec:
           destination:
             server: ${destination_server}

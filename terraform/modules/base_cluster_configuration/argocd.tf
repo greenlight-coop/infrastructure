@@ -23,6 +23,7 @@ resource "k8s_manifest" "base-application" {
       istio_https_node_port   = var.istio_https_node_port
       metrics_server_enabled  = var.metrics_server_enabled,
       provider                = var.cluster_provider,
+      rook_enabled            = var.rook_enabled,
       repo_url                = var.repo_url,
       target_revision         = var.target_revision
       use_staging_certs       = var.use_staging_certs
