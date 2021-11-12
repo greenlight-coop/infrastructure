@@ -17,6 +17,8 @@ spec:
     helm:
       values: |
         domainName: ${domain_name}
+        rook:
+          enabled: ${rook_enabled}
         spec:
           project: greenlight-project
           source:
