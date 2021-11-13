@@ -1,14 +1,14 @@
 terraform {
-  required_version = ">= 1.0.5"
+  required_version = ">= 1.0.11"
 
   required_providers {
-    helm = {
-      source  = "hashicorp/helm"
-      version = ">= 2.3.0"
-    }
     google = {
       source =  "hashicorp/google"
-      version = "~> 3.82.0"
+      version = "~> 4.0.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.4.1"
     }
     k8s = {
       source  = "banzaicloud/k8s"
@@ -16,7 +16,7 @@ terraform {
     }
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.4.1"
+      version = "~> 2.6.1"
     }
     local = {
       source =  "hashicorp/local"
