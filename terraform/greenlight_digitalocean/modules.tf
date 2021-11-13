@@ -40,6 +40,7 @@ module "project_cluster" {
   external_dns_enabled    = true
   metrics_server_enabled  = true
   repo_url                = local.repo_url
+  rook_enabled            = true
   target_revision         = local.target_revision
   use_staging_certs       = var.use_staging_certs
 
@@ -57,6 +58,7 @@ module "development_cluster_configuration" {
   bot_private_key     = local.bot_private_key
   domain_name         = local.domain_name
   repo_url            = local.repo_url
+  rook_enabled        = true
   target_revision     = local.target_revision
   webhook_secret      = var.webhook_secret
 

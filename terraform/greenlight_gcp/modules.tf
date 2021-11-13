@@ -44,6 +44,7 @@ module "project_cluster" {
   google_project_id       = local.project_id
   metrics_server_enabled  = false
   repo_url                = local.repo_url
+  rook_enabled            = false
   target_revision         = local.target_revision
   use_staging_certs       = var.use_staging_certs
 
@@ -61,6 +62,7 @@ module "development_cluster_configuration" {
   bot_private_key     = local.bot_private_key
   domain_name         = local.domain_name
   repo_url            = local.repo_url
+  rook_enabled        = false
   target_revision     = local.target_revision
   webhook_secret      = var.webhook_secret
 

@@ -159,3 +159,9 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 * Connect to cqlsh as superuser
 
       k exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-superuser -p <password>
+
+### Ceph
+
+* Get Ceph Dashboard admin password:
+
+      kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo

@@ -39,6 +39,7 @@ module "project_cluster" {
   istio_https_node_port   = 30443
   metrics_server_enabled  = true
   repo_url                = local.repo_url
+  rook_enabled            = false
   target_revision         = local.target_revision
   use_staging_certs       = false
 
@@ -56,6 +57,7 @@ module "development_cluster_configuration" {
   bot_private_key     = local.bot_private_key
   domain_name         = local.domain_name
   repo_url            = local.repo_url
+  rook_enabled        = false
   target_revision     = local.target_revision
   webhook_secret      = var.webhook_secret
 

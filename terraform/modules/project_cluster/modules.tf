@@ -16,6 +16,7 @@ module "base_cluster_configuration" {
   kafka_enabled           = var.kafka_enabled
   google_project_id       = var.google_project_id
   metrics_server_enabled  = var.metrics_server_enabled
+  rook_enabled            = var.rook_enabled
   repo_url                = var.repo_url
   target_revision         = var.target_revision
   use_staging_certs       = var.use_staging_certs
