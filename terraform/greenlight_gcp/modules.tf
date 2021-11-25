@@ -63,6 +63,7 @@ module "development_cluster_configuration" {
   domain_name         = local.domain_name
   repo_url            = local.repo_url
   rook_enabled        = false
+  snyk_token          = var.snyk_token
   target_revision     = local.target_revision
   webhook_secret      = var.webhook_secret
 

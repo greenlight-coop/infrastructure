@@ -120,3 +120,19 @@ resource "kubernetes_secret" "greenlight-pipelines-buildkit-daemon-certs" {
   ]
 }
 
+
+resource "kubernetes_secret" "greenlight-pipelines-snyk-token" {
+  metadata {
+    name = "snyk"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    token = var.snyk_token
+  }
+  
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+}
+

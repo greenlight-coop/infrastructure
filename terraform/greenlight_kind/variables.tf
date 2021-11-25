@@ -68,6 +68,15 @@ resource "random_password" "admin" {
   special = false
 }
 
+variable "snyk_token" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.snyk_token) > 0
+    error_message = "Value for snyk_token must be set."
+  }
+}
+
 locals {
   admin_password                        = var.admin_password == "" ? random_password.admin.result : var.admin_password
   base_name                             = "greenlight"

@@ -25,6 +25,11 @@ variable "rook_enabled" {
   type    = bool
 }
 
+variable "snyk_token" {
+  type      = string
+  sensitive = true
+}
+
 variable "target_revision" {
   type    = string
 }
