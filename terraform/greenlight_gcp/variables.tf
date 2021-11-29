@@ -37,6 +37,15 @@ variable "region" {
   default = "us-east4"
 }
 
+variable "snyk_token" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.snyk_token) > 0
+    error_message = "Value for snyk_token must be set."
+  }
+}
+
 variable "use_staging_certs" {
   type    = bool
   default = false

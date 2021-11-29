@@ -63,6 +63,15 @@ variable "use_staging_certs" {
   type    = bool
 }
 
+variable "snyk_token" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.snyk_token) > 0
+    error_message = "Value for snyk_token must be set."
+  }
+}
+
 variable "webhook_secret" {
   type      = string
   sensitive = true
