@@ -3,7 +3,14 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
 data:
-  url: https://argocd.${domain_name}
+  configManagementPlugins: |
+    - name: kustomized-helm
+      init:
+        command: ["/bin/sh", "-c"]
+        args: ["helm dependency build"]
+      generate:
+        command: [sh, -c]
+        args: ["helm template --release-name release-name . > all.yaml && kustomize build"]
   resource.customizations: |
     admissionregistration.k8s.io/MutatingWebhookConfiguration:
       ignoreDifferences: |
@@ -64,3 +71,4 @@ data:
         - CiliumIdentity
       clusters:
         - "*"
+  url: https://argocd.${domain_name}
