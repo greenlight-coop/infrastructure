@@ -10,7 +10,7 @@ data:
         args: ["helm dependency build"]
       generate:
         command: [sh, -c]
-        args: ["helm template --include-crds --release-name release-name . > all.yaml && kustomize build"]
+        args: ["helm template --include-crds . > all.yaml && kustomize build"]
   resource.customizations: |
     admissionregistration.k8s.io/MutatingWebhookConfiguration:
       ignoreDifferences: |
