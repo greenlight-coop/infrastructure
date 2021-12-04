@@ -5,4 +5,5 @@ machine_type = "s-4vcpu-8gb"
 max_node_count = 10
 min_node_count = 3
 region = "nyc1"
+# region = "sfo3"
 use_staging_certs = false
