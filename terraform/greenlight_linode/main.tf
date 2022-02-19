@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.1.3"
+  required_version = ">= 1.1.6"
 
   required_providers {
     helm = {
@@ -12,11 +12,11 @@ terraform {
     }
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.7.1"
+      version = "~> 2.8.0"
     }
     linode = {
       source =  "linode/linode"
-      version = "~> 1.25.1"
+      version = "~> 1.25.2"
     }
     local = {
       source =  "hashicorp/local"
