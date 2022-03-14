@@ -136,3 +136,20 @@ resource "kubernetes_secret" "greenlight-pipelines-snyk-token" {
   ]
 }
 
+resource "kubernetes_secret" "greenlight-pipelines-verdaccio-htpasswd" {
+  metadata {
+    name = "verdaccio-htpasswd"
+    namespace = "greenlight-pipelines"
+  }
+
+  data = {
+    "htpasswd" = <<-EOF
+      greenlight-coop-bot:${bcrypt(var.bot_password)}
+    EOF
+  }
+
+  depends_on = [
+    kubernetes_namespace.greenlight-pipelines
+  ]
+}
+
