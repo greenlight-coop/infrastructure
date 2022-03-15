@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.1.6"
+  required_version = ">= 1.1.7"
 
   required_providers {
     google = {
       source =  "hashicorp/google"
-      version = "~> 4.11.0"
+      version = "~> 4.14.0"
     }
     k8s = {
       source  = "banzaicloud/k8s"
@@ -24,7 +24,7 @@ terraform {
     }
     local = {
       source =  "hashicorp/local"
-      version = "~> 2.1.0"
+      version = "~> 2.2.2"
     }
     random = {
       source =  "hashicorp/random"
