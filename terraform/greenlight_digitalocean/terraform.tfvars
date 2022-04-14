@@ -1,6 +1,6 @@
 admin_email = "admin@greenlight.coop"
 cassandra_enabled = true
-k8s_version = "1.22.7-do.0"
+k8s_version = "1.22.8-do.0"
 machine_type = "s-4vcpu-8gb"
 max_node_count = 10
 min_node_count = 3
