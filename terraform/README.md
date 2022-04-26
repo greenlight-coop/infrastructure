@@ -158,7 +158,9 @@ All cross-project GCP resources are configured in the `greenlight-root` project.
 
 * Connect to cqlsh as superuser
 
-      k exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh -u k8ssandra-superuser -p <password>
+      kubectl exec -it k8ssandra-dc1-default-sts-0 -c cassandra -- cqlsh \
+        -u k8ssandra-superuser \
+        -p $(kubectl get secret k8ssandra-superuser -o json | jq -r '.data.password' | base64 --decode)
 
 ### Ceph
 
