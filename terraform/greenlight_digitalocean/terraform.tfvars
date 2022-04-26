@@ -1,8 +1,8 @@
 admin_email = "admin@greenlight.coop"
 cassandra_enabled = true
 k8s_version = "1.22.8-do.1"
-machine_type = "s-4vcpu-8gb"
-max_node_count = 10
+machine_type = "s-4vcpu-8gb" # https://slugs.do-api.dev/
+max_node_count = 6
 min_node_count = 3
 region = "nyc1"
 # region = "sfo3"
