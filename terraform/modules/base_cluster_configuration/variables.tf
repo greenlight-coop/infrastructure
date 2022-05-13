@@ -61,6 +61,11 @@ variable "kafka_enabled" {
   default = true
 }
 
+variable "kube_prometheus_stack_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "metrics_server_enabled" {
   type    = bool
 }

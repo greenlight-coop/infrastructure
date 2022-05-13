@@ -28,7 +28,7 @@ spec:
         kafka:
           enabled: ${kafka_enabled}
         kubePrometheusStack:
-          enabled: ${!cassandra_enabled}
+          enabled: ${kube_prometheus_stack_enabled}
         googleProjectId: ${google_project_id}
         istio:
           jwtPolicy: ${istio_jwt_policy}
