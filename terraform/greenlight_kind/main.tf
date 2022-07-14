@@ -4,7 +4,7 @@ terraform {
   required_providers {
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.8.0"
+      version = "~> 2.12.1"
     }
     k8s = {
       source  = "banzaicloud/k8s"
@@ -12,19 +12,19 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.4.1"
+      version = ">= 2.6.0"
     }
     null = {
       source =  "hashicorp/null"
-      version = "~> 3.1.0"
+      version = "~> 3.1.1"
     }
     local = {
       source =  "hashicorp/local"
-      version = "~> 2.2.2"
+      version = "~> 2.2.3"
     }
     random = {
       source =  "hashicorp/random"
-      version = "~> 3.1.0"
+      version = "~> 3.3.2"
     }
   }
 }

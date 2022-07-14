@@ -4,7 +4,7 @@ terraform {
   required_providers {
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.8.0"
+      version = "~> 2.12.1"
     }
     k8s = {
       source  = "banzaicloud/k8s"
