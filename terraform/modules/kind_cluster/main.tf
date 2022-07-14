@@ -1,18 +1,18 @@
 terraform {
-  required_version = ">= 1.1.7"
+  required_version = ">= 1.2.5"
 
   required_providers {
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.8.0"
+      version = "~> 2.12.1"
     }
     null = {
       source =  "hashicorp/null"
-      version = "~> 3.1.0"
+      version = "~> 3.1.1"
     }
     local = {
       source =  "hashicorp/local"
-      version = "~> 2.2.2"
+      version = "~> 2.2.3"
     }
   }
 }

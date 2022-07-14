@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.1.7"
+  required_version = ">= 1.2.5"
 
   required_providers {
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.8.0"
+      version = "~> 2.12.1"
     }
     k8s = {
       source  = "banzaicloud/k8s"
