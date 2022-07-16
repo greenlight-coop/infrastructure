@@ -32,21 +32,22 @@ module "argo_cd" {
 module "project_cluster" {
   source = "../modules/project_cluster"
 
-  admin_email             = var.admin_email
-  admin_password          = local.admin_password
-  base_name               = local.base_name
-  cassandra_enabled       = var.cassandra_enabled
-  cert_manager_enabled    = true
-  cluster_provider        = "google"
-  destination_server      = local.greenlight_development_cluster_server
-  domain_name             = local.domain_name
-  external_dns_enabled    = true
-  google_project_id       = local.project_id
-  metrics_server_enabled  = false
-  repo_url                = local.repo_url
-  rook_enabled            = false
-  target_revision         = local.target_revision
-  use_staging_certs       = var.use_staging_certs
+  admin_email                 = var.admin_email
+  admin_password              = local.admin_password
+  base_name                   = local.base_name
+  cassandra_enabled           = var.cassandra_enabled
+  cert_manager_enabled        = true
+  cert_manager_generate_certs = true
+  cluster_provider            = "google"
+  destination_server          = local.greenlight_development_cluster_server
+  domain_name                 = local.domain_name
+  external_dns_enabled        = true
+  google_project_id           = local.project_id
+  metrics_server_enabled      = false
+  repo_url                    = local.repo_url
+  rook_enabled                = false
+  target_revision             = local.target_revision
+  use_staging_certs           = var.use_staging_certs
 
   depends_on = [
     module.google_project,

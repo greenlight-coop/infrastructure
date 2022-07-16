@@ -22,6 +22,7 @@ spec:
           enabled: ${cassandra_enabled}
         certManager:
           enabled: ${cert_manager_enabled}
+          generateCerts: ${cert_manager_generate_certs}
         domainName: ${domain_name}
         externalDns:
           enabled: ${external_dns_enabled}

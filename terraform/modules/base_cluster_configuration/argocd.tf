@@ -13,6 +13,7 @@ resource "k8s_manifest" "base-application" {
       base_name                     = var.base_name,
       cassandra_enabled             = var.cassandra_enabled,
       cert_manager_enabled          = var.cert_manager_enabled,
+      cert_manager_generate_certs   = var.cert_manager_generate_certs,
       destination_server            = var.destination_server,
       domain_name                   = var.domain_name,
       external_dns_enabled          = var.external_dns_enabled,
