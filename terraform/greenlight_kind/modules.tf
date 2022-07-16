@@ -27,6 +27,7 @@ module "project_cluster" {
   admin_email                 = var.admin_email
   admin_password              = local.admin_password
   base_name                   = local.base_name
+  cassandra_datacenter_size   = var.cassandra_datacenter_size
   cassandra_enabled           = var.cassandra_enabled
   cert_manager_enabled        = true
   cert_manager_generate_certs = false

@@ -26,6 +26,11 @@ variable "bot_password" {
   }
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+  default = 3
+}
+
 variable "cassandra_enabled" {
   type    = bool
 }

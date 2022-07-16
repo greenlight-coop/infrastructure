@@ -4,6 +4,7 @@ module "base_cluster_configuration" {
   admin_email                 = var.admin_email
   admin_password              = var.admin_password
   base_name                   = var.base_name
+  cassandra_datacenter_size   = var.cassandra_datacenter_size
   cassandra_enabled           = var.cassandra_enabled
   cert_manager_enabled        = var.cert_manager_enabled
   cert_manager_generate_certs = var.cert_manager_generate_certs

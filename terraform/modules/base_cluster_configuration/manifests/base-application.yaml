@@ -19,6 +19,7 @@ spec:
         adminEmail: ${admin_email}
         baseName: ${base_name}
         cassandra:
+          datacenterSize: ${cassandra_datacenter_size}
           enabled: ${cassandra_enabled}
         certManager:
           enabled: ${cert_manager_enabled}
