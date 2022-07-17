@@ -54,15 +54,17 @@ module "project_cluster" {
 module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
 
-  bot_github_token    = var.bot_github_token
-  bot_password        = var.bot_password
-  bot_private_key     = local.bot_private_key
-  domain_name         = local.domain_name
-  repo_url            = local.repo_url
-  rook_enabled        = false
-  snyk_token          = var.snyk_token
-  target_revision     = local.target_revision
-  webhook_secret      = var.webhook_secret
+  bot_github_token          = var.bot_github_token
+  bot_password              = var.bot_password
+  bot_private_key           = local.bot_private_key
+  cassandra_datacenter_size = var.cassandra_datacenter_size
+  cassandra_enabled         = var.cassandra_enabled
+  domain_name               = local.domain_name
+  repo_url                  = local.repo_url
+  rook_enabled              = false
+  snyk_token                = var.snyk_token
+  target_revision           = local.target_revision
+  webhook_secret            = var.webhook_secret
 
   depends_on = [
     module.kind_cluster,
