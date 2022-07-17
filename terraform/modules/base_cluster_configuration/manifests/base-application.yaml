@@ -19,14 +19,18 @@ spec:
         adminEmail: ${admin_email}
         baseName: ${base_name}
         cassandra:
+          datacenterSize: ${cassandra_datacenter_size}
           enabled: ${cassandra_enabled}
         certManager:
           enabled: ${cert_manager_enabled}
+          generateCerts: ${cert_manager_generate_certs}
         domainName: ${domain_name}
         externalDns:
           enabled: ${external_dns_enabled}
         kafka:
           enabled: ${kafka_enabled}
+        keycloak:
+          instances: ${keycloak_instances}
         kubePrometheusStack:
           enabled: ${kube_prometheus_stack_enabled}
         googleProjectId: ${google_project_id}

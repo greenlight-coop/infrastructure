@@ -8,10 +8,6 @@ variable "admin_password" {
   default   = ""
 }
 
-variable "cassandra_enabled" {
-  type    = bool
-}
-
 variable "bot_github_token" {
   type      = string
   sensitive = true
@@ -28,6 +24,14 @@ variable "bot_password" {
     condition     = length(var.bot_password) > 0
     error_message = "Value for bot_password must be set."
   }
+}
+
+variable "cassandra_enabled" {
+  type    = bool
+}
+
+variable "keycloak_instances" {
+  type    = number
 }
 
 variable "linode_token" {

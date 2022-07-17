@@ -26,6 +26,11 @@ variable "bot_password" {
   }
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+  default = 3
+}
+
 variable "cassandra_enabled" {
   type    = bool
 }
@@ -41,6 +46,10 @@ variable "digitalocean_token" {
 
 variable "k8s_version" {
   type = string
+}
+
+variable "keycloak_instances" {
+  type    = number
 }
 
 variable "machine_type" {

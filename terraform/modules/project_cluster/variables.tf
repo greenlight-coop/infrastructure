@@ -11,12 +11,19 @@ variable "base_name" {
   type    = string
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+}
+
 variable "cassandra_enabled" {
   type    = bool
-  default = true
 }
 
 variable "cert_manager_enabled" {
+  type    = bool
+}
+
+variable "cert_manager_generate_certs" {
   type    = bool
 }
 
@@ -39,6 +46,10 @@ variable "external_dns_enabled" {
 variable "google_project_id" {
   type    = string
   default = ""
+}
+
+variable "keycloak_instances" {
+  type    = number
 }
 
 variable "istio_jwt_policy" {

@@ -1,6 +1,5 @@
 variable "admin_email" {
   type    = string
-  default = "admin@greenlight.coop"
 }
 
 variable "admin_password" {
@@ -8,9 +7,12 @@ variable "admin_password" {
   default = ""
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+}
+
 variable "cassandra_enabled" {
   type    = bool
-  default = false
 }
 
 variable "bot_github_token" {
@@ -34,6 +36,10 @@ variable "bot_password" {
 variable "kafka_enabled" {
   type    = bool
   default = false
+}
+
+variable "keycloak_instances" {
+  type    = number
 }
 
 variable "kind_tls_crt" {

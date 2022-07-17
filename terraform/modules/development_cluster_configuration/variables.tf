@@ -13,6 +13,14 @@ variable "bot_private_key" {
   sensitive = true
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+}
+
+variable "cassandra_enabled" {
+  type    = bool
+}
+
 variable "domain_name" {
   type = string
 }

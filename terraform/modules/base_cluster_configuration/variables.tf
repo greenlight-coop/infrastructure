@@ -11,12 +11,19 @@ variable "base_name" {
   type    = string
 }
 
+variable "cassandra_datacenter_size" {
+  type    = number
+}
+
 variable "cassandra_enabled" {
   type    = bool
-  default = true
 }
 
 variable "cert_manager_enabled" {
+  type    = bool
+}
+
+variable "cert_manager_generate_certs" {
   type    = bool
 }
 
@@ -59,6 +66,10 @@ variable "istio_https_node_port" {
 variable "kafka_enabled" {
   type    = bool
   default = true
+}
+
+variable "keycloak_instances" {
+  type    = number
 }
 
 variable "kube_prometheus_stack_enabled" {
