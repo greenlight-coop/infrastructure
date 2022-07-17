@@ -48,6 +48,10 @@ variable "google_project_id" {
   default = ""
 }
 
+variable "keycloak_instances" {
+  type    = number
+}
+
 variable "istio_jwt_policy" {
   type    = string
   default = "third-party-jwt"

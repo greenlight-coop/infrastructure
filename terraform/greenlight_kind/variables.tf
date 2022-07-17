@@ -38,6 +38,10 @@ variable "kafka_enabled" {
   default = false
 }
 
+variable "keycloak_instances" {
+  type    = number
+}
+
 variable "kind_tls_crt" {
   type      = string
   sensitive = true

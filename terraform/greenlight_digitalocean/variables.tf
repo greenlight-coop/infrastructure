@@ -48,6 +48,10 @@ variable "k8s_version" {
   type = string
 }
 
+variable "keycloak_instances" {
+  type    = number
+}
+
 variable "machine_type" {
   type    = string
 }

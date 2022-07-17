@@ -68,6 +68,10 @@ variable "kafka_enabled" {
   default = true
 }
 
+variable "keycloak_instances" {
+  type    = number
+}
+
 variable "kube_prometheus_stack_enabled" {
   type    = bool
   default = true

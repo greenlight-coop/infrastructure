@@ -44,6 +44,7 @@ module "project_cluster" {
   domain_name                 = local.domain_name
   external_dns_enabled        = true
   google_project_id           = local.project_id
+  keycloak_instances          = var.keycloak_instances
   metrics_server_enabled      = false
   repo_url                    = local.repo_url
   rook_enabled                = false

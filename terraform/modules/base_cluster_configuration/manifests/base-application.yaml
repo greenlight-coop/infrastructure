@@ -29,6 +29,8 @@ spec:
           enabled: ${external_dns_enabled}
         kafka:
           enabled: ${kafka_enabled}
+        keycloak:
+          instances: ${keycloak_instances}
         kubePrometheusStack:
           enabled: ${kube_prometheus_stack_enabled}
         googleProjectId: ${google_project_id}

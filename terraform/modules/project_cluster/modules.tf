@@ -16,6 +16,7 @@ module "base_cluster_configuration" {
   istio_http_node_port        = var.istio_http_node_port
   istio_https_node_port       = var.istio_https_node_port
   kafka_enabled               = var.kafka_enabled
+  keycloak_instances          = var.keycloak_instances
   google_project_id           = var.google_project_id
   metrics_server_enabled      = var.metrics_server_enabled
   rook_enabled                = var.rook_enabled
