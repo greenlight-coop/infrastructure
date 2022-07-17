@@ -20,6 +20,7 @@ resource "k8s_manifest" "base-application" {
       external_dns_enabled          = var.external_dns_enabled,
       google_project_id             = var.google_project_id,
       kafka_enabled                 = var.kafka_enabled,
+      keycloak_instances            = var.keycloak_instances,
       kube_prometheus_stack_enabled = var.kube_prometheus_stack_enabled,
       istio_jwt_policy              = var.istio_jwt_policy
       istio_http_node_port          = var.istio_http_node_port
