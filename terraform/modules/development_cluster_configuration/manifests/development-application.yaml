@@ -16,6 +16,9 @@ spec:
     path: development/apps
     helm:
       values: |
+        bot:
+          email: ${bot_email}
+          username: ${bot_username}
         cassandra:
           datacenterSize: ${cassandra_datacenter_size}
           enabled: ${cassandra_enabled}
