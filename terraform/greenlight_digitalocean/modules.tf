@@ -56,6 +56,7 @@ module "project_cluster" {
 module "development_cluster_configuration" {
   source = "../modules/development_cluster_configuration"
 
+  bot_email                 = var.bot_email
   bot_github_token          = var.bot_github_token
   bot_password              = var.bot_password
   bot_private_key           = local.bot_private_key

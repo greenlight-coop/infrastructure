@@ -1,3 +1,8 @@
+variable "bot_email" {
+  type      = string
+  sensitive = true
+}
+
 variable "bot_github_token" {
   type      = string
   sensitive = true

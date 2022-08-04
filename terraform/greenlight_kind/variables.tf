@@ -15,6 +15,15 @@ variable "cassandra_enabled" {
   type    = bool
 }
 
+variable "bot_email" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_email) > 0
+    error_message = "Value for bot_email must be set."
+  }
+}
+
 variable "bot_github_token" {
   type      = string
   sensitive = true
