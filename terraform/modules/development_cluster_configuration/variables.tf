@@ -3,6 +3,11 @@ variable "bot_github_token" {
   sensitive = true
 }
 
+variable "bot_username" {
+  type      = string
+  sensitive = true
+}
+
 variable "bot_password" {
   type      = string
   sensitive = true

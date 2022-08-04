@@ -144,7 +144,7 @@ resource "kubernetes_secret" "greenlight-pipelines-verdaccio-htpasswd" {
 
   data = {
     "htpasswd" = <<-EOF
-      greenlight-coop-bot:${bcrypt(var.bot_password)}
+      ${var.bot_username}:${bcrypt(var.bot_password)}
     EOF
   }
 

@@ -58,6 +58,7 @@ module "development_cluster_configuration" {
   bot_github_token          = var.bot_github_token
   bot_password              = var.bot_password
   bot_private_key           = local.bot_private_key
+  bot_username              = var.bot_username
   cassandra_datacenter_size = var.cassandra_datacenter_size
   cassandra_enabled         = var.cassandra_enabled
   domain_name               = local.domain_name

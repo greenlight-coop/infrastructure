@@ -33,6 +33,15 @@ variable "bot_password" {
   }
 }
 
+variable "bot_username" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_username) > 0
+    error_message = "Value for bot_username must be set."
+  }
+}
+
 variable "kafka_enabled" {
   type    = bool
   default = false
