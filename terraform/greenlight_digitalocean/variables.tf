@@ -8,6 +8,15 @@ variable "admin_password" {
   default   = ""
 }
 
+variable "bot_email" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_email) > 0
+    error_message = "Value for bot_email must be set."
+  }
+}
+
 variable "bot_github_token" {
   type      = string
   sensitive = true
@@ -23,6 +32,15 @@ variable "bot_password" {
   validation {
     condition     = length(var.bot_password) > 0
     error_message = "Value for bot_password must be set."
+  }
+}
+
+variable "bot_username" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.bot_username) > 0
+    error_message = "Value for bot_username must be set."
   }
 }
 
