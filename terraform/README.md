@@ -125,7 +125,7 @@ have been vetted and merged to main. This may be done in either a GCP or Kind cl
       meta git diff feature/<n>     # Check that all changes have been merged
       meta git branch -D feature/<n>
       meta git push origin --delete feature/<n>
-      terraform workspace select default
+      terraform workspace select default    # Run cleanup script before this step
       terraform workspace delete -force feature-<n>
 
 ## greenlight-root GCP Project
