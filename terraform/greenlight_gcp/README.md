@@ -6,6 +6,18 @@
   * Grant Owner role
   * Grant Service Account Token role
 
+## greenlight-root GCP Project
+
+All cross-project GCP resources are configured in the `greenlight-root` project. This project was created manually and includes
+
+* The `tfstate-greenlight` bucket that holds Terraform state for all GCP involved projects
+* The `terraform` Service Account used for creation and access for Terraform managed resources.
+    * terraform@greenlight-root.iam.gserviceaccount.com
+    * Give Owner role access to the `greenlight-root`, `greenlight-coop-development` and all feature and client GCP projects
+    * Give Service Account Token Creator role in `greenlight-root`, `greenlight-coop-development` and all feature and client 
+      GCP projects in order to allow use in Terraform.
+    * Generated a JSON key and saved to the root of `terraform` as `credentials.json`
+
 ## Configure GCP Project and GKE Cluster
 
 Configure the GCP project and install the GKE cluster with the following command:
