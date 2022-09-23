@@ -60,30 +60,12 @@ variable "keycloak_instances" {
   type    = number
 }
 
-variable "kind_tls_crt" {
+variable "tls_crt" {
   type      = string
   sensitive = true
   validation {
-    condition     = length(var.kind_tls_crt) > 0
-    error_message = "Value for kind_tls_crt must be set."
-  }
-}
-
-variable "kind_tls_key" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.kind_tls_key) > 0
-    error_message = "Value for kind_tls_key must be set."
-  }
-}
-
-variable "webhook_secret" {
-  type      = string
-  sensitive = true
-  validation {
-    condition     = length(var.webhook_secret) > 0
-    error_message = "Value for webhook_secret must be set."
+    condition     = length(var.tls_crt) > 0
+    error_message = "Value for tls_crt must be set."
   }
 }
 
@@ -98,6 +80,24 @@ variable "snyk_token" {
   validation {
     condition     = length(var.snyk_token) > 0
     error_message = "Value for snyk_token must be set."
+  }
+}
+
+variable "tls_key" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.tls_key) > 0
+    error_message = "Value for tls_key must be set."
+  }
+}
+
+variable "webhook_secret" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.webhook_secret) > 0
+    error_message = "Value for webhook_secret must be set."
   }
 }
 

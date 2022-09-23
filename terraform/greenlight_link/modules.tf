@@ -44,7 +44,7 @@ module "project_cluster" {
   use_staging_certs           = false
 
   depends_on = [
-    module.kind_cluster,
+    module.link_cluster,
     module.argo_cd
   ]
 }
@@ -67,7 +67,7 @@ module "development_cluster_configuration" {
   webhook_secret            = var.webhook_secret
 
   depends_on = [
-    module.kind_cluster,
+    module.link_cluster,
     module.argo_cd,
     module.project_cluster
   ]

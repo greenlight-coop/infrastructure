@@ -42,6 +42,6 @@ provider "k8s" {
 provider "helm" { 
   kubernetes {
     config_path = "~/.kube/config"
-    config_context = "kind-greenlight"
+    config_context = "kubernetes-admin@kubernetes"
   }
 }

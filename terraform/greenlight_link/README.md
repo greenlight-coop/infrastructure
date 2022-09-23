@@ -13,8 +13,8 @@ Ensure that the file `secrets.auto.tfvars` is present and contains correct value
     admin_password
     bot_github_token
     bot_password
-    kind_tls_crt    # See Generating new certificates
-    kind_tls_key    # See Generating new certificates
+    tls_crt    # See Generating new certificates
+    tls_key    # See Generating new certificates
     snyk_token
     webhook_secret
 
@@ -74,27 +74,20 @@ Remove nginx docker container
     docker container stop <container name>
     docker container rm <container name>
 
-Revise `greenlight_kind/secrets.auto.tfvars` with updated keys:
+Revise `greenlight_link/secrets.auto.tfvars` with updated keys:
 
     sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/fullchain.pem | pbcopy
-    # Paste value into variable kind_tls_crt
+    # Paste value into variable tls_crt
 
     sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/privkey.pem | pbcopy
-    # Paste value into variable kind_tls_key
+    # Paste value into variable tls_key
 
-### Configure kind Cluster
+### Configure link Cluster
 
 To run the automated set up script run:
 
     ./setup.sh
 
-To manually install the kind cluster, run the steps below and then continue with configuration steps in the
-main README.
-
-    terraform init \
-      && terraform apply -auto-approve -target=module.kind_cluster.null_resource.kind \
-      && terraform apply -auto-approve -target=module.kind_cluster
-
 ## Removal
 
-Run `./reset.sh` to remove resources and reset the workspace.
+Run `./cleanup.sh` to remove resources and reset the workspace.
