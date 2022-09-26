@@ -12,7 +12,7 @@ variable "domain_name" {
 
 variable "k8s_version" {
   type = string
-  default = "1.21"
+  default = "1.23"
 }
 
 variable "linode_token" {
