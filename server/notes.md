@@ -52,3 +52,7 @@ kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
 * Added user for mark
 
 * Added mark to sudoers group
+
+## On Macbook
+
+scp etavela@link:.kube/config ~/.kube/config
