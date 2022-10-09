@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Run as root (sudo -i)
+# 
+# Installs/reinstalls kubernetes and associated tools
+#
+# To copy to link:
+# scp setup.sh etavela@link:setup.sh
+
 set -ex
 
 KUBE_VERSION=1.25.2

@@ -35,8 +35,8 @@ module "project_cluster" {
   kafka_enabled               = var.kafka_enabled
   keycloak_instances          = var.keycloak_instances
   # istio_jwt_policy            = "first-party-jwt"
-  # istio_http_node_port        = 30080
-  # istio_https_node_port       = 30443
+  istio_http_node_port        = 30080
+  istio_https_node_port       = 30443
   metrics_server_enabled      = true
   repo_url                    = local.repo_url
   rook_enabled                = false
