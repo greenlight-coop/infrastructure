@@ -6,4 +6,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 echo 'source <(kubectl completion zsh)' >> ~/.zshrc
 echo 'alias k=kubectl' >> ~/.zshrc
 
-sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
+sudo cp -f /etc/kubernetes/admin.conf ~/.kube/config
+
+# To get .kube/config on laptop
+# scp etavela@link:.kube/config ~/.kube/config
