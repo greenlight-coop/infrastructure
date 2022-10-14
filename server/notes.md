@@ -53,6 +53,34 @@ kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
 
 * Added mark to sudoers group
 
-## On Macbook
+## On MacBook
 
 scp etavela@link:.kube/config ~/.kube/config
+
+## Reset instructions
+
+On MacBook, in `server` directory, copy latest setup
+
+    scp setup.sh etavela@link:setup.sh
+
+On `link` as `etavela`
+
+    sudo -i
+    cd ~etavela && ./setup.sh
+    exit
+    sudo cp -f /etc/kubernetes/admin.conf ~/.kube/config
+
+On MacBook get kubeconfig
+
+    scp etavela@link:.kube/config ~/.kube/config
+
+On MacBook, in `greenlight_link` directory, deploy Green Light platform
+
+    TF_WORKSPACE=feature-nnn
+    rm -rf .terraform.lock.hcl terraform.tfstate*
+    terraform workspace new $TF_WORKSPACE
+    ./setup.sh
+
+## NGINX notes
+
+sudo apt install nginx

@@ -9,7 +9,8 @@
 
 set -ex
 
-KUBE_VERSION=1.25.2
+# KUBE_VERSION=1.25.2
+KUBE_VERSION=1.24.4
 
 ### setup terminal
 apt-get update
@@ -119,8 +120,6 @@ KUBELET_EXTRA_ARGS="--container-runtime remote --container-runtime-endpoint unix
 EOF
 }
 
-
-
 ### start services
 systemctl daemon-reload
 systemctl enable containerd
@@ -140,3 +139,37 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/custom-resources.yaml -O
 sed -i 's/192.168.0.0\/16/10.0.0.0\/8/g' custom-resources.yaml
 kubectl create -f custom-resources.yaml
+
+### MetalLB
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+sed -e "s/mode: \"\"/mode: \"ipvs\"/" | \
+kubectl apply -f - -n kube-system
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.6/config/manifests/metallb-native.yaml
+
+HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
+
+cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: load-balancer-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - $HOST_IP/32
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - load-balancer-pool
+EOF
+
+### Make node schedulable
+# kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
+kubectl taint nodes link node-role.kubernetes.io/master:NoSchedule-
