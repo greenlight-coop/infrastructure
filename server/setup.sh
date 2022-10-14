@@ -37,9 +37,12 @@ apt-get install -y zsh
 kubeadm reset -f || true
 crictl rm --force $(crictl ps -a -q) || true
 apt-mark unhold kubelet kubeadm kubectl kubernetes-cni || true
-apt-get remove -y docker.io containerd kubelet kubeadm kubectl kubernetes-cni || true
+apt-get remove -y docker.io containerd kubelet kubeadm kubectl kubernetes-cni rpcbind nfs-kernel-server || true
 apt-get autoremove -y
 systemctl daemon-reload
+
+### remove nfs
+rm -f /etc/exports || true
 
 ### install packages
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
@@ -47,9 +50,18 @@ cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update
-apt-get install -y docker.io containerd kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00 kubernetes-cni
+apt-get install -y docker.io containerd rpcbind nfs-kernel-server kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00 kubernetes-cni
 apt-mark hold kubelet kubeadm kubectl kubernetes-cni
 
+
+### nfs
+mkdir -p /srv/nfs/storage
+chown -R 777 /srv/nfs/storage
+echo '/srv/nfs/storage *(rw,sync,no_root_squash,no_subtree_check,no_all_squash,insecure)' >> /etc/exports
+exportfs -ra
+service nfs-kernel-server restart
+systemctl enable nfs-kernel-server
+systemctl restart nfs-kernel-server
 
 ### containerd
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
@@ -140,6 +152,10 @@ curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/cu
 sed -i 's/192.168.0.0\/16/10.0.0.0\/8/g' custom-resources.yaml
 kubectl create -f custom-resources.yaml
 
+### Make node schedulable
+kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
+kubectl taint nodes link node-role.kubernetes.io/master:NoSchedule-
+
 ### MetalLB
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
@@ -170,6 +186,106 @@ spec:
   - load-balancer-pool
 EOF
 
-### Make node schedulable
-# kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
-kubectl taint nodes link node-role.kubernetes.io/master:NoSchedule-
+### nfs storageclasses
+cat <<EOF | kubectl apply -f -
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: nfs-client-provisioner
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner-runner
+rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: nfs-client-provisioner-runner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    namespace: default
+roleRef:
+  kind: Role
+  name: leader-locking-nfs-client-provisioner
+  apiGroup: rbac.authorization.k8s.io
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
+    tier: storage
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+      tier: storage
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+        tier: storage
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: $HOST_IP
+            path: /srv/nfs/storage
+      containers:
+        - name: nfs-client-provisioner
+          image: quay.io/external_storage/nfs-client-provisioner:latest
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: example.com/nfs
+            - name: NFS_SERVER
+              value: $HOST_IP
+            - name: NFS_PATH
+              value: /srv/nfs/storage
+EOF
