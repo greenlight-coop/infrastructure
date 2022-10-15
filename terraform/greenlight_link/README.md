@@ -50,6 +50,8 @@ When prompted as below:
     (This must be set up in addition to the previous challenges; do not remove,
     replace, or undo the previous challenge tasks yet.)
 
+Log in to wireless router and temporarily route HTTP requests to Erics-MBP
+
 Deploy an nginx container
 
     sudo docker run -d -p 80:80 nginx
@@ -81,6 +83,12 @@ Revise `greenlight_link/secrets.auto.tfvars` with updated keys:
 
     sudo cat /etc/letsencrypt/live/app-home.greenlightcoop.dev/privkey.pem | pbcopy
     # Paste value into variable tls_key
+
+Update certificate secret in cluster
+
+    terraform apply -auto-approve -target=module.link_cluster.kubernetes_secret.istio-letsencrypt
+
+Log in to wireless router restore forwarding of HTTP requests to link
 
 ### Configure link Cluster
 
