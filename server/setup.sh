@@ -166,7 +166,7 @@ kubectl apply -f - -n kube-system
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.6/config/manifests/metallb-native.yaml
 
-kubectl wait -n metallb-system --timeout=120s --for condition=Available deployment/controller
+kubectl wait -n metallb-system --timeout=180s --for condition=Available deployment/controller
 
 HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
 
