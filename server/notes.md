@@ -87,7 +87,3 @@ On MacBook, in `greenlight_link` directory, deploy Green Light platform
     rm -rf .terraform.lock.hcl terraform.tfstate*
     terraform workspace new $TF_WORKSPACE
     ./setup.sh
-
-## NGINX notes
-
-sudo apt install nginx
