@@ -7,6 +7,16 @@ BIOS Boot Manager
 
 ## Set up
 
+* Installation USB in lower (right side) slot
+
+* Configure boot (if necessary)
+  * F2 system set up
+  * System BIOS > Boot Settings > BIOS Boot Settings
+    * Hard-Disk Drie Sequence
+      * Make USB 1:Innostor first
+  * Save changes
+  * Exit and reboot
+
 * English
 
 * Ubuntu Server
@@ -25,9 +35,6 @@ BIOS Boot Manager
   * Install server
   * Import from GitHub (etavela)
   * Allow password auth over SSH
-
-* Feature Server Snaps
-  * Docker
 
 ## Kubernetes
 
@@ -68,7 +75,7 @@ On `link` as `etavela`
     sudo -i
     cd ~etavela && ./setup.sh
     exit
-    sudo cp -f /etc/kubernetes/admin.conf ~/.kube/config
+    mkdir -p ~/.kube/ && sudo cp -f /etc/kubernetes/admin.conf ~/.kube/config && sudo chown etavela ~/.kube/config
 
 On MacBook get kubeconfig
 

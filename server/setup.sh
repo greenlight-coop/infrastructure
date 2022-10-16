@@ -56,27 +56,26 @@ apt-mark hold kubelet kubeadm kubectl kubernetes-cni
 
 ### nfs
 mkdir -p /srv/nfs/storage
-chown -R 777 /srv/nfs/storage
+chown -R nobody:nogroup /srv/nfs/storage
+chmod 777 /srv/nfs/storage
 echo '/srv/nfs/storage *(rw,sync,no_root_squash,no_subtree_check,no_all_squash,insecure)' >> /etc/exports
 exportfs -ra
-service nfs-kernel-server restart
-systemctl enable nfs-kernel-server
 systemctl restart nfs-kernel-server
 
 ### containerd
-cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+cat <<EOF | tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
 EOF
-sudo modprobe overlay
-sudo modprobe br_netfilter
-cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+modprobe overlay
+modprobe br_netfilter
+cat <<EOF | tee /etc/sysctl.d/99-kubernetes-cri.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.ipv4.ip_forward                 = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 EOF
-sudo sysctl --system
-sudo mkdir -p /etc/containerd
+sysctl --system
+mkdir -p /etc/containerd
 
 
 ### containerd config
@@ -119,7 +118,7 @@ EOF
 
 ### crictl uses containerd as default
 {
-cat <<EOF | sudo tee /etc/crictl.yaml
+cat <<EOF | tee /etc/crictl.yaml
 runtime-endpoint: unix:///run/containerd/containerd.sock
 EOF
 }
@@ -127,7 +126,7 @@ EOF
 
 ### kubelet should use containerd
 {
-cat <<EOF | sudo tee /etc/default/kubelet
+cat <<EOF | tee /etc/default/kubelet
 KUBELET_EXTRA_ARGS="--container-runtime remote --container-runtime-endpoint unix:///run/containerd/containerd.sock"
 EOF
 }
@@ -144,7 +143,7 @@ rm /root/.kube/config || true
 kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print --pod-network-cidr 10.0.0.0/8
 
 mkdir -p ~/.kube
-sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
+cp -i /etc/kubernetes/admin.conf ~/.kube/config
 
 ### CNI
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/tigera-operator.yaml
@@ -152,9 +151,12 @@ curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/cu
 sed -i 's/192.168.0.0\/16/10.0.0.0\/8/g' custom-resources.yaml
 kubectl create -f custom-resources.yaml
 
+### Wait for node
+kubectl wait --for=condition=Ready node/link
+
 ### Make node schedulable
-kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
-kubectl taint nodes link node-role.kubernetes.io/master:NoSchedule-
+kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule- || true
+kubectl taint nodes link node-role.kubernetes.io/master:NoSchedule- || true
 
 ### MetalLB
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -163,6 +165,8 @@ sed -e "s/mode: \"\"/mode: \"ipvs\"/" | \
 kubectl apply -f - -n kube-system
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.6/config/manifests/metallb-native.yaml
+
+kubectl wait -n metallb-system --for condition=Available deployment/controller
 
 HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
 
@@ -186,106 +190,13 @@ spec:
   - load-balancer-pool
 EOF
 
-### nfs storageclasses
-cat <<EOF | kubectl apply -f -
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: nfs-client-provisioner
----
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: nfs-client-provisioner-runner
-rules:
-  - apiGroups: [""]
-    resources: ["persistentvolumes"]
-    verbs: ["get", "list", "watch", "create", "delete"]
-  - apiGroups: [""]
-    resources: ["persistentvolumeclaims"]
-    verbs: ["get", "list", "watch", "update"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["create", "update", "patch"]
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: run-nfs-client-provisioner
-subjects:
-  - kind: ServiceAccount
-    name: nfs-client-provisioner
-    namespace: default
-roleRef:
-  kind: ClusterRole
-  name: nfs-client-provisioner-runner
-  apiGroup: rbac.authorization.k8s.io
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: leader-locking-nfs-client-provisioner
-rules:
-  - apiGroups: [""]
-    resources: ["endpoints"]
-    verbs: ["get", "list", "watch", "create", "update", "patch"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: leader-locking-nfs-client-provisioner
-subjects:
-  - kind: ServiceAccount
-    name: nfs-client-provisioner
-    namespace: default
-roleRef:
-  kind: Role
-  name: leader-locking-nfs-client-provisioner
-  apiGroup: rbac.authorization.k8s.io
-EOF
+### helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nfs-client-provisioner
-  labels:
-    app: nfs-client-provisioner
-    tier: storage
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: nfs-client-provisioner
-      tier: storage
-  template:
-    metadata:
-      labels:
-        app: nfs-client-provisioner
-        tier: storage
-    spec:
-      serviceAccountName: nfs-client-provisioner
-      volumes:
-        - name: nfs-client-root
-          nfs:
-            server: $HOST_IP
-            path: /srv/nfs/storage
-      containers:
-        - name: nfs-client-provisioner
-          image: quay.io/external_storage/nfs-client-provisioner:latest
-          volumeMounts:
-            - name: nfs-client-root
-              mountPath: /persistentvolumes
-          env:
-            - name: PROVISIONER_NAME
-              value: example.com/nfs
-            - name: NFS_SERVER
-              value: $HOST_IP
-            - name: NFS_PATH
-              value: /srv/nfs/storage
-EOF
+### nfs storageclass
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+  --set nfs.server=$HOST_IP \
+  --set nfs.path=/srv/nfs/storage \
+  --set storageClass.defaultClass=true \
+  --set storageClass.volumeBindingMode=WaitForFirstConsumer
