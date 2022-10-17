@@ -47,24 +47,7 @@ run setup.sh
 
 kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule-
 
-## Post set up
-
-* Ensure current IP for link has port forwarding for HTTP and HTTPS in Verizon FiOS router
-
-* As etavela
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  echo 'source <(kubectl completion zsh)' >> ~/.zshrc
-  echo 'alias k=kubectl' >> ~/.zshrc
-
-* Added user for mark
-
-* Added mark to sudoers group
-
-## On MacBook
-
-scp etavela@link:.kube/config ~/.kube/config
-
-## Reset instructions
+## Configure / reset kubernetes
 
 On MacBook, in `server` directory, copy latest setup
 
@@ -87,3 +70,17 @@ On MacBook, in `greenlight_link` directory, deploy Green Light platform
     rm -rf .terraform.lock.hcl terraform.tfstate*
     terraform workspace new $TF_WORKSPACE
     ./setup.sh
+
+## Post set up
+
+* Ensure current IP for link has port forwarding for HTTP and HTTPS in Verizon FiOS router
+
+* As etavela
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  echo 'source <(kubectl completion zsh)' >> ~/.zshrc
+  echo 'alias k=kubectl' >> ~/.zshrc
+
+* Add user for mark
+
+* Add mark to sudoers group
+
