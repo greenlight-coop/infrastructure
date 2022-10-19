@@ -71,6 +71,12 @@ On MacBook, in `greenlight_link` directory, deploy Green Light platform
     terraform workspace new $TF_WORKSPACE
     ./setup.sh
 
+## Patch k8ssandra server-config-init limits
+
+After deploying the K8ssandraCluster, fix OOMKilled issue with:
+
+    kubectl patch -n k8ssandra-operator statefulset k8ssandra-dc1-default-sts --type json -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/1/resources/limits/memory", "value":"512M"}]'
+
 ## Post set up
 
 * Ensure current IP for link has port forwarding for HTTP and HTTPS in Verizon FiOS router

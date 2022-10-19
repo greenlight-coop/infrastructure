@@ -44,6 +44,17 @@ systemctl daemon-reload
 ### remove nfs
 rm -f /etc/exports || true
 
+### sysctl settings
+sysctl -w fs.inotify.max_user_instances=8192
+sysctl -w fs.inotify.max_user_watches=1048576
+sysctl -w vm.max_map_count=524288
+
+cat <<EOF > /etc/sysctl.d/local.conf
+fs.inotify.max_user_instances = 8192
+fs.inotify.max_user_watches = 1048576
+vm.max_map_count = 524288
+EOF
+
 ### install packages
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
