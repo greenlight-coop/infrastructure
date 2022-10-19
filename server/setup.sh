@@ -9,8 +9,7 @@
 
 set -ex
 
-# KUBE_VERSION=1.25.2
-KUBE_VERSION=1.24.4
+KUBE_VERSION=1.24.7
 
 ### setup terminal
 apt-get update
