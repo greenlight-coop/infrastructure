@@ -2,6 +2,40 @@
 
 This configuration runs on our local development server `link`.
 
+## Install Ubuntu on link
+
+Insert the USB drive containing the Ubuntu install image into the lower (right) USB slot
+on the front of the server and reboot.
+
+If necessary to reconfigure boot sequence
+* Press F2 to open system set up
+* Navigate to System BIOS > Boot Settings > BIOS Boot Settings
+* Hard-Disk Drive Sequence
+    * Make USB 1:Innostor first
+* Save changes
+* Exit and reboot
+
+Choose the following settings:
+* English
+* Ubuntu Server
+* DHCP configured eno1
+* No proxy
+* Default Ubuntu mirror
+* Installed on a single SSD
+* Default storage config
+* Open SSH
+  * Install server
+  * Import from GitHub (etavela)
+  * Allow password auth over SSH
+
+Ensure current IP for link has port forwarding for HTTP and HTTPS in Verizon FiOS router
+
+As etavela:
+
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    echo 'source <(kubectl completion zsh)' >> ~/.zshrc
+    echo 'alias k=kubectl' >> ~/.zshrc
+
 ## Deploy Green Light Development Platform
 
 ### Initial Set Up 
@@ -20,6 +54,18 @@ Ensure that the file `secrets.auto.tfvars` is present and contains correct value
 
 Manually generate the Let's Encrypt certificates and private key using the directions below in the section
 *Generating new certificates*
+
+### Configure link Cluster
+
+To run the automated set up script run:
+
+    bin/reset.sh <remote user>
+
+#### Patch k8ssandra server-config-init limits
+
+After deploying the K8ssandraCluster, fix OOMKilled issue with:
+
+    kubectl patch -n k8ssandra-operator statefulset k8ssandra-dc1-default-sts --type json -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/1/resources/limits/memory", "value":"512M"}]'
 
 ## Generating new certificates
 
@@ -89,13 +135,3 @@ Update certificate secret in cluster
     terraform apply -auto-approve -target=module.link_cluster.kubernetes_secret.istio-letsencrypt
 
 Log in to wireless router restore forwarding of HTTP requests to link
-
-### Configure link Cluster
-
-To run the automated set up script run:
-
-    ./setup.sh
-
-## Removal
-
-Run `./cleanup.sh` to remove resources and reset the workspace.
