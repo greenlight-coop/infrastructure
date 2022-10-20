@@ -59,7 +59,7 @@ Manually generate the Let's Encrypt certificates and private key using the direc
 
 To run the automated set up script run:
 
-    bin/reset.sh
+    bin/reset.sh <remote user>
 
 #### Patch k8ssandra server-config-init limits
 
