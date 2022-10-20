@@ -2,27 +2,12 @@
 
 # Run as root (sudo -i)
 # 
-# Installs/reinstalls kubernetes and associated tools
-#
-# To copy to link:
-# scp setup.sh etavela@link:setup.sh
+# Installs kubernetes cluster and associated tools
 
 set -ex
 
 KUBE_VERSION=1.24.7
-
-### setup terminal
-apt-get update
-apt-get install -y bash-completion binutils
-echo 'colorscheme ron' >> ~/.vimrc
-echo 'set tabstop=2' >> ~/.vimrc
-echo 'set shiftwidth=2' >> ~/.vimrc
-echo 'set expandtab' >> ~/.vimrc
-echo 'source <(kubectl completion bash)' >> ~/.bashrc
-echo 'alias k=kubectl' >> ~/.bashrc
-echo 'alias c=clear' >> ~/.bashrc
-echo 'complete -F __start_kubectl k' >> ~/.bashrc
-sed -i '1s/^/force_color_prompt=yes\n/' ~/.bashrc
+HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
 
 ### disable linux swap and remove any existing swap partitions
 swapoff -a
@@ -31,17 +16,6 @@ sed -i '/\sswap\s/ s/^\(.*\)$/#\1/g' /etc/fstab
 ### setup additional system packages
 apt-get install -y net-tools
 apt-get install -y zsh
-
-### remove packages
-kubeadm reset -f || true
-crictl rm --force $(crictl ps -a -q) || true
-apt-mark unhold kubelet kubeadm kubectl kubernetes-cni || true
-apt-get remove -y docker.io containerd kubelet kubeadm kubectl kubernetes-cni rpcbind nfs-kernel-server || true
-apt-get autoremove -y
-systemctl daemon-reload
-
-### remove nfs
-rm -f /etc/exports || true
 
 ### sysctl settings
 sysctl -w fs.inotify.max_user_instances=8192
@@ -149,7 +123,6 @@ systemctl enable kubelet && systemctl start kubelet
 
 
 ### init k8s
-rm /root/.kube/config || true
 kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print --pod-network-cidr 10.0.0.0/8
 
 mkdir -p ~/.kube
@@ -177,8 +150,6 @@ kubectl apply -f - -n kube-system
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.6/config/manifests/metallb-native.yaml
 
 kubectl wait -n metallb-system --timeout=180s --for condition=Available deployment/controller
-
-HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
 
 cat <<EOF | kubectl apply -f -
 apiVersion: metallb.io/v1beta1
