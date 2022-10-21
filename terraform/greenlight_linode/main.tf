@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.2.5"
+  required_version = ">= 1.3.3"
 
   required_providers {
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.6.0"
+      version = ">= 2.7.1"
     }
     k8s = {
       source  = "banzaicloud/k8s"
@@ -12,11 +12,11 @@ terraform {
     }
     kubernetes = {
       source =  "hashicorp/kubernetes"
-      version = "~> 2.12.1"
+      version = "~> 2.14.0"
     }
     linode = {
       source =  "linode/linode"
-      version = "~> 1.28.0"
+      version = "~> 1.29.4"
     }
     local = {
       source =  "hashicorp/local"
@@ -28,7 +28,7 @@ terraform {
     }
     random = {
       source =  "hashicorp/random"
-      version = "~> 3.3.2"
+      version = "~> 3.4.3"
     }
   }
 
