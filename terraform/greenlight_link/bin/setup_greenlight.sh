@@ -27,7 +27,7 @@ wait_for_resource argocd deployments Available app.kubernetes.io/part-of=argocd
 # Install base cluster infrastructure
 terraform apply -auto-approve -target=module.project_cluster
 wait_for_resource istio-system deployments/istiod Available
-wait_for_resource default pods/loki-0 Ready
+wait_for_resource default deployments/loki-loki-distributed-distributor Available
 
 # Install development cluster infrastructure
 terraform apply -auto-approve -target=module.development_cluster_configuration
