@@ -65,11 +65,11 @@ To run the automated set up script run:
 
     bin/reset.sh <remote user>
 
-#### Patch k8ssandra server-config-init limits
+#### Start k8ssandra cluster
 
-After deploying the K8ssandraCluster, fix OOMKilled issue with:
+Using the Argo CD UI, sync the `greenlight-k8ssandra-operator` and `greenlight-k8ssandra-cluster` projects.
 
-    kubectl patch -n k8ssandra-operator statefulset k8ssandra-dc1-default-sts --type json -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/1/resources/limits/memory", "value":"512M"}]'
+Ensure all the pods in k8ssandra-dc1-default-sts-0 start up correctly.
 
 ## Generating new certificates
 
