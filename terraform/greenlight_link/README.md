@@ -32,7 +32,11 @@ Ensure current IP for link has port forwarding for HTTP and HTTPS in Verizon FiO
 
 As etavela:
 
+    sudo apt install zsh
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+After cluster configuration:
+
     echo 'source <(kubectl completion zsh)' >> ~/.zshrc
     echo 'alias k=kubectl' >> ~/.zshrc
 
