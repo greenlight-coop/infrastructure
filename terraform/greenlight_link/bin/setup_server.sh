@@ -7,6 +7,7 @@
 set -ex
 
 KUBE_VERSION=1.24.7
+# KUBE_VERSION=1.25.4
 HOST_IP=$(ip a s eno1 | awk '/inet / {print$2}' | cut -d/ -f1)
 
 ### disable linux swap and remove any existing swap partitions
