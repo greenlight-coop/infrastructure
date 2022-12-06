@@ -122,12 +122,19 @@ systemctl enable containerd
 systemctl restart containerd
 systemctl enable kubelet && systemctl start kubelet
 
-
 ### init k8s
 kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print --pod-network-cidr 10.0.0.0/8
 
 mkdir -p ~/.kube
 cp -i /etc/kubernetes/admin.conf ~/.kube/config
+
+### kubelet configuration updates
+{
+cat <<EOF >> /var/lib/kubelet/config.yaml
+maxPods: 1024
+EOF
+}
+systemctl restart kubelet
 
 ### CNI
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/tigera-operator.yaml
