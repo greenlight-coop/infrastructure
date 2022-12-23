@@ -143,7 +143,7 @@ sed -i 's/192.168.0.0\/16/10.0.0.0\/8/g' custom-resources.yaml
 kubectl create -f custom-resources.yaml
 
 ### Wait for node
-kubectl wait --for=condition=Ready node/link
+kubectl wait --for=condition=Ready node/link --timeout=120s
 
 ### Make node schedulable
 kubectl taint nodes link node-role.kubernetes.io/control-plane:NoSchedule- || true
